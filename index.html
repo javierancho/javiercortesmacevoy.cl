@@ -2,35 +2,300 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Javier Cortés Mac Evoy</title>
+
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #5f6c7b;
+      --primary: #0f2f4f;
+      --accent: #2563eb;
+      --line: #d9e2ec;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand {
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.2px;
+    }
+
+    .nav-links a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .hero {
+      padding: 80px 0 60px;
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, #ffffff 0%, #edf4ff 100%);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 56px;
+      box-shadow: 0 20px 60px rgba(15, 47, 79, 0.08);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 13px;
+      letter-spacing: 1.4px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: clamp(38px, 6vw, 64px);
+      line-height: 1.05;
+      margin: 0;
+      color: var(--primary);
+    }
+
+    .subtitle {
+      font-size: 22px;
+      color: var(--muted);
+      margin: 22px 0 28px;
+      max-width: 820px;
+    }
+
+    .summary {
+      font-size: 18px;
+      max-width: 780px;
+      margin-bottom: 34px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 13px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid var(--primary);
+    }
+
+    .button.primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .button.secondary {
+      color: var(--primary);
+      background: #ffffff;
+    }
+
+    section {
+      padding: 34px 0;
+    }
+
+    .section-title {
+      font-size: 28px;
+      color: var(--primary);
+      margin-bottom: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(15, 47, 79, 0.05);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    .card p {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    footer {
+      margin-top: 40px;
+      padding: 30px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 800px) {
+      nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links a {
+        margin-left: 0;
+        margin-right: 16px;
+      }
+
+      .hero-card {
+        padding: 34px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Javier Cortés Mac Evoy</h1>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">Javier Cortés Mac Evoy</div>
+        <div class="nav-links">
+          <a href="#sobre-mi">Sobre mí</a>
+          <a href="#especialidades">Especialidades</a>
+          <a href="proyectos/">Proyectos</a>
+          <a href="#contacto">Contacto</a>
+        </div>
+      </nav>
+    </div>
+  </header>
 
-  <h2>Supply Chain Executive | MBA | Pharmacist | Industrial Engineering Student</h2>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="eyebrow">Perfil profesional</div>
+          <h1>Javier Cortés Mac Evoy</h1>
 
-  <p>
-    Profesional con experiencia en supply chain, logística, operaciones,
-    planificación, inventarios y mejora continua en la industria farmacéutica.
-  </p>
+          <p class="subtitle">
+            Supply Chain Executive | MBA | Pharmacist | Industrial Engineering Student
+          </p>
 
-  <p>
-    Este sitio reúne mi perfil profesional, trayectoria y proyectos aplicados
-    en gestión, analítica de datos, simulación y optimización operacional.
-  </p>
+          <p class="summary">
+            Profesional con experiencia en supply chain, logística, operaciones,
+            planificación, inventarios y mejora continua en la industria farmacéutica.
+            Este sitio reúne mi perfil profesional, trayectoria y proyectos aplicados
+            en gestión, analítica de datos, simulación y optimización operacional.
+          </p>
 
-  <h2>Proyectos</h2>
+          <div class="buttons">
+            <a class="button primary" href="proyectos/">Ver proyectos</a>
+            <a class="button secondary" href="https://www.linkedin.com/in/javiercortesmacevoy/" target="_blank">
+              LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <ul>
-    <li><a href="proyectos/">Ver proyectos</a></li>
-  </ul>
+    <section id="sobre-mi">
+      <div class="container">
+        <h2 class="section-title">Sobre mí</h2>
+        <p>
+          Combino experiencia ejecutiva en la industria farmacéutica con formación en
+          administración, ciencias farmacéuticas e ingeniería. Mi foco está en construir
+          procesos confiables, mejorar la disponibilidad de productos, optimizar inventarios
+          y conectar la operación con decisiones basadas en datos.
+        </p>
+      </div>
+    </section>
 
-  <h2>Contacto</h2>
+    <section id="especialidades">
+      <div class="container">
+        <h2 class="section-title">Áreas de especialización</h2>
 
-  <p>
-    <a href="https://www.linkedin.com/in/javiercortesmacevoy/" target="_blank">
-      LinkedIn
-    </a>
-  </p>
+        <div class="grid">
+          <div class="card">
+            <h3>Supply Chain</h3>
+            <p>
+              Planificación, abastecimiento, inventarios, logística, distribución,
+              S&OP y control operacional.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Industria farmacéutica</h3>
+            <p>
+              Experiencia en operaciones reguladas, trazabilidad, cumplimiento,
+              cadena de frío y disponibilidad de productos.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Analítica aplicada</h3>
+            <p>
+              Uso de datos, simulación, forecasting y herramientas analíticas para
+              apoyar decisiones operacionales.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto">
+      <div class="container">
+        <h2 class="section-title">Contacto</h2>
+        <p>
+          Puedes revisar mi perfil profesional en
+          <a href="https://www.linkedin.com/in/javiercortesmacevoy/" target="_blank">LinkedIn</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 Javier Cortés Mac Evoy · Portafolio profesional
+    </div>
+  </footer>
 </body>
 </html>
