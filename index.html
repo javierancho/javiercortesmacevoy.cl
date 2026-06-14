@@ -71,8 +71,31 @@
       background: linear-gradient(135deg, #ffffff 0%, #edf4ff 100%);
       border: 1px solid var(--line);
       border-radius: 28px;
-      padding: 56px;
+      padding: 52px;
       box-shadow: 0 20px 60px rgba(15, 47, 79, 0.08);
+    }
+
+    .hero-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 42px;
+    }
+
+    .hero-text {
+      flex: 1;
+    }
+
+    .hero-image {
+      width: 290px;
+      flex-shrink: 0;
+    }
+
+    .hero-image img {
+      width: 100%;
+      display: block;
+      border-radius: 24px;
+      box-shadow: 0 16px 42px rgba(15, 47, 79, 0.16);
     }
 
     .eyebrow {
@@ -95,12 +118,12 @@
       font-size: 22px;
       color: var(--muted);
       margin: 22px 0 28px;
-      max-width: 820px;
+      max-width: 760px;
     }
 
     .summary {
       font-size: 18px;
-      max-width: 800px;
+      max-width: 760px;
       margin-bottom: 34px;
     }
 
@@ -142,6 +165,7 @@
     .text-block {
       max-width: 850px;
       font-size: 17px;
+      text-align: justify;
     }
 
     .grid {
@@ -167,6 +191,7 @@
     .card p {
       color: var(--muted);
       margin-bottom: 0;
+      text-align: justify;
     }
 
     footer {
@@ -177,7 +202,7 @@
       font-size: 14px;
     }
 
-    @media (max-width: 800px) {
+    @media (max-width: 850px) {
       nav {
         align-items: flex-start;
         flex-direction: column;
@@ -190,6 +215,16 @@
 
       .hero-card {
         padding: 34px;
+      }
+
+      .hero-content {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+      }
+
+      .hero-image {
+        width: 100%;
+        max-width: 320px;
       }
 
       .grid {
@@ -218,24 +253,35 @@
     <section class="hero">
       <div class="container">
         <div class="hero-card">
-          <div class="eyebrow">Página personal</div>
-          <h1>Hola, soy Javier.</h1>
+          <div class="hero-content">
 
-          <p class="subtitle">
-            Un espacio para compartir proyectos, aprendizajes, intereses y algo de mi historia.
-          </p>
+            <div class="hero-text">
+              <div class="eyebrow">Página personal</div>
 
-          <p class="summary">
-            Soy padre, esposo, químico farmacéutico, estudiante y una persona curiosa por naturaleza.
-            Me interesan los sistemas, la tecnología, el aprendizaje continuo y las experiencias que
-            conectan la vida profesional con una mirada más humana y personal.
-          </p>
+              <h1>Hola, soy Javier.</h1>
 
-          <div class="buttons">
-            <a class="button primary" href="proyectos/">Ver proyectos</a>
-            <a class="button secondary" href="https://www.linkedin.com/in/javiercortesmacevoy/" target="_blank">
-              LinkedIn
-            </a>
+              <p class="subtitle">
+                Un espacio para compartir proyectos, aprendizajes, intereses y algo de mi historia.
+              </p>
+
+              <p class="summary">
+                Soy padre, químico farmacéutico, estudiante y una persona curiosa por naturaleza.
+                Me interesan la tecnología, el aprendizaje continuo y los proyectos que permiten
+                transformar ideas en algo tangible.
+              </p>
+
+              <div class="buttons">
+                <a class="button primary" href="proyectos/">Ver proyectos</a>
+                <a class="button secondary" href="https://www.linkedin.com/in/javiercortesmacevoy/" target="_blank">
+                  LinkedIn
+                </a>
+              </div>
+            </div>
+
+            <div class="hero-image">
+              <img src="assets/img/Javier.jpeg" alt="Javier Cortés Mac Evoy">
+            </div>
+
           </div>
         </div>
       </div>
@@ -247,9 +293,9 @@
 
         <div class="text-block">
           <p>
-            Este sitio nace como una forma de ordenar y compartir distintas partes de mi vida:
-            proyectos académicos, ideas personales, aprendizajes, intereses y también algo de mi
-            camino profesional, pero sin convertirlo en una copia de LinkedIn.
+            Esta página busca reunir distintas partes de mi vida sin convertirlas en una copia
+            de LinkedIn. Aquí quiero compartir proyectos, intereses, aprendizajes y algunas ideas
+            que normalmente no aparecen en una presentación profesional.
           </p>
 
           <p>
@@ -257,11 +303,6 @@
             Con el tiempo he descubierto que muchas de mis motivaciones se conectan entre sí:
             la curiosidad, la resolución de problemas, la tecnología, la naturaleza, la familia
             y las ganas de seguir construyendo algo propio.
-          </p>
-
-          <p>
-            Más adelante este espacio también tendrá fotos, notas, proyectos en desarrollo y
-            registros de experiencias que quiero ir dejando documentadas.
           </p>
         </div>
       </div>
@@ -273,18 +314,10 @@
 
         <div class="grid">
           <div class="card">
-            <h3>Familia</h3>
+            <h3>Familia y paternidad</h3>
             <p>
-              Una parte central de mi vida. Ser padre y esposo ha cambiado mi forma de mirar
-              el tiempo, las prioridades y los proyectos personales.
-            </p>
-          </div>
-
-          <div class="card">
-            <h3>Aprendizaje continuo</h3>
-            <p>
-              Me interesa seguir estudiando, explorar nuevas áreas y conectar conocimiento
-              práctico con herramientas tecnológicas y analíticas.
+              Ser padre es una parte central de mi vida y también una experiencia que ha cambiado
+              mi forma de mirar el tiempo, las prioridades y los proyectos personales.
             </p>
           </div>
 
@@ -321,26 +354,10 @@
           </div>
 
           <div class="card">
-            <h3>Tecnología</h3>
+            <h3>Tecnología y proyectos</h3>
             <p>
-              Me interesan las herramientas digitales, la automatización, los datos y las formas
+              Me interesan las herramientas digitales, los datos, la automatización y las formas
               prácticas de aplicar tecnología a problemas reales.
-            </p>
-          </div>
-
-          <div class="card">
-            <h3>Proyectos</h3>
-            <p>
-              Este sitio será también un lugar para ordenar trabajos universitarios, ideas,
-              pruebas, prototipos y proyectos personales.
-            </p>
-          </div>
-
-          <div class="card">
-            <h3>Vida al aire libre</h3>
-            <p>
-              Valoro las experiencias simples: salir, recorrer, compartir y mirar las cosas
-              desde un lugar distinto al habitual.
             </p>
           </div>
         </div>
