@@ -1,29 +1,121 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Proyectos | Javier Cortés Mac Evoy</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyectos | Javier Cortés Mac Evoy</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fa;
+            color: #1f2933;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 60px 20px;
+        }
+
+        h1 {
+            color: #0f2f4f;
+            margin-bottom: 10px;
+        }
+
+        .intro {
+            color: #5f6c7b;
+            margin-bottom: 40px;
+        }
+
+        .project {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        }
+
+        .project h2 {
+            margin-top: 0;
+            color: #0f2f4f;
+        }
+
+        .project p {
+            color: #5f6c7b;
+            text-align: justify;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 18px;
+            background: #0f2f4f;
+            color: white;
+            text-decoration: none;
+            border-radius: 999px;
+        }
+
+        .back {
+            margin-top: 30px;
+            display: inline-block;
+            color: #0f2f4f;
+            text-decoration: none;
+        }
+
+    </style>
 </head>
+
 <body>
-  <h1>Proyectos</h1>
 
-  <p>
-    Selección de proyectos profesionales, académicos y aplicados en supply chain,
-    analítica de datos, simulación, forecasting y optimización operacional.
-  </p>
+<div class="container">
 
-  <h2>Proyectos universitarios</h2>
+    <h1>Proyectos</h1>
 
-  <ul>
-    <li>
-      <a href="#">
-        Taller de Simulación
-      </a>
-    </li>
-  </ul>
+    <p class="intro">
+        Algunos trabajos académicos y proyectos personales que he ido desarrollando durante los últimos años.
+    </p>
 
-  <p>
-    <a href="../">Volver al inicio</a>
-  </p>
+    <div class="project">
+
+        <h2>Analítica y Ciencia de Datos</h2>
+
+        <p>
+            Proyecto desarrollado en el marco de la asignatura de Analítica y Ciencia de Datos.
+            Incluye análisis exploratorio de datos, visualización y construcción de modelos predictivos utilizando Python.
+        </p>
+
+        <a class="button"
+           href="https://github.com/javierancho/USS_Analitica_De_Datos"
+           target="_blank">
+           Ver proyecto
+        </a>
+
+    </div>
+
+    <div class="project">
+
+        <h2>Taller de Innovación y Emprendimiento</h2>
+
+        <p>
+            Trabajo orientado al desarrollo de una propuesta de innovación y emprendimiento,
+            considerando análisis de mercado, modelo de negocio y evaluación de oportunidades.
+        </p>
+
+        <a class="button"
+           href="https://github.com/javierancho/USS_Taller_Innovacion_y_Emprendimiento_Javier_Cortes"
+           target="_blank">
+           Ver proyecto
+        </a>
+
+    </div>
+
+    <a class="back" href="../">
+        ← Volver al inicio
+    </a>
+
+</div>
+
 </body>
 </html>
