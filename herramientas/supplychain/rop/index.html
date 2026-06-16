@@ -358,6 +358,11 @@
     }
 
     function calcular() {
+
+      document.querySelector(".results").style.display = "block";
+      document.querySelector(".chart-wrap").style.display = "block";
+      document.querySelector(".evaluation").style.display = "block";
+      document.querySelector(".steps").style.display = "block";
       const demanda = parseFloat(document.getElementById("demanda").value);
       const leadtime = parseFloat(document.getElementById("leadtime").value);
       const metodoSS = document.getElementById("metodoSS").value;
