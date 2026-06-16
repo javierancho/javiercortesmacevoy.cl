@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Punto de Reorden (ROP) | Javier Cortés Mac Evoy</title>
+
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #5f6c7b;
+      --primary: #0f2f4f;
+      --accent: #2563eb;
+      --line: #d9e2ec;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .nav-links a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    main { padding: 70px 0; }
+
+    h1, h2, h3 { color: var(--primary); }
+
+    .intro {
+      max-width: 850px;
+      font-size: 18px;
+      color: var(--muted);
+      text-align: justify;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 34px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 26px;
+      box-shadow: 0 10px 30px rgba(15, 47, 79, 0.05);
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-size: 15px;
+    }
+
+    button {
+      margin-top: 22px;
+      padding: 13px 20px;
+      border: none;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover { background: var(--accent); }
+
+    .results p { margin: 8px 0; }
+
+    .chart-wrap {
+      margin-top: 26px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    canvas {
+      width: 100%;
+      height: 420px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #ffffff;
+    }
+
+    .steps {
+      margin-top: 26px;
+    }
+
+    .step {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .step h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .step p {
+      margin: 5px 0;
+      color: var(--muted);
+      font-family: "Courier New", monospace;
+      font-size: 14px;
+    }
+
+    .evaluation {
+      margin-top: 26px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .evaluation p {
+      margin: 8px 0;
+      color: var(--muted);
+    }
+
+    .note {
+      margin-top: 34px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+      color: var(--muted);
+      text-align: justify;
+    }
+
+    footer {
+      margin-top: 60px;
+      padding: 30px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 850px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links a {
+        margin-left: 0;
+        margin-right: 16px;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      canvas {
+        height: 360px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">Javier Cortés Mac Evoy</div>
+        <div class="nav-links">
+          <a href="../../../">Inicio</a>
+          <a href="../../../proyectos/">Proyectos</a>
+          <a href="../../../#sobre-mi">Sobre mí</a>
+          <a href="../../../#contacto">Contacto</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Punto de Reorden (ROP)</h1>
+
+      <p class="intro">
+        Herramienta para calcular el punto de reorden y visualizar el comportamiento esperado
+        del inventario durante un horizonte de simulación. Permite identificar cuándo generar
+        una orden de compra y cuándo se recibiría la reposición bajo supuestos simples de demanda
+        constante y lead time estable.
+      </p>
+
+      <div class="layout">
+        <div class="card">
+          <h2>Datos de entrada</h2>
+
+          <label for="demanda">Demanda diaria promedio</label>
+          <input id="demanda" type="number" value="100" step="1">
+
+          <label for="leadtime">Lead Time (días)</label>
+          <input id="leadtime" type="number" value="10" step="1">
+
+          <label for="metodoSS">Método de stock de seguridad</label>
+          <select id="metodoSS" onchange="mostrarCampoSS()">
+            <option value="dias">Días de cobertura</option>
+            <option value="unidades">Unidades</option>
+          </select>
+
+          <div id="campoDiasSS">
+            <label for="diasSS">Días de stock de seguridad</label>
+            <input id="diasSS" type="number" value="5" step="1">
+          </div>
+
+          <div id="campoUnidadesSS" style="display:none;">
+            <label for="unidadesSS">Stock de seguridad (unidades)</label>
+            <input id="unidadesSS" type="number" value="500" step="1">
+          </div>
+
+          <label for="stockActual">Stock actual</label>
+          <input id="stockActual" type="number" value="5000" step="1">
+
+          <label for="reposicion">Cantidad de reposición</label>
+          <input id="reposicion" type="number" value="2000" step="1">
+
+          <label for="horizonte">Horizonte de simulación (días)</label>
+          <input id="horizonte" type="number" value="120" step="1">
+
+          <button onclick="calcular()">Calcular</button>
+        </div>
+
+        <div class="card results">
+          <h2>Resultados</h2>
+
+          <p><strong>Stock de seguridad:</strong> <span id="resultadoSS">-</span></p>
+          <p><strong>Punto de Reorden (ROP):</strong> <span id="resultadoROP">-</span></p>
+          <p><strong>Cobertura actual:</strong> <span id="resultadoCobertura">-</span></p>
+          <p><strong>Días hasta alcanzar ROP:</strong> <span id="resultadoDiasROP">-</span></p>
+          <p><strong>Días hasta quiebre sin reposición:</strong> <span id="resultadoQuiebre">-</span></p>
+          <p><strong>Primera recepción estimada:</strong> <span id="resultadoRecepcion">-</span></p>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <h2>Proyección gráfica</h2>
+        <canvas id="grafico" width="1000" height="420"></canvas>
+      </div>
+
+      <div class="evaluation">
+        <h2>Evaluación</h2>
+        <p id="eval1">-</p>
+        <p id="eval2">-</p>
+        <p id="eval3">-</p>
+      </div>
+
+      <div class="card steps">
+        <h2>Cálculos paso a paso</h2>
+
+        <div class="step">
+          <h3>1. Stock de seguridad</h3>
+          <p id="pasoSS">-</p>
+        </div>
+
+        <div class="step">
+          <h3>2. Punto de Reorden</h3>
+          <p id="pasoROP">-</p>
+        </div>
+
+        <div class="step">
+          <h3>3. Cobertura actual</h3>
+          <p id="pasoCobertura">-</p>
+        </div>
+
+        <div class="step">
+          <h3>4. Días hasta ROP</h3>
+          <p id="pasoDiasROP">-</p>
+        </div>
+
+        <div class="step">
+          <h3>5. Simulación de reposición</h3>
+          <p id="pasoSimulacion">-</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <h2>Nota</h2>
+        <p>
+          Esta información se proporciona únicamente con fines educativos, de experimentación
+          y apoyo al aprendizaje.
+        </p>
+        <p>
+          Los resultados son referenciales y dependen de los supuestos utilizados, tales como
+          demanda constante, lead time estable y reposición completa según la cantidad definida.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 Javier Cortés Mac Evoy · Punto de Reorden
+    </div>
+  </footer>
+
+  <script>
+    function mostrarCampoSS() {
+      const metodo = document.getElementById("metodoSS").value;
+      document.getElementById("campoDiasSS").style.display = metodo === "dias" ? "block" : "none";
+      document.getElementById("campoUnidadesSS").style.display = metodo === "unidades" ? "block" : "none";
+    }
+
+    function formato(numero) {
+      return Math.round(numero).toLocaleString("es-CL");
+    }
+
+    function calcular() {
+      const demanda = parseFloat(document.getElementById("demanda").value);
+      const leadtime = parseFloat(document.getElementById("leadtime").value);
+      const metodoSS = document.getElementById("metodoSS").value;
+      const diasSS = parseFloat(document.getElementById("diasSS").value);
+      const unidadesSS = parseFloat(document.getElementById("unidadesSS").value);
+      const stockActual = parseFloat(document.getElementById("stockActual").value);
+      const reposicion = parseFloat(document.getElementById("reposicion").value);
+      const horizonte = parseFloat(document.getElementById("horizonte").value);
+
+      if (
+        isNaN(demanda) || demanda <= 0 ||
+        isNaN(leadtime) || leadtime < 0 ||
+        isNaN(stockActual) || stockActual < 0 ||
+        isNaN(reposicion) || reposicion <= 0 ||
+        isNaN(horizonte) || horizonte <= 0
+      ) {
+        alert("Revise los datos ingresados. Todos los valores deben ser válidos.");
+        return;
+      }
+
+      let stockSeguridad;
+
+      if (metodoSS === "dias") {
+        if (isNaN(diasSS) || diasSS < 0) {
+          alert("Revise los días de stock de seguridad.");
+          return;
+        }
+        stockSeguridad = demanda * diasSS;
+      } else {
+        if (isNaN(unidadesSS) || unidadesSS < 0) {
+          alert("Revise el stock de seguridad en unidades.");
+          return;
+        }
+        stockSeguridad = unidadesSS;
+      }
+
+      const rop = demanda * leadtime + stockSeguridad;
+      const cobertura = stockActual / demanda;
+      const diasHastaROP = stockActual > rop ? (stockActual - rop) / demanda : 0;
+      const diasHastaQuiebre = stockActual / demanda;
+      const primeraRecepcion = diasHastaROP + leadtime;
+
+      document.getElementById("resultadoSS").textContent = formato(stockSeguridad) + " unidades";
+      document.getElementById("resultadoROP").textContent = formato(rop) + " unidades";
+      document.getElementById("resultadoCobertura").textContent = cobertura.toFixed(1) + " días";
+      document.getElementById("resultadoDiasROP").textContent = diasHastaROP.toFixed(1) + " días";
+      document.getElementById("resultadoQuiebre").textContent = diasHastaQuiebre.toFixed(1) + " días";
+      document.getElementById("resultadoRecepcion").textContent = primeraRecepcion.toFixed(1) + " días";
+
+      generarEvaluacion(stockSeguridad, rop, cobertura, diasHastaROP, diasHastaQuiebre, primeraRecepcion, leadtime);
+      generarPasos(demanda, leadtime, metodoSS, diasSS, unidadesSS, stockSeguridad, rop, stockActual, cobertura, diasHastaROP, reposicion);
+      const datos = simularInventario(demanda, leadtime, stockSeguridad, rop, stockActual, reposicion, horizonte);
+      dibujarGrafico(datos, rop, stockSeguridad, horizonte);
+    }
+
+    function generarEvaluacion(ss, rop, cobertura, diasROP, quiebre, recepcion, leadtime) {
+      document.getElementById("eval1").textContent =
+        "→ La orden de compra debería generarse al alcanzar " + formato(rop) + " unidades.";
+
+      document.getElementById("eval2").textContent =
+        "→ Bajo los supuestos ingresados, el stock actual permite una cobertura aproximada de " + cobertura.toFixed(1) + " días.";
+
+      if (recepcion <= quiebre) {
+        document.getElementById("eval3").textContent =
+          "→ No se observa quiebre antes de la primera recepción estimada.";
+      } else {
+        document.getElementById("eval3").textContent =
+          "→ Existe riesgo de quiebre antes de la recepción. Revise lead time, stock de seguridad o cantidad de reposición.";
+      }
+    }
+
+    function generarPasos(demanda, leadtime, metodoSS, diasSS, unidadesSS, ss, rop, stockActual, cobertura, diasROP, reposicion) {
+      if (metodoSS === "dias") {
+        document.getElementById("pasoSS").innerHTML =
+          "SS = Demanda diaria × Días de seguridad<br>" +
+          "SS = " + demanda.toFixed(1) + " × " + diasSS.toFixed(1) + "<br>" +
+          "SS = " + formato(ss) + " unidades";
+      } else {
+        document.getElementById("pasoSS").innerHTML =
+          "SS = Stock de seguridad ingresado manualmente<br>" +
+          "SS = " + formato(unidadesSS) + " unidades";
+      }
+
+      document.getElementById("pasoROP").innerHTML =
+        "ROP = Demanda diaria × Lead Time + Stock de seguridad<br>" +
+        "ROP = " + demanda.toFixed(1) + " × " + leadtime.toFixed(1) + " + " + formato(ss) + "<br>" +
+        "ROP = " + formato(rop) + " unidades";
+
+      document.getElementById("pasoCobertura").innerHTML =
+        "Cobertura = Stock actual / Demanda diaria<br>" +
+        "Cobertura = " + formato(stockActual) + " / " + demanda.toFixed(1) + "<br>" +
+        "Cobertura = " + cobertura.toFixed(1) + " días";
+
+      document.getElementById("pasoDiasROP").innerHTML =
+        "Días hasta ROP = (Stock actual - ROP) / Demanda diaria<br>" +
+        "Días hasta ROP = (" + formato(stockActual) + " - " + formato(rop) + ") / " + demanda.toFixed(1) + "<br>" +
+        "Días hasta ROP = " + diasROP.toFixed(1) + " días";
+
+      document.getElementById("pasoSimulacion").innerHTML =
+        "Al llegar al ROP se genera una orden de compra.<br>" +
+        "La recepción se estima después del Lead Time definido.<br>" +
+        "Cada recepción aumenta el inventario en " + formato(reposicion) + " unidades.";
+    }
+
+    function simularInventario(demanda, leadtime, ss, rop, stockInicial, reposicion, horizonte) {
+      let datos = [];
+      let stock = stockInicial;
+      let ordenPendiente = false;
+      let diaRecepcion = null;
+
+      for (let dia = 0; dia <= horizonte; dia++) {
+        let evento = "";
+
+        if (ordenPendiente && dia === diaRecepcion) {
+          stock += reposicion;
+          ordenPendiente = false;
+          diaRecepcion = null;
+          evento = "Recepción OC";
+        }
+
+        if (!ordenPendiente && stock <= rop && stock > 0) {
+          ordenPendiente = true;
+          diaRecepcion = dia + leadtime;
+          evento = evento ? evento + " / Generar OC" : "Generar OC";
+        }
+
+        datos.push({
+          dia: dia,
+          stock: Math.max(stock, 0),
+          evento: evento
+        });
+
+        stock -= demanda;
+      }
+
+      return datos;
+    }
+
+    function dibujarGrafico(datos, rop, ss, horizonte) {
+      const canvas = document.getElementById("grafico");
+      const ctx = canvas.getContext("2d");
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const margenIzq = 70;
+      const margenDer = 30;
+      const margenSup = 40;
+      const margenInf = 55;
+
+      const ancho = canvas.width - margenIzq - margenDer;
+      const alto = canvas.height - margenSup - margenInf;
+
+      const maxStock = Math.max(...datos.map(d => d.stock), rop, ss) * 1.15;
+
+      function x(dia) {
+        return margenIzq + (dia / horizonte) * ancho;
+      }
+
+      function y(valor) {
+        return margenSup + alto - (valor / maxStock) * alto;
+      }
+
+      ctx.strokeStyle = "#d9e2ec";
+      ctx.lineWidth = 1;
+
+      for (let i = 0; i <= 5; i++) {
+        const yGrid = margenSup + (alto / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(margenIzq, yGrid);
+        ctx.lineTo(canvas.width - margenDer, yGrid);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = "#5f6c7b";
+      ctx.font = "13px Arial";
+
+      for (let i = 0; i <= 5; i++) {
+        const valor = maxStock - (maxStock / 5) * i;
+        ctx.fillText(formato(valor), 8, margenSup + (alto / 5) * i + 5);
+      }
+
+      ctx.strokeStyle = "#0f2f4f";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+
+      datos.forEach((d, i) => {
+        if (i === 0) {
+          ctx.moveTo(x(d.dia), y(d.stock));
+        } else {
+          ctx.lineTo(x(d.dia), y(d.stock));
+        }
+      });
+
+      ctx.stroke();
+
+      dibujarLineaReferencia(ctx, margenIzq, canvas.width - margenDer, y(rop), "Punto de Reorden", "#2563eb");
+      dibujarLineaReferencia(ctx, margenIzq, canvas.width - margenDer, y(ss), "Stock Seguridad", "#5f6c7b");
+
+      datos.forEach(d => {
+        if (d.evento.includes("Generar OC")) {
+          dibujarEvento(ctx, x(d.dia), y(d.stock), "→ Generar OC", "#0f2f4f");
+        }
+
+        if (d.evento.includes("Recepción OC")) {
+          dibujarEvento(ctx, x(d.dia), y(d.stock), "→ Recepción OC", "#2563eb");
+        }
+      });
+
+      ctx.fillStyle = "#5f6c7b";
+      ctx.font = "14px Arial";
+      ctx.fillText("Días", canvas.width / 2, canvas.height - 12);
+      ctx.save();
+      ctx.translate(18, canvas.height / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText("Unidades", 0, 0);
+      ctx.restore();
+    }
+
+    function dibujarLineaReferencia(ctx, x1, x2, y, texto, color) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([6, 5]);
+      ctx.beginPath();
+      ctx.moveTo(x1, y);
+      ctx.lineTo(x2, y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = color;
+      ctx.font = "13px Arial";
+      ctx.fillText(texto, x2 - 145, y - 8);
+    }
+
+    function dibujarEvento(ctx, x, y, texto, color) {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.font = "12px Arial";
+      ctx.fillText(texto, x + 8, y - 10);
+    }
+
+    mostrarCampoSS();
+    calcular();
+  </script>
+</body>
+</html>
