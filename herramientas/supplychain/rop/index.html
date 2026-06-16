@@ -13,10 +13,22 @@
       --muted: #5f6c7b;
       --primary: #0f2f4f;
       --accent: #2563eb;
+      --accent-soft: #edf4ff;
+      --green: #15803d;
+      --green-soft: #eaf7ef;
+      --orange: #ea580c;
+      --orange-soft: #fff4e6;
+      --purple: #7e22ce;
+      --purple-soft: #f4e8ff;
+      --teal: #0f766e;
+      --teal-soft: #e6fffb;
       --line: #d9e2ec;
+      --shadow: rgba(15, 47, 79, 0.07);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -27,7 +39,7 @@
     }
 
     .container {
-      width: min(1100px, 92%);
+      width: min(1180px, 94%);
       margin: 0 auto;
     }
 
@@ -47,6 +59,7 @@
     .brand {
       font-weight: 700;
       color: var(--primary);
+      letter-spacing: 0.2px;
     }
 
     .nav-links a {
@@ -56,32 +69,55 @@
       font-size: 15px;
     }
 
-    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover {
+      color: var(--accent);
+    }
 
-    main { padding: 70px 0; }
+    main {
+      padding: 64px 0;
+    }
 
-    h1, h2, h3 { color: var(--primary); }
+    h1, h2, h3 {
+      color: var(--primary);
+    }
+
+    h1 {
+      font-size: clamp(34px, 5vw, 52px);
+      line-height: 1.08;
+      margin: 0 0 14px;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 24px;
+    }
 
     .intro {
-      max-width: 850px;
+      max-width: 900px;
       font-size: 18px;
       color: var(--muted);
       text-align: justify;
+      margin-bottom: 34px;
     }
 
-    .layout {
+    .dashboard {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-top: 34px;
+      grid-template-columns: 340px 1fr;
+      gap: 22px;
+      align-items: start;
     }
 
     .card {
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: 20px;
-      padding: 26px;
-      box-shadow: 0 10px 30px rgba(15, 47, 79, 0.05);
+      padding: 24px;
+      box-shadow: 0 12px 32px var(--shadow);
+    }
+
+    .form-card {
+      position: sticky;
+      top: 18px;
     }
 
     label {
@@ -89,88 +125,250 @@
       margin-top: 16px;
       font-weight: 700;
       color: var(--primary);
+      font-size: 14px;
     }
 
     input, select {
       width: 100%;
-      padding: 12px;
+      padding: 12px 13px;
       margin-top: 6px;
       border: 1px solid var(--line);
       border-radius: 10px;
       font-size: 15px;
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    input:focus, select:focus {
+      outline: 2px solid rgba(37, 99, 235, 0.16);
+      border-color: var(--accent);
+    }
+
+    .input-help {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 4px;
     }
 
     button {
-      margin-top: 22px;
+      width: 100%;
+      margin-top: 24px;
       padding: 13px 20px;
       border: none;
-      border-radius: 999px;
+      border-radius: 12px;
       background: var(--primary);
       color: #ffffff;
       font-weight: 700;
       cursor: pointer;
+      font-size: 15px;
     }
 
-    button:hover { background: var(--accent); }
+    button:hover {
+      background: var(--accent);
+    }
 
-    .results p { margin: 8px 0; }
+    .output {
+      display: none;
+    }
 
-    .chart-wrap {
-      margin-top: 26px;
-      background: #ffffff;
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+
+    .metric {
       border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 24px;
+      border-radius: 16px;
+      padding: 16px;
+      min-height: 120px;
+      background: #ffffff;
+    }
+
+    .metric .tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 28px;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .metric.green {
+      background: var(--green-soft);
+      border-color: #c6efd2;
+    }
+
+    .metric.green .tag, .metric.green strong {
+      color: var(--green);
+    }
+
+    .metric.blue {
+      background: var(--accent-soft);
+      border-color: #c7dafd;
+    }
+
+    .metric.blue .tag, .metric.blue strong {
+      color: var(--accent);
+    }
+
+    .metric.purple {
+      background: var(--purple-soft);
+      border-color: #e2c5ff;
+    }
+
+    .metric.purple .tag, .metric.purple strong {
+      color: var(--purple);
+    }
+
+    .metric.orange {
+      background: var(--orange-soft);
+      border-color: #fed7aa;
+    }
+
+    .metric.orange .tag, .metric.orange strong {
+      color: var(--orange);
+    }
+
+    .metric.teal {
+      background: var(--teal-soft);
+      border-color: #b8eee6;
+    }
+
+    .metric.teal .tag, .metric.teal strong {
+      color: var(--teal);
+    }
+
+    .chart-card {
+      margin-top: 22px;
+    }
+
+    .chart-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: baseline;
+      margin-bottom: 12px;
+    }
+
+    .chart-title h2 {
+      margin-bottom: 0;
+    }
+
+    .chart-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .chart-frame {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: #ffffff;
     }
 
     canvas {
       width: 100%;
-      height: 420px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
+      height: 430px;
+      display: block;
+      border-radius: 12px;
       background: #ffffff;
     }
 
-    .steps {
-      margin-top: 26px;
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .legend-line {
+      width: 26px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--primary);
+    }
+
+    .legend-dash {
+      width: 26px;
+      height: 0;
+      border-top: 2px dashed var(--accent);
+    }
+
+    .legend-dash.gray {
+      border-color: #64748b;
+    }
+
+    .legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .legend-dot.dark {
+      background: var(--primary);
+    }
+
+    .evaluation {
+      margin-top: 22px;
+    }
+
+    .evaluation p {
+      margin: 9px 0;
+      color: var(--muted);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-top: 14px;
     }
 
     .step {
-      background: #ffffff;
       border: 1px solid var(--line);
       border-radius: 16px;
       padding: 18px;
-      margin-bottom: 14px;
+      background: #ffffff;
     }
 
     .step h3 {
       margin-top: 0;
       margin-bottom: 10px;
-      font-size: 18px;
+      font-size: 16px;
     }
 
     .step p {
       margin: 5px 0;
       color: var(--muted);
       font-family: "Courier New", monospace;
-      font-size: 14px;
-    }
-
-    .evaluation {
-      margin-top: 26px;
-      background: #ffffff;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 24px;
-    }
-
-    .evaluation p {
-      margin: 8px 0;
-      color: var(--muted);
+      font-size: 13px;
     }
 
     .note {
-      margin-top: 34px;
+      margin-top: 26px;
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: 20px;
@@ -187,7 +385,22 @@
       font-size: 14px;
     }
 
-    @media (max-width: 850px) {
+    @media (max-width: 1050px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .form-card {
+        position: static;
+      }
+
+      .result-grid,
+      .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
       nav {
         flex-direction: column;
         align-items: flex-start;
@@ -198,7 +411,8 @@
         margin-right: 16px;
       }
 
-      .layout {
+      .result-grid,
+      .steps-grid {
         grid-template-columns: 1fr;
       }
 
@@ -235,12 +449,14 @@
         constante y lead time estable.
       </p>
 
-      <div class="layout">
-        <div class="card">
+      <div class="dashboard">
+        <aside class="card form-card">
           <h2>Datos de entrada</h2>
+          <p class="input-help">Ingrese los parámetros para calcular el punto de reorden.</p>
 
           <label for="demanda">Demanda diaria promedio</label>
           <input id="demanda" type="number" value="100" step="1">
+          <div class="input-help">Unidades por día.</div>
 
           <label for="leadtime">Lead Time (días)</label>
           <input id="leadtime" type="number" value="10" step="1">
@@ -268,62 +484,105 @@
           <input id="reposicion" type="number" value="2000" step="1">
 
           <label for="horizonte">Horizonte de simulación (días)</label>
-          <input id="horizonte" type="number" value="120" step="1">
+          <input id="horizonte" type="number" value="180" step="1">
 
           <button onclick="calcular()">Calcular</button>
-        </div>
+        </aside>
 
-        <div class="card results">
-          <h2>Resultados</h2>
+        <section class="output" id="output">
+          <div class="card">
+            <h2>Resultados clave</h2>
 
-          <p><strong>Stock de seguridad:</strong> <span id="resultadoSS">-</span></p>
-          <p><strong>Punto de Reorden (ROP):</strong> <span id="resultadoROP">-</span></p>
-          <p><strong>Cobertura actual:</strong> <span id="resultadoCobertura">-</span></p>
-          <p><strong>Días hasta alcanzar ROP:</strong> <span id="resultadoDiasROP">-</span></p>
-          <p><strong>Días hasta quiebre sin reposición:</strong> <span id="resultadoQuiebre">-</span></p>
-          <p><strong>Primera recepción estimada:</strong> <span id="resultadoRecepcion">-</span></p>
-        </div>
-      </div>
+            <div class="result-grid">
+              <div class="metric green">
+                <div class="tag">Stock de seguridad</div>
+                <strong id="resultadoSS">-</strong>
+                <span>unidades</span>
+              </div>
 
-      <div class="chart-wrap">
-        <h2>Proyección gráfica</h2>
-        <canvas id="grafico" width="1000" height="420"></canvas>
-      </div>
+              <div class="metric blue">
+                <div class="tag">Punto de Reorden (ROP)</div>
+                <strong id="resultadoROP">-</strong>
+                <span>unidades</span>
+              </div>
 
-      <div class="evaluation">
-        <h2>Evaluación</h2>
-        <p id="eval1">-</p>
-        <p id="eval2">-</p>
-        <p id="eval3">-</p>
-      </div>
+              <div class="metric purple">
+                <div class="tag">Cobertura actual</div>
+                <strong id="resultadoCobertura">-</strong>
+                <span>días</span>
+              </div>
 
-      <div class="card steps">
-        <h2>Cálculos paso a paso</h2>
+              <div class="metric orange">
+                <div class="tag">Días hasta ROP</div>
+                <strong id="resultadoDiasROP">-</strong>
+                <span>días</span>
+              </div>
 
-        <div class="step">
-          <h3>1. Stock de seguridad</h3>
-          <p id="pasoSS">-</p>
-        </div>
+              <div class="metric teal">
+                <div class="tag">Primera recepción</div>
+                <strong id="resultadoRecepcion">-</strong>
+                <span>días</span>
+              </div>
+            </div>
+          </div>
 
-        <div class="step">
-          <h3>2. Punto de Reorden</h3>
-          <p id="pasoROP">-</p>
-        </div>
+          <div class="card chart-card">
+            <div class="chart-title">
+              <h2>Proyección de inventario</h2>
+              <p id="chartSubtitle">Horizonte de simulación</p>
+            </div>
 
-        <div class="step">
-          <h3>3. Cobertura actual</h3>
-          <p id="pasoCobertura">-</p>
-        </div>
+            <div class="legend">
+              <span class="legend-item"><span class="legend-line"></span>Stock proyectado</span>
+              <span class="legend-item"><span class="legend-dash"></span>Punto de Reorden (ROP)</span>
+              <span class="legend-item"><span class="legend-dash gray"></span>Stock de seguridad</span>
+              <span class="legend-item"><span class="legend-dot"></span>Recepción OC</span>
+              <span class="legend-item"><span class="legend-dot dark"></span>Generar OC</span>
+            </div>
 
-        <div class="step">
-          <h3>4. Días hasta ROP</h3>
-          <p id="pasoDiasROP">-</p>
-        </div>
+            <div class="chart-frame">
+              <canvas id="grafico" width="1000" height="430"></canvas>
+            </div>
+          </div>
 
-        <div class="step">
-          <h3>5. Simulación de reposición</h3>
-          <p id="pasoSimulacion">-</p>
-        </div>
+          <div class="card evaluation">
+            <h2>Evaluación</h2>
+            <p id="eval1">-</p>
+            <p id="eval2">-</p>
+            <p id="eval3">-</p>
+          </div>
+
+          <div class="card">
+            <h2>Cálculos paso a paso</h2>
+
+            <div class="steps-grid">
+              <div class="step">
+                <h3>1. Stock de seguridad</h3>
+                <p id="pasoSS">-</p>
+              </div>
+
+              <div class="step">
+                <h3>2. Punto de Reorden</h3>
+                <p id="pasoROP">-</p>
+              </div>
+
+              <div class="step">
+                <h3>3. Cobertura actual</h3>
+                <p id="pasoCobertura">-</p>
+              </div>
+
+              <div class="step">
+                <h3>4. Días hasta ROP</h3>
+                <p id="pasoDiasROP">-</p>
+              </div>
+
+              <div class="step">
+                <h3>5. Simulación de reposición</h3>
+                <p id="pasoSimulacion">-</p>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
 
       <div class="note">
@@ -358,11 +617,6 @@
     }
 
     function calcular() {
-
-      document.querySelector(".results").style.display = "block";
-      document.querySelector(".chart-wrap").style.display = "block";
-      document.querySelector(".evaluation").style.display = "block";
-      document.querySelector(".steps").style.display = "block";
       const demanda = parseFloat(document.getElementById("demanda").value);
       const leadtime = parseFloat(document.getElementById("leadtime").value);
       const metodoSS = document.getElementById("metodoSS").value;
@@ -390,12 +644,14 @@
           alert("Revise los días de stock de seguridad.");
           return;
         }
+
         stockSeguridad = demanda * diasSS;
       } else {
         if (isNaN(unidadesSS) || unidadesSS < 0) {
           alert("Revise el stock de seguridad en unidades.");
           return;
         }
+
         stockSeguridad = unidadesSS;
       }
 
@@ -405,20 +661,22 @@
       const diasHastaQuiebre = stockActual / demanda;
       const primeraRecepcion = diasHastaROP + leadtime;
 
-      document.getElementById("resultadoSS").textContent = formato(stockSeguridad) + " unidades";
-      document.getElementById("resultadoROP").textContent = formato(rop) + " unidades";
-      document.getElementById("resultadoCobertura").textContent = cobertura.toFixed(1) + " días";
-      document.getElementById("resultadoDiasROP").textContent = diasHastaROP.toFixed(1) + " días";
-      document.getElementById("resultadoQuiebre").textContent = diasHastaQuiebre.toFixed(1) + " días";
-      document.getElementById("resultadoRecepcion").textContent = primeraRecepcion.toFixed(1) + " días";
+      document.getElementById("output").style.display = "block";
+      document.getElementById("chartSubtitle").textContent = "Horizonte: " + formato(horizonte) + " días";
 
-      generarEvaluacion(stockSeguridad, rop, cobertura, diasHastaROP, diasHastaQuiebre, primeraRecepcion, leadtime);
+      document.getElementById("resultadoSS").textContent = formato(stockSeguridad);
+      document.getElementById("resultadoROP").textContent = formato(rop);
+      document.getElementById("resultadoCobertura").textContent = cobertura.toFixed(1);
+      document.getElementById("resultadoDiasROP").textContent = diasHastaROP.toFixed(1);
+      document.getElementById("resultadoRecepcion").textContent = primeraRecepcion.toFixed(1);
+
+      generarEvaluacion(rop, cobertura, primeraRecepcion, diasHastaQuiebre);
       generarPasos(demanda, leadtime, metodoSS, diasSS, unidadesSS, stockSeguridad, rop, stockActual, cobertura, diasHastaROP, reposicion);
-      const datos = simularInventario(demanda, leadtime, stockSeguridad, rop, stockActual, reposicion, horizonte);
+      const datos = simularInventario(demanda, leadtime, rop, stockActual, reposicion, horizonte);
       dibujarGrafico(datos, rop, stockSeguridad, horizonte);
     }
 
-    function generarEvaluacion(ss, rop, cobertura, diasROP, quiebre, recepcion, leadtime) {
+    function generarEvaluacion(rop, cobertura, recepcion, quiebre) {
       document.getElementById("eval1").textContent =
         "→ La orden de compra debería generarse al alcanzar " + formato(rop) + " unidades.";
 
@@ -437,17 +695,17 @@
     function generarPasos(demanda, leadtime, metodoSS, diasSS, unidadesSS, ss, rop, stockActual, cobertura, diasROP, reposicion) {
       if (metodoSS === "dias") {
         document.getElementById("pasoSS").innerHTML =
-          "SS = Demanda diaria × Días de seguridad<br>" +
+          "SS = Demanda diaria × Días SS<br>" +
           "SS = " + demanda.toFixed(1) + " × " + diasSS.toFixed(1) + "<br>" +
           "SS = " + formato(ss) + " unidades";
       } else {
         document.getElementById("pasoSS").innerHTML =
-          "SS = Stock de seguridad ingresado manualmente<br>" +
+          "SS = Stock de seguridad ingresado<br>" +
           "SS = " + formato(unidadesSS) + " unidades";
       }
 
       document.getElementById("pasoROP").innerHTML =
-        "ROP = Demanda diaria × Lead Time + Stock de seguridad<br>" +
+        "ROP = Demanda diaria × Lead Time + SS<br>" +
         "ROP = " + demanda.toFixed(1) + " × " + leadtime.toFixed(1) + " + " + formato(ss) + "<br>" +
         "ROP = " + formato(rop) + " unidades";
 
@@ -462,13 +720,13 @@
         "Días hasta ROP = " + diasROP.toFixed(1) + " días";
 
       document.getElementById("pasoSimulacion").innerHTML =
-        "Al llegar al ROP se genera una orden de compra.<br>" +
-        "La recepción se estima después del Lead Time definido.<br>" +
-        "Cada recepción aumenta el inventario en " + formato(reposicion) + " unidades.";
+        "Al llegar al ROP se genera una OC.<br>" +
+        "La recepción ocurre después del Lead Time definido.<br>" +
+        "Cada recepción repone " + formato(reposicion) + " unidades.";
     }
 
-    function simularInventario(demanda, leadtime, ss, rop, stockInicial, reposicion, horizonte) {
-      let datos = [];
+    function simularInventario(demanda, leadtime, rop, stockInicial, reposicion, horizonte) {
+      const datos = [];
       let stock = stockInicial;
       let ordenPendiente = false;
       let diaRecepcion = null;
@@ -490,9 +748,9 @@
         }
 
         datos.push({
-          dia: dia,
+          dia,
           stock: Math.max(stock, 0),
-          evento: evento
+          evento
         });
 
         stock -= demanda;
@@ -507,15 +765,15 @@
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const margenIzq = 70;
-      const margenDer = 30;
-      const margenSup = 40;
-      const margenInf = 55;
+      const margenIzq = 76;
+      const margenDer = 28;
+      const margenSup = 28;
+      const margenInf = 54;
 
       const ancho = canvas.width - margenIzq - margenDer;
       const alto = canvas.height - margenSup - margenInf;
 
-      const maxStock = Math.max(...datos.map(d => d.stock), rop, ss) * 1.15;
+      const maxStock = Math.max(...datos.map(d => d.stock), rop, ss) * 1.18;
 
       function x(dia) {
         return margenIzq + (dia / horizonte) * ancho;
@@ -525,24 +783,37 @@
         return margenSup + alto - (valor / maxStock) * alto;
       }
 
-      ctx.strokeStyle = "#d9e2ec";
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.strokeStyle = "#e8eef5";
       ctx.lineWidth = 1;
 
       for (let i = 0; i <= 5; i++) {
         const yGrid = margenSup + (alto / 5) * i;
+
         ctx.beginPath();
         ctx.moveTo(margenIzq, yGrid);
         ctx.lineTo(canvas.width - margenDer, yGrid);
         ctx.stroke();
-      }
 
-      ctx.fillStyle = "#5f6c7b";
-      ctx.font = "13px Arial";
-
-      for (let i = 0; i <= 5; i++) {
         const valor = maxStock - (maxStock / 5) * i;
-        ctx.fillText(formato(valor), 8, margenSup + (alto / 5) * i + 5);
+        ctx.fillStyle = "#64748b";
+        ctx.font = "12px Arial";
+        ctx.fillText(formato(valor), 14, yGrid + 4);
       }
+
+      ctx.strokeStyle = "#cbd5e1";
+      ctx.lineWidth = 1;
+
+      ctx.beginPath();
+      ctx.moveTo(margenIzq, margenSup);
+      ctx.lineTo(margenIzq, margenSup + alto);
+      ctx.lineTo(canvas.width - margenDer, margenSup + alto);
+      ctx.stroke();
+
+      dibujarLineaReferencia(ctx, margenIzq, canvas.width - margenDer, y(rop), "ROP", "#2563eb");
+      dibujarLineaReferencia(ctx, margenIzq, canvas.width - margenDer, y(ss), "Stock seguridad", "#64748b");
 
       ctx.strokeStyle = "#0f2f4f";
       ctx.lineWidth = 3;
@@ -558,24 +829,35 @@
 
       ctx.stroke();
 
-      dibujarLineaReferencia(ctx, margenIzq, canvas.width - margenDer, y(rop), "Punto de Reorden", "#2563eb");
-      dibujarLineaReferencia(ctx, margenIzq, canvas.width - margenDer, y(ss), "Stock Seguridad", "#5f6c7b");
+      let etiquetaCompra = false;
+      let etiquetaRecepcion = false;
 
       datos.forEach(d => {
         if (d.evento.includes("Generar OC")) {
-          dibujarEvento(ctx, x(d.dia), y(d.stock), "→ Generar OC", "#0f2f4f");
+          dibujarEvento(ctx, x(d.dia), y(d.stock), "#0f2f4f");
+
+          if (!etiquetaCompra) {
+            dibujarEtiqueta(ctx, x(d.dia), y(d.stock), "Generar OC", "#0f2f4f", "abajo");
+            etiquetaCompra = true;
+          }
         }
 
         if (d.evento.includes("Recepción OC")) {
-          dibujarEvento(ctx, x(d.dia), y(d.stock), "→ Recepción OC", "#2563eb");
+          dibujarEvento(ctx, x(d.dia), y(d.stock), "#2563eb");
+
+          if (!etiquetaRecepcion) {
+            dibujarEtiqueta(ctx, x(d.dia), y(d.stock), "Recepción OC", "#2563eb", "arriba");
+            etiquetaRecepcion = true;
+          }
         }
       });
 
-      ctx.fillStyle = "#5f6c7b";
-      ctx.font = "14px Arial";
-      ctx.fillText("Días", canvas.width / 2, canvas.height - 12);
+      ctx.fillStyle = "#64748b";
+      ctx.font = "13px Arial";
+      ctx.fillText("Días", canvas.width / 2, canvas.height - 15);
+
       ctx.save();
-      ctx.translate(18, canvas.height / 2);
+      ctx.translate(24, canvas.height / 2 + 24);
       ctx.rotate(-Math.PI / 2);
       ctx.fillText("Unidades", 0, 0);
       ctx.restore();
@@ -583,36 +865,50 @@
 
     function dibujarLineaReferencia(ctx, x1, x2, y, texto, color) {
       ctx.strokeStyle = color;
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([6, 5]);
+      ctx.lineWidth = 1.6;
+      ctx.setLineDash([7, 6]);
+
       ctx.beginPath();
       ctx.moveTo(x1, y);
       ctx.lineTo(x2, y);
       ctx.stroke();
+
       ctx.setLineDash([]);
 
       ctx.fillStyle = color;
-      ctx.font = "13px Arial";
-      ctx.fillText(texto, x2 - 145, y - 8);
+      ctx.font = "12px Arial";
+      ctx.fillText(texto, x2 - 110, y - 8);
     }
 
-    function dibujarEvento(ctx, x, y, texto, color) {
+    function dibujarEvento(ctx, x, y, color) {
       ctx.fillStyle = color;
       ctx.beginPath();
-      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
       ctx.fill();
 
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(x, y, 6, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    function dibujarEtiqueta(ctx, x, y, texto, color, posicion) {
+      const ancho = 98;
+      const alto = 24;
+      const offsetY = posicion === "arriba" ? -38 : 16;
+
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.roundRect(x + 8, y + offsetY, ancho, alto, 6);
+      ctx.fill();
+
+      ctx.fillStyle = "#ffffff";
       ctx.font = "12px Arial";
-      ctx.fillText(texto, x + 8, y - 10);
+      ctx.fillText(texto, x + 16, y + offsetY + 16);
     }
 
     mostrarCampoSS();
-
-document.querySelector(".results").style.display = "none";
-document.querySelector(".chart-wrap").style.display = "none";
-document.querySelector(".evaluation").style.display = "none";
-document.querySelector(".steps").style.display = "none";
-    
   </script>
 </body>
 </html>
