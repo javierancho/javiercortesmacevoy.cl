@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Precio de Venta | Javier Cortés Mac Evoy</title>
+
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #5f6c7b;
+      --primary: #0f2f4f;
+      --accent: #2563eb;
+      --line: #d9e2ec;
+      --soft: #edf4ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .nav-links a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    main { padding: 70px 0; }
+
+    h1, h2, h3 { color: var(--primary); }
+
+    .intro {
+      max-width: 850px;
+      font-size: 18px;
+      color: var(--muted);
+      text-align: justify;
+    }
+
+    .mode-switch {
+      display: flex;
+      gap: 10px;
+      margin-top: 28px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px;
+      width: fit-content;
+      box-shadow: 0 8px 24px rgba(15, 47, 79, 0.05);
+    }
+
+    .mode-switch button {
+      margin: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--primary);
+      border: none;
+      padding: 11px 18px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .mode-switch button.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 34px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 26px;
+      box-shadow: 0 10px 30px rgba(15, 47, 79, 0.05);
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-size: 15px;
+    }
+
+    .help {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .primary-button {
+      margin-top: 22px;
+      padding: 13px 20px;
+      border: none;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary-button:hover { background: var(--accent); }
+
+    .secondary-button {
+      margin-top: 12px;
+      margin-left: 8px;
+      padding: 13px 20px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--primary);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .secondary-button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .results { display: none; }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .metric {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 6px;
+      color: var(--primary);
+      font-size: 22px;
+    }
+
+    .summary, .note {
+      display: none;
+      margin-top: 26px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .summary p, .note p {
+      color: var(--muted);
+      text-align: justify;
+    }
+
+    footer {
+      margin-top: 60px;
+      padding: 30px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 850px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links a {
+        margin-left: 0;
+        margin-right: 16px;
+      }
+
+      .layout, .result-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .mode-switch {
+        width: 100%;
+        flex-direction: column;
+        border-radius: 20px;
+      }
+
+      .secondary-button {
+        margin-left: 0;
+        display: block;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">Javier Cortés Mac Evoy</div>
+        <div class="nav-links">
+          <a href="../../">Inicio</a>
+          <a href="../../proyectos/">Proyectos</a>
+          <a href="../../#sobre-mi">Sobre mí</a>
+          <a href="../../#contacto">Contacto</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Calculadora de Precio de Venta</h1>
+
+      <p class="intro">
+        Herramienta para estimar el precio de venta de un producto a partir de su costo
+        y margen deseado, o para calcular el margen obtenido a partir de un precio final
+        con IVA.
+      </p>
+
+      <div class="mode-switch">
+        <button id="btnModoPrecio" class="active" onclick="cambiarModo('precio')">
+          Calcular precio de venta
+        </button>
+        <button id="btnModoMargen" onclick="cambiarModo('margen')">
+          Obtener margen desde precio
+        </button>
+      </div>
+
+      <div class="layout">
+        <div class="card">
+          <h2>Datos de entrada</h2>
+
+          <label for="costoNeto">Costo neto del producto</label>
+          <input id="costoNeto" type="number" placeholder="Ej: 10000" step="100">
+          <div class="help">Ingrese el costo sin IVA.</div>
+
+          <label for="otrosCostos">Otros costos netos</label>
+          <input id="otrosCostos" type="number" placeholder="Opcional. Ej: 500" step="100">
+          <div class="help">Puede incluir flete, embalaje, comisión u otros costos asociados.</div>
+
+          <div id="modoPrecio">
+            <label for="margenDeseado">Margen deseado (%)</label>
+            <input id="margenDeseado" type="number" placeholder="Ej: 30" step="0.01">
+            <div class="help">Ingrese 30 para un margen de 30% sobre el precio neto de venta.</div>
+          </div>
+
+          <div id="modoMargen" style="display:none;">
+            <label for="precioFinalIva">Precio final con IVA</label>
+            <input id="precioFinalIva" type="number" placeholder="Ej: 17850" step="100">
+            <div class="help">Ingrese el precio final cobrado al cliente.</div>
+          </div>
+
+          <label for="iva">IVA (%)</label>
+          <input id="iva" type="number" value="19" placeholder="Ej: 19" step="0.01">
+
+          <button class="primary-button" onclick="calcular()">Calcular</button>
+          <button class="secondary-button" onclick="limpiar()">Limpiar</button>
+        </div>
+
+        <div class="card results">
+          <h2>Resultados</h2>
+
+          <div class="result-grid">
+            <div class="metric">
+              <span>Costo total neto</span>
+              <strong id="costoTotal">-</strong>
+            </div>
+
+            <div class="metric">
+              <span>Precio neto de venta</span>
+              <strong id="precioNeto">-</strong>
+            </div>
+
+            <div class="metric">
+              <span>IVA</span>
+              <strong id="montoIva">-</strong>
+            </div>
+
+            <div class="metric">
+              <span>Precio final con IVA</span>
+              <strong id="precioFinal">-</strong>
+            </div>
+
+            <div class="metric">
+              <span>Utilidad neta</span>
+              <strong id="utilidad">-</strong>
+            </div>
+
+            <div class="metric">
+              <span id="labelMargen">Margen aplicado</span>
+              <strong id="margenResultado">-</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary">
+        <h2>Resumen</h2>
+        <p id="resumenTexto">-</p>
+      </div>
+
+      <div class="note">
+        <h2>Nota</h2>
+        <p>
+          Esta información se proporciona únicamente con fines educativos, de experimentación
+          y apoyo al aprendizaje.
+        </p>
+        <p>
+          Los resultados son referenciales y dependen de los datos ingresados. Esta herramienta
+          no reemplaza una evaluación contable, tributaria o financiera específica.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 Javier Cortés Mac Evoy · Calculadora de Precio de Venta
+    </div>
+  </footer>
+
+  <script>
+    let modoActual = "precio";
+
+    function cambiarModo(modo) {
+      modoActual = modo;
+
+      document.getElementById("modoPrecio").style.display = modo === "precio" ? "block" : "none";
+      document.getElementById("modoMargen").style.display = modo === "margen" ? "block" : "none";
+
+      document.getElementById("btnModoPrecio").classList.toggle("active", modo === "precio");
+      document.getElementById("btnModoMargen").classList.toggle("active", modo === "margen");
+
+      ocultarResultados();
+    }
+
+    function ocultarResultados() {
+      document.querySelector(".results").style.display = "none";
+      document.querySelector(".summary").style.display = "none";
+      document.querySelector(".note").style.display = "none";
+    }
+
+    function mostrarBloques() {
+      document.querySelector(".results").style.display = "block";
+      document.querySelector(".summary").style.display = "block";
+      document.querySelector(".note").style.display = "block";
+    }
+
+    function moneda(valor) {
+      return "$" + Math.round(valor).toLocaleString("es-CL");
+    }
+
+    function porcentaje(valor) {
+      return valor.toLocaleString("es-CL", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }) + "%";
+    }
+
+    function obtenerCostoTotal() {
+      const costoNeto = parseFloat(document.getElementById("costoNeto").value);
+      const otrosCostos = parseFloat(document.getElementById("otrosCostos").value) || 0;
+
+      if (isNaN(costoNeto) || costoNeto <= 0 || otrosCostos < 0) {
+        return null;
+      }
+
+      return costoNeto + otrosCostos;
+    }
+
+    function calcular() {
+      if (modoActual === "precio") {
+        calcularPrecioVenta();
+      } else {
+        calcularMargenDesdePrecio();
+      }
+    }
+
+    function calcularPrecioVenta() {
+      const costoTotal = obtenerCostoTotal();
+      const margenDeseado = parseFloat(document.getElementById("margenDeseado").value);
+      const iva = parseFloat(document.getElementById("iva").value);
+
+      if (
+        costoTotal === null ||
+        isNaN(margenDeseado) || margenDeseado <= 0 || margenDeseado >= 100 ||
+        isNaN(iva) || iva < 0
+      ) {
+        alert("Revise los datos ingresados. El costo debe ser mayor a cero, el margen debe estar entre 0% y 100%, y el IVA no puede ser negativo.");
+        return;
+      }
+
+      const margen = margenDeseado / 100;
+      const tasaIva = iva / 100;
+
+      const precioNeto = costoTotal / (1 - margen);
+      const montoIva = precioNeto * tasaIva;
+      const precioFinal = precioNeto + montoIva;
+      const utilidad = precioNeto - costoTotal;
+
+      mostrarBloques();
+
+      document.getElementById("costoTotal").textContent = moneda(costoTotal);
+      document.getElementById("precioNeto").textContent = moneda(precioNeto);
+      document.getElementById("montoIva").textContent = moneda(montoIva);
+      document.getElementById("precioFinal").textContent = moneda(precioFinal);
+      document.getElementById("utilidad").textContent = moneda(utilidad);
+      document.getElementById("labelMargen").textContent = "Margen aplicado";
+      document.getElementById("margenResultado").textContent = porcentaje(margenDeseado);
+
+      document.getElementById("resumenTexto").textContent =
+        "Con un costo total neto de " + moneda(costoTotal) + " y un margen deseado de " + porcentaje(margenDeseado) + ", " +
+        "el precio neto de venta estimado sería de " + moneda(precioNeto) + ". " +
+        "Aplicando un IVA de " + porcentaje(iva) + ", el precio final con IVA sería de " + moneda(precioFinal) + ". " +
+        "La utilidad neta estimada por unidad sería de " + moneda(utilidad) + ".";
+    }
+
+    function calcularMargenDesdePrecio() {
+      const costoTotal = obtenerCostoTotal();
+      const precioFinalIva = parseFloat(document.getElementById("precioFinalIva").value);
+      const iva = parseFloat(document.getElementById("iva").value);
+
+      if (
+        costoTotal === null ||
+        isNaN(precioFinalIva) || precioFinalIva <= 0 ||
+        isNaN(iva) || iva < 0
+      ) {
+        alert("Revise los datos ingresados. El costo y el precio final deben ser mayores a cero, y el IVA no puede ser negativo.");
+        return;
+      }
+
+      const tasaIva = iva / 100;
+
+      const precioNeto = precioFinalIva / (1 + tasaIva);
+      const montoIva = precioFinalIva - precioNeto;
+      const utilidad = precioNeto - costoTotal;
+      const margenObtenido = (utilidad / precioNeto) * 100;
+
+      mostrarBloques();
+
+      document.getElementById("costoTotal").textContent = moneda(costoTotal);
+      document.getElementById("precioNeto").textContent = moneda(precioNeto);
+      document.getElementById("montoIva").textContent = moneda(montoIva);
+      document.getElementById("precioFinal").textContent = moneda(precioFinalIva);
+      document.getElementById("utilidad").textContent = moneda(utilidad);
+      document.getElementById("labelMargen").textContent = "Margen obtenido";
+      document.getElementById("margenResultado").textContent = porcentaje(margenObtenido);
+
+      if (utilidad >= 0) {
+        document.getElementById("resumenTexto").textContent =
+          "Con un precio final con IVA de " + moneda(precioFinalIva) + " y un IVA de " + porcentaje(iva) + ", " +
+          "el precio neto de venta corresponde a " + moneda(precioNeto) + ". " +
+          "Considerando un costo total neto de " + moneda(costoTotal) + ", la utilidad neta estimada sería de " + moneda(utilidad) + ". " +
+          "El margen obtenido sobre el precio neto de venta sería de " + porcentaje(margenObtenido) + ".";
+      } else {
+        document.getElementById("resumenTexto").textContent =
+          "Con un precio final con IVA de " + moneda(precioFinalIva) + " y un IVA de " + porcentaje(iva) + ", " +
+          "el precio neto de venta corresponde a " + moneda(precioNeto) + ". " +
+          "Considerando un costo total neto de " + moneda(costoTotal) + ", se obtiene una pérdida neta estimada de " + moneda(Math.abs(utilidad)) + ". " +
+          "El margen obtenido sería negativo, equivalente a " + porcentaje(margenObtenido) + ".";
+      }
+    }
+
+    function limpiar() {
+      document.getElementById("costoNeto").value = "";
+      document.getElementById("otrosCostos").value = "";
+      document.getElementById("margenDeseado").value = "";
+      document.getElementById("precioFinalIva").value = "";
+      document.getElementById("iva").value = "19";
+
+      ocultarResultados();
+    }
+
+    ocultarResultados();
+  </script>
+</body>
+</html>
