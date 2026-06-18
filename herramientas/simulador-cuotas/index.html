@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Cuotas | Javier Cortés Mac Evoy</title>
+
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #5f6c7b;
+      --primary: #0f2f4f;
+      --accent: #2563eb;
+      --line: #d9e2ec;
+      --soft: #edf4ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .nav-links a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    main {
+      padding: 70px 0;
+    }
+
+    h1, h2, h3 {
+      color: var(--primary);
+    }
+
+    .intro {
+      max-width: 850px;
+      font-size: 18px;
+      color: var(--muted);
+      text-align: justify;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 34px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 26px;
+      box-shadow: 0 10px 30px rgba(15, 47, 79, 0.05);
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-size: 15px;
+    }
+
+    .help {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    button {
+      margin-top: 22px;
+      padding: 13px 20px;
+      border: none;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: var(--accent);
+    }
+
+    .results {
+      display: none;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .metric {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 6px;
+      color: var(--primary);
+      font-size: 22px;
+    }
+
+    .summary, .table-wrap, .note {
+      display: none;
+      margin-top: 26px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .summary p, .note p {
+      color: var(--muted);
+      text-align: justify;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: right;
+    }
+
+    th:first-child, td:first-child {
+      text-align: center;
+    }
+
+    th {
+      color: var(--primary);
+      background: #f8fafc;
+    }
+
+    footer {
+      margin-top: 60px;
+      padding: 30px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 850px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links a {
+        margin-left: 0;
+        margin-right: 16px;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        font-size: 12px;
+      }
+
+      th, td {
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">Javier Cortés Mac Evoy</div>
+        <div class="nav-links">
+          <a href="../../">Inicio</a>
+          <a href="../../proyectos/">Proyectos</a>
+          <a href="../../#sobre-mi">Sobre mí</a>
+          <a href="../../#contacto">Contacto</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Simulador de Cuotas</h1>
+
+      <p class="intro">
+        Herramienta para estimar el pago mensual, el costo total de una compra financiada
+        y el impacto de intereses, seguros y otros costos asociados.
+      </p>
+
+      <div class="layout">
+        <div class="card">
+          <h2>Datos de entrada</h2>
+
+          <label for="precio">Precio del producto</label>
+          <input id="precio" type="number" placeholder="Ej: 10000000" step="1000">
+
+          <label for="pie">Pie o pago inicial</label>
+          <input id="pie" type="number" placeholder="Ej: 2000000" step="1000">
+
+          <label for="cuotas">Cantidad de cuotas</label>
+          <input id="cuotas" type="number" placeholder="Ej: 24" step="1">
+
+          <label for="tasa">Tasa de interés (% mensual)</label>
+          <input id="tasa" type="number" placeholder="Ej: 1.5" step="0.01">
+          <div class="help">Ingrese 1.5 para una tasa mensual de 1,5%.</div>
+
+          <label for="seguro">Seguro mensual</label>
+          <input id="seguro" type="number" placeholder="Ej: 12000" step="1000">
+
+          <label for="otros">Otros costos mensuales</label>
+          <input id="otros" type="number" placeholder="Ej: 5000" step="1000">
+
+          <button onclick="calcular()">Calcular</button>
+        </div>
+
+        <div class="card results">
+          <h2>Resultados</h2>
+
+          <div class="result-grid">
+            <div class="metric">
+              <span>Monto financiado</span>
+              <strong id="montoFinanciado">-</strong>
+            </div>
+
+            <div class="metric">
+              <span>Pago mensual estimado</span>
+              <strong id="pagoMensual">-</strong>
+            </div>
+
+            <div class="metric">
+              <span>Total pagado</span>
+              <strong id="totalPagado">-</strong>
+            </div>
+
+            <div class="metric">
+              <span>Intereses pagados</span>
+              <strong id="interesesPagados">-</strong>
+            </div>
+
+            <div class="metric">
+              <span>Costos adicionales</span>
+              <strong id="costosAdicionales">-</strong>
+            </div>
+
+            <div class="metric">
+              <span>Diferencia vs precio</span>
+              <strong id="diferencia">-</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary">
+        <h2>Resumen</h2>
+        <p id="resumenTexto">-</p>
+      </div>
+
+      <div class="table-wrap">
+        <h2>Detalle de pagos</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Cuota</th>
+              <th>Saldo inicial</th>
+              <th>Interés</th>
+              <th>Abono a deuda</th>
+              <th>Pago mensual</th>
+              <th>Saldo final</th>
+            </tr>
+          </thead>
+          <tbody id="tablaPagos"></tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <h2>Nota</h2>
+        <p>
+          Esta información se proporciona únicamente con fines educativos, de experimentación
+          y apoyo al aprendizaje.
+        </p>
+        <p>
+          Los resultados son referenciales y dependen de los datos ingresados, de la tasa utilizada
+          y de las condiciones reales aplicadas por cada institución o comercio.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 Javier Cortés Mac Evoy · Simulador de Cuotas
+    </div>
+  </footer>
+
+  <script>
+    function moneda(valor) {
+      return "$" + Math.round(valor).toLocaleString("es-CL");
+    }
+
+    function calcular() {
+      const precio = parseFloat(document.getElementById("precio").value);
+      const pie = parseFloat(document.getElementById("pie").value) || 0;
+      const cuotas = parseInt(document.getElementById("cuotas").value);
+      const tasaMensual = parseFloat(document.getElementById("tasa").value);
+      const seguro = parseFloat(document.getElementById("seguro").value) || 0;
+      const otros = parseFloat(document.getElementById("otros").value) || 0;
+
+      if (
+        isNaN(precio) || precio <= 0 ||
+        isNaN(cuotas) || cuotas <= 0 ||
+        isNaN(tasaMensual) || tasaMensual < 0 ||
+        pie < 0 || pie > precio
+      ) {
+        alert("Revise los datos ingresados. Precio, cuotas y tasa deben ser válidos.");
+        return;
+      }
+
+      const montoFinanciado = precio - pie;
+      const tasa = tasaMensual / 100;
+
+      let cuotaBase;
+
+      if (tasa === 0) {
+        cuotaBase = montoFinanciado / cuotas;
+      } else {
+        cuotaBase = montoFinanciado * (tasa * Math.pow(1 + tasa, cuotas)) / (Math.pow(1 + tasa, cuotas) - 1);
+      }
+
+      const costosMensuales = seguro + otros;
+      const pagoMensualTotal = cuotaBase + costosMensuales;
+      const totalCredito = cuotaBase * cuotas;
+      const intereses = totalCredito - montoFinanciado;
+      const totalCostos = costosMensuales * cuotas;
+      const totalDesembolsado = pie + totalCredito + totalCostos;
+      const diferencia = totalDesembolsado - precio;
+      const incremento = (diferencia / precio) * 100;
+
+      document.querySelector(".results").style.display = "block";
+      document.querySelector(".summary").style.display = "block";
+      document.querySelector(".table-wrap").style.display = "block";
+      document.querySelector(".note").style.display = "block";
+
+      document.getElementById("montoFinanciado").textContent = moneda(montoFinanciado);
+      document.getElementById("pagoMensual").textContent = moneda(pagoMensualTotal);
+      document.getElementById("totalPagado").textContent = moneda(totalDesembolsado);
+      document.getElementById("interesesPagados").textContent = moneda(intereses);
+      document.getElementById("costosAdicionales").textContent = moneda(totalCostos);
+      document.getElementById("diferencia").textContent = moneda(diferencia);
+
+      document.getElementById("resumenTexto").textContent =
+        "El producto tiene un valor de " + moneda(precio) + ". " +
+        "Considerando un pie de " + moneda(pie) + ", el monto financiado sería de " + moneda(montoFinanciado) + ". " +
+        "El pago mensual estimado sería de " + moneda(pagoMensualTotal) + ", incluyendo la cuota y los costos adicionales ingresados. " +
+        "Al finalizar el período, el total desembolsado sería de " + moneda(totalDesembolsado) + ". " +
+        "Esto equivale a pagar " + moneda(diferencia) + " adicionales respecto al precio original del producto, equivalente a un incremento aproximado de " + incremento.toFixed(1) + "%.";
+
+      generarTabla(montoFinanciado, tasa, cuotas, cuotaBase, costosMensuales);
+    }
+
+    function generarTabla(montoFinanciado, tasa, cuotas, cuotaBase, costosMensuales) {
+      const tbody = document.getElementById("tablaPagos");
+      tbody.innerHTML = "";
+
+      let saldo = montoFinanciado;
+
+      for (let i = 1; i <= cuotas; i++) {
+        const interes = saldo * tasa;
+        const abono = cuotaBase - interes;
+        const saldoFinal = Math.max(saldo - abono, 0);
+        const pagoMensual = cuotaBase + costosMensuales;
+
+        const fila = document.createElement("tr");
+
+        fila.innerHTML =
+          "<td>" + i + "</td>" +
+          "<td>" + moneda(saldo) + "</td>" +
+          "<td>" + moneda(interes) + "</td>" +
+          "<td>" + moneda(abono) + "</td>" +
+          "<td>" + moneda(pagoMensual) + "</td>" +
+          "<td>" + moneda(saldoFinal) + "</td>";
+
+        tbody.appendChild(fila);
+
+        saldo = saldoFinal;
+      }
+    }
+  </script>
+</body>
+</html>
