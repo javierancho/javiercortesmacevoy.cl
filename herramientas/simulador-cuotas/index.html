@@ -17,9 +17,7 @@
       --soft: #edf4ff;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -59,23 +57,45 @@
       font-size: 15px;
     }
 
-    .nav-links a:hover {
-      color: var(--accent);
-    }
+    .nav-links a:hover { color: var(--accent); }
 
-    main {
-      padding: 70px 0;
-    }
+    main { padding: 70px 0; }
 
-    h1, h2, h3 {
-      color: var(--primary);
-    }
+    h1, h2, h3 { color: var(--primary); }
 
     .intro {
       max-width: 850px;
       font-size: 18px;
       color: var(--muted);
       text-align: justify;
+    }
+
+    .mode-switch {
+      display: flex;
+      gap: 10px;
+      margin-top: 28px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px;
+      width: fit-content;
+      box-shadow: 0 8px 24px rgba(15, 47, 79, 0.05);
+    }
+
+    .mode-switch button {
+      margin: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--primary);
+      border: none;
+      padding: 11px 18px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .mode-switch button.active {
+      background: var(--primary);
+      color: #ffffff;
     }
 
     .layout {
@@ -115,7 +135,7 @@
       color: var(--muted);
     }
 
-    button {
+    .primary-button {
       margin-top: 22px;
       padding: 13px 20px;
       border: none;
@@ -126,13 +146,9 @@
       cursor: pointer;
     }
 
-    button:hover {
-      background: var(--accent);
-    }
+    .primary-button:hover { background: var(--accent); }
 
-    .results {
-      display: none;
-    }
+    .results { display: none; }
 
     .result-grid {
       display: grid;
@@ -216,12 +232,14 @@
         margin-right: 16px;
       }
 
-      .layout {
+      .layout, .result-grid {
         grid-template-columns: 1fr;
       }
 
-      .result-grid {
-        grid-template-columns: 1fr;
+      .mode-switch {
+        width: 100%;
+        flex-direction: column;
+        border-radius: 20px;
       }
 
       table {
@@ -259,22 +277,48 @@
         y el impacto de intereses, seguros y otros costos asociados.
       </p>
 
+      <div class="mode-switch">
+        <button id="btnModoPrecio" class="active" onclick="cambiarModo('precio')">
+          Tengo el precio del producto
+        </button>
+        <button id="btnModoCuota" onclick="cambiarModo('cuota')">
+          Tengo el valor de la cuota
+        </button>
+      </div>
+
       <div class="layout">
         <div class="card">
           <h2>Datos de entrada</h2>
 
-          <label for="precio">Precio del producto</label>
-          <input id="precio" type="number" placeholder="Ej: 10000000" step="1000">
+          <div id="modoPrecio">
+            <label for="precio">Precio del producto</label>
+            <input id="precio" type="number" placeholder="Ej: 10000000" step="1000">
 
-          <label for="pie">Pie o pago inicial</label>
-          <input id="pie" type="number" placeholder="Ej: 2000000" step="1000">
+            <label for="pie">Pie o pago inicial</label>
+            <input id="pie" type="number" placeholder="Ej: 2000000" step="1000">
 
-          <label for="cuotas">Cantidad de cuotas</label>
-          <input id="cuotas" type="number" placeholder="Ej: 24" step="1">
+            <label for="cuotas">Cantidad de cuotas</label>
+            <input id="cuotas" type="number" placeholder="Ej: 24" step="1">
 
-          <label for="tasa">Tasa de interés (% mensual)</label>
-          <input id="tasa" type="number" placeholder="Ej: 1.5" step="0.01">
-          <div class="help">Ingrese 1.5 para una tasa mensual de 1,5%.</div>
+            <label for="tasa">Tasa de interés (% mensual)</label>
+            <input id="tasa" type="number" placeholder="Ej: 1.5" step="0.01">
+            <div class="help">Ingrese 1.5 para una tasa mensual de 1,5%.</div>
+          </div>
+
+          <div id="modoCuota" style="display:none;">
+            <label for="valorCuota">Valor de la cuota</label>
+            <input id="valorCuota" type="number" placeholder="Ej: 424000" step="1000">
+
+            <label for="cuotasConocidas">Cantidad de cuotas</label>
+            <input id="cuotasConocidas" type="number" placeholder="Ej: 24" step="1">
+
+            <label for="pieConocido">Pie o pago inicial</label>
+            <input id="pieConocido" type="number" placeholder="Ej: 2000000" step="1000">
+
+            <label for="precioReferencia">Precio del producto conocido u observado</label>
+            <input id="precioReferencia" type="number" placeholder="Opcional. Ej: 10000000" step="1000">
+            <div class="help">Si no conoce el precio original, deje este campo vacío.</div>
+          </div>
 
           <label for="seguro">Seguro mensual</label>
           <input id="seguro" type="number" placeholder="Ej: 12000" step="1000">
@@ -282,7 +326,7 @@
           <label for="otros">Otros costos mensuales</label>
           <input id="otros" type="number" placeholder="Ej: 5000" step="1000">
 
-          <button onclick="calcular()">Calcular</button>
+          <button class="primary-button" onclick="calcular()">Calcular</button>
         </div>
 
         <div class="card results">
@@ -290,7 +334,7 @@
 
           <div class="result-grid">
             <div class="metric">
-              <span>Monto financiado</span>
+              <span id="labelMonto">Monto financiado</span>
               <strong id="montoFinanciado">-</strong>
             </div>
 
@@ -365,11 +409,47 @@
   </footer>
 
   <script>
+    let modoActual = "precio";
+
+    function cambiarModo(modo) {
+      modoActual = modo;
+
+      document.getElementById("modoPrecio").style.display = modo === "precio" ? "block" : "none";
+      document.getElementById("modoCuota").style.display = modo === "cuota" ? "block" : "none";
+
+      document.getElementById("btnModoPrecio").classList.toggle("active", modo === "precio");
+      document.getElementById("btnModoCuota").classList.toggle("active", modo === "cuota");
+
+      ocultarResultados();
+    }
+
+    function ocultarResultados() {
+      document.querySelector(".results").style.display = "none";
+      document.querySelector(".summary").style.display = "none";
+      document.querySelector(".table-wrap").style.display = "none";
+      document.querySelector(".note").style.display = "none";
+    }
+
     function moneda(valor) {
       return "$" + Math.round(valor).toLocaleString("es-CL");
     }
 
     function calcular() {
+      if (modoActual === "precio") {
+        calcularDesdePrecio();
+      } else {
+        calcularDesdeCuota();
+      }
+    }
+
+    function mostrarBloques() {
+      document.querySelector(".results").style.display = "block";
+      document.querySelector(".summary").style.display = "block";
+      document.querySelector(".table-wrap").style.display = "block";
+      document.querySelector(".note").style.display = "block";
+    }
+
+    function calcularDesdePrecio() {
       const precio = parseFloat(document.getElementById("precio").value);
       const pie = parseFloat(document.getElementById("pie").value) || 0;
       const cuotas = parseInt(document.getElementById("cuotas").value);
@@ -407,11 +487,9 @@
       const diferencia = totalDesembolsado - precio;
       const incremento = (diferencia / precio) * 100;
 
-      document.querySelector(".results").style.display = "block";
-      document.querySelector(".summary").style.display = "block";
-      document.querySelector(".table-wrap").style.display = "block";
-      document.querySelector(".note").style.display = "block";
+      mostrarBloques();
 
+      document.getElementById("labelMonto").textContent = "Monto financiado";
       document.getElementById("montoFinanciado").textContent = moneda(montoFinanciado);
       document.getElementById("pagoMensual").textContent = moneda(pagoMensualTotal);
       document.getElementById("totalPagado").textContent = moneda(totalDesembolsado);
@@ -427,6 +505,65 @@
         "Esto equivale a pagar " + moneda(diferencia) + " adicionales respecto al precio original del producto, equivalente a un incremento aproximado de " + incremento.toFixed(1) + "%.";
 
       generarTabla(montoFinanciado, tasa, cuotas, cuotaBase, costosMensuales);
+    }
+
+    function calcularDesdeCuota() {
+      const valorCuota = parseFloat(document.getElementById("valorCuota").value);
+      const cuotas = parseInt(document.getElementById("cuotasConocidas").value);
+      const pie = parseFloat(document.getElementById("pieConocido").value) || 0;
+      const precioReferencia = parseFloat(document.getElementById("precioReferencia").value);
+      const seguro = parseFloat(document.getElementById("seguro").value) || 0;
+      const otros = parseFloat(document.getElementById("otros").value) || 0;
+
+      if (
+        isNaN(valorCuota) || valorCuota <= 0 ||
+        isNaN(cuotas) || cuotas <= 0 ||
+        pie < 0
+      ) {
+        alert("Revise los datos ingresados. Valor de cuota y cantidad de cuotas deben ser válidos.");
+        return;
+      }
+
+      const costosMensuales = seguro + otros;
+      const pagoMensualTotal = valorCuota + costosMensuales;
+      const totalCuotas = valorCuota * cuotas;
+      const totalCostos = costosMensuales * cuotas;
+      const totalDesembolsado = pie + totalCuotas + totalCostos;
+
+      let diferencia = null;
+      let incremento = null;
+
+      if (!isNaN(precioReferencia) && precioReferencia > 0) {
+        diferencia = totalDesembolsado - precioReferencia;
+        incremento = (diferencia / precioReferencia) * 100;
+      }
+
+      mostrarBloques();
+
+      document.getElementById("labelMonto").textContent = "Total de cuotas";
+      document.getElementById("montoFinanciado").textContent = moneda(totalCuotas);
+      document.getElementById("pagoMensual").textContent = moneda(pagoMensualTotal);
+      document.getElementById("totalPagado").textContent = moneda(totalDesembolsado);
+      document.getElementById("interesesPagados").textContent = "No calculable";
+      document.getElementById("costosAdicionales").textContent = moneda(totalCostos);
+      document.getElementById("diferencia").textContent = diferencia === null ? "Sin precio base" : moneda(diferencia);
+
+      if (diferencia === null) {
+        document.getElementById("resumenTexto").textContent =
+          "Con una cuota de " + moneda(valorCuota) + " durante " + cuotas + " meses, más costos adicionales mensuales por " + moneda(costosMensuales) + ", " +
+          "el pago mensual estimado sería de " + moneda(pagoMensualTotal) + ". " +
+          "Al finalizar el período, el total desembolsado sería de " + moneda(totalDesembolsado) + ". " +
+          "Como no se ingresó un precio de referencia, no es posible calcular la diferencia contra el precio original ni separar intereses.";
+      } else {
+        document.getElementById("resumenTexto").textContent =
+          "Con una cuota de " + moneda(valorCuota) + " durante " + cuotas + " meses, más costos adicionales mensuales por " + moneda(costosMensuales) + ", " +
+          "el pago mensual estimado sería de " + moneda(pagoMensualTotal) + ". " +
+          "Al finalizar el período, el total desembolsado sería de " + moneda(totalDesembolsado) + ". " +
+          "Comparado con un precio de referencia de " + moneda(precioReferencia) + ", esto equivale a pagar " + moneda(diferencia) +
+          " adicionales, con un incremento aproximado de " + incremento.toFixed(1) + "%.";
+      }
+
+      generarTablaCuotaConocida(valorCuota, cuotas, costosMensuales);
     }
 
     function generarTabla(montoFinanciado, tasa, cuotas, cuotaBase, costosMensuales) {
@@ -452,10 +589,30 @@
           "<td>" + moneda(saldoFinal) + "</td>";
 
         tbody.appendChild(fila);
-
         saldo = saldoFinal;
       }
     }
+
+    function generarTablaCuotaConocida(valorCuota, cuotas, costosMensuales) {
+      const tbody = document.getElementById("tablaPagos");
+      tbody.innerHTML = "";
+
+      for (let i = 1; i <= cuotas; i++) {
+        const fila = document.createElement("tr");
+
+        fila.innerHTML =
+          "<td>" + i + "</td>" +
+          "<td>No disponible</td>" +
+          "<td>No calculable</td>" +
+          "<td>No calculable</td>" +
+          "<td>" + moneda(valorCuota + costosMensuales) + "</td>" +
+          "<td>No disponible</td>";
+
+        tbody.appendChild(fila);
+      }
+    }
+
+    ocultarResultados();
   </script>
 </body>
 </html>
