@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Códigos | Javier Cortés Mac Evoy</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #5f6c7b;
+      --primary: #0f2f4f;
+      --accent: #2563eb;
+      --line: #d9e2ec;
+      --soft: #edf4ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .nav-links a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    main { padding: 70px 0; }
+
+    h1, h2, h3 { color: var(--primary); }
+
+    .intro {
+      max-width: 850px;
+      font-size: 18px;
+      color: var(--muted);
+      text-align: justify;
+    }
+
+    .segmented-control {
+      display: inline-flex;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px;
+      margin-top: 28px;
+      box-shadow: 0 8px 24px rgba(15, 47, 79, 0.05);
+    }
+
+    .segment {
+      border: none;
+      background: transparent;
+      color: var(--primary);
+      padding: 14px 28px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 15px;
+      transition: all 0.25s ease;
+    }
+
+    .segment:hover { background: var(--soft); }
+
+    .segment.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 34px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 26px;
+      box-shadow: 0 10px 30px rgba(15, 47, 79, 0.05);
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .help {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    button.primary-button {
+      margin-top: 22px;
+      padding: 13px 20px;
+      border: none;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button.primary-button:hover { background: var(--accent); }
+
+    .secondary-button {
+      margin-top: 12px;
+      padding: 11px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--primary);
+      background: #ffffff;
+      color: var(--primary);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .result-box {
+      display: none;
+    }
+
+    .code-preview {
+      margin-top: 18px;
+      padding: 22px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      min-height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: auto;
+    }
+
+    .status {
+      margin-top: 16px;
+      padding: 14px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .details, .note {
+      display: none;
+      margin-top: 26px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .details p, .note p {
+      color: var(--muted);
+      text-align: justify;
+    }
+
+    .technical {
+      font-family: "Courier New", monospace;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      color: var(--muted);
+      overflow-x: auto;
+    }
+
+    footer {
+      margin-top: 60px;
+      padding: 30px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 850px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links a {
+        margin-left: 0;
+        margin-right: 16px;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .segmented-control {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        border-radius: 20px;
+      }
+
+      .segment {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">Javier Cortés Mac Evoy</div>
+        <div class="nav-links">
+          <a href="../../">Inicio</a>
+          <a href="../../proyectos/">Proyectos</a>
+          <a href="../../#sobre-mi">Sobre mí</a>
+          <a href="../../#contacto">Contacto</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Generador de Códigos</h1>
+
+      <p class="intro">
+        Herramienta para generar códigos QR y códigos de barras simples, validar dígitos verificadores
+        y descargar una imagen del resultado generado.
+      </p>
+
+      <div class="segmented-control">
+        <button id="btnQR" class="segment active" onclick="cambiarModo('qr')">QR</button>
+        <button id="btnEAN" class="segment" onclick="cambiarModo('ean')">EAN-13</button>
+        <button id="btnDUN" class="segment" onclick="cambiarModo('dun')">DUN-14 / ITF-14</button>
+      </div>
+
+      <div class="layout">
+        <div class="card">
+          <h2>Datos de entrada</h2>
+
+          <div id="modoQR">
+            <label for="qrTexto">Texto, URL o dato a codificar</label>
+            <textarea id="qrTexto" placeholder="Ej: https://javiercortesmacevoy.cl"></textarea>
+            <div class="help">Puede ingresar una URL, texto, correo, teléfono o cualquier dato simple.</div>
+          </div>
+
+          <div id="modoEAN" style="display:none;">
+            <label for="eanInput">Código EAN</label>
+            <input id="eanInput" type="text" placeholder="Ingrese 12 o 13 dígitos">
+            <div class="help">
+              Si ingresa 12 dígitos, se calculará el dígito verificador. Si ingresa 13, se validará el código.
+            </div>
+          </div>
+
+          <div id="modoDUN" style="display:none;">
+            <label for="dunInput">Código base DUN-14 / ITF-14</label>
+            <input id="dunInput" type="text" placeholder="Ingrese 13 o 14 dígitos">
+            <div class="help">
+              Si ingresa 13 dígitos, se calculará el dígito verificador. Si ingresa 14, se validará el código.
+            </div>
+          </div>
+
+          <button class="primary-button" onclick="generarCodigo()">Generar código</button>
+        </div>
+
+        <div class="card result-box">
+          <h2>Resultado</h2>
+
+          <div class="status" id="estadoCodigo">
+            -
+          </div>
+
+          <div class="code-preview">
+            <div id="qrPreview"></div>
+            <canvas id="barcodeCanvas"></canvas>
+          </div>
+
+          <button class="secondary-button" onclick="descargarPNG()">
+            Descargar PNG
+          </button>
+        </div>
+      </div>
+
+      <div class="details">
+        <h2>Detalle del cálculo</h2>
+        <div class="technical" id="detalleCalculo">-</div>
+      </div>
+
+      <div class="note">
+        <h2>Nota</h2>
+        <p>
+          Esta herramienta se proporciona únicamente con fines educativos, de experimentación
+          y apoyo al aprendizaje.
+        </p>
+        <p>
+          Siempre valide los códigos generados antes de utilizarlos en procesos productivos,
+          comerciales, regulatorios o de trazabilidad.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 Javier Cortés Mac Evoy · Generador de Códigos
+    </div>
+  </footer>
+
+  <script>
+    let modoActual = "qr";
+
+    function cambiarModo(modo) {
+      modoActual = modo;
+
+      document.getElementById("modoQR").style.display = modo === "qr" ? "block" : "none";
+      document.getElementById("modoEAN").style.display = modo === "ean" ? "block" : "none";
+      document.getElementById("modoDUN").style.display = modo === "dun" ? "block" : "none";
+
+      document.getElementById("btnQR").classList.toggle("active", modo === "qr");
+      document.getElementById("btnEAN").classList.toggle("active", modo === "ean");
+      document.getElementById("btnDUN").classList.toggle("active", modo === "dun");
+
+      limpiarResultado();
+    }
+
+    function limpiarResultado() {
+      document.querySelector(".result-box").style.display = "none";
+      document.querySelector(".details").style.display = "none";
+      document.querySelector(".note").style.display = "none";
+
+      document.getElementById("qrPreview").innerHTML = "";
+      const canvas = document.getElementById("barcodeCanvas");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.style.display = "none";
+    }
+
+    function mostrarResultado() {
+      document.querySelector(".result-box").style.display = "block";
+      document.querySelector(".details").style.display = "block";
+      document.querySelector(".note").style.display = "block";
+    }
+
+    function soloDigitos(valor) {
+      return valor.replace(/\D/g, "");
+    }
+
+    function calcularDigitoVerificador(codigoSinDV) {
+      let suma = 0;
+      let peso = 3;
+
+      for (let i = codigoSinDV.length - 1; i >= 0; i--) {
+        suma += parseInt(codigoSinDV[i]) * peso;
+        peso = peso === 3 ? 1 : 3;
+      }
+
+      const resto = suma % 10;
+      return resto === 0 ? 0 : 10 - resto;
+    }
+
+    function generarCodigo() {
+      if (modoActual === "qr") generarQR();
+      if (modoActual === "ean") generarEAN13();
+      if (modoActual === "dun") generarDUN14();
+    }
+
+    function generarQR() {
+      const texto = document.getElementById("qrTexto").value.trim();
+
+      if (!texto) {
+        alert("Ingrese un texto o URL para generar el QR.");
+        return;
+      }
+
+      mostrarResultado();
+
+      document.getElementById("qrPreview").innerHTML = "";
+      document.getElementById("barcodeCanvas").style.display = "none";
+
+      new QRCode(document.getElementById("qrPreview"), {
+        text: texto,
+        width: 220,
+        height: 220,
+        correctLevel: QRCode.CorrectLevel.M
+      });
+
+      document.getElementById("estadoCodigo").textContent = "QR generado correctamente.";
+      document.getElementById("detalleCalculo").innerHTML =
+        "Tipo: QR<br>" +
+        "Contenido codificado:<br>" +
+        texto;
+    }
+
+    function generarEAN13() {
+      const entrada = soloDigitos(document.getElementById("eanInput").value);
+
+      if (entrada.length !== 12 && entrada.length !== 13) {
+        alert("Ingrese un código EAN de 12 o 13 dígitos.");
+        return;
+      }
+
+      let codigoFinal;
+      let estado;
+      let detalle;
+
+      if (entrada.length === 12) {
+        const dv = calcularDigitoVerificador(entrada);
+        codigoFinal = entrada + dv;
+        estado = "EAN-13 generado correctamente: " + codigoFinal;
+        detalle =
+          "Código base: " + entrada + "<br>" +
+          "Dígito verificador calculado: " + dv + "<br>" +
+          "Código final: " + codigoFinal;
+      } else {
+        const base = entrada.slice(0, 12);
+        const dvIngresado = parseInt(entrada[12]);
+        const dvCalculado = calcularDigitoVerificador(base);
+        codigoFinal = entrada;
+
+        if (dvIngresado === dvCalculado) {
+          estado = "EAN-13 válido: " + codigoFinal;
+        } else {
+          estado = "EAN-13 inválido. Dígito esperado: " + dvCalculado;
+        }
+
+        detalle =
+          "Código ingresado: " + entrada + "<br>" +
+          "Base: " + base + "<br>" +
+          "Dígito ingresado: " + dvIngresado + "<br>" +
+          "Dígito calculado: " + dvCalculado;
+      }
+
+      mostrarResultado();
+      renderBarcode(codigoFinal, "EAN13");
+
+      document.getElementById("estadoCodigo").textContent = estado;
+      document.getElementById("detalleCalculo").innerHTML = detalle;
+    }
+
+    function generarDUN14() {
+      const entrada = soloDigitos(document.getElementById("dunInput").value);
+
+      if (entrada.length !== 13 && entrada.length !== 14) {
+        alert("Ingrese un código DUN-14 / ITF-14 de 13 o 14 dígitos.");
+        return;
+      }
+
+      let codigoFinal;
+      let estado;
+      let detalle;
+
+      if (entrada.length === 13) {
+        const dv = calcularDigitoVerificador(entrada);
+        codigoFinal = entrada + dv;
+        estado = "DUN-14 / ITF-14 generado correctamente: " + codigoFinal;
+        detalle =
+          "Código base: " + entrada + "<br>" +
+          "Dígito verificador calculado: " + dv + "<br>" +
+          "Código final: " + codigoFinal;
+      } else {
+        const base = entrada.slice(0, 13);
+        const dvIngresado = parseInt(entrada[13]);
+        const dvCalculado = calcularDigitoVerificador(base);
+        codigoFinal = entrada;
+
+        if (dvIngresado === dvCalculado) {
+          estado = "DUN-14 / ITF-14 válido: " + codigoFinal;
+        } else {
+          estado = "DUN-14 / ITF-14 inválido. Dígito esperado: " + dvCalculado;
+        }
+
+        detalle =
+          "Código ingresado: " + entrada + "<br>" +
+          "Base: " + base + "<br>" +
+          "Dígito ingresado: " + dvIngresado + "<br>" +
+          "Dígito calculado: " + dvCalculado;
+      }
+
+      mostrarResultado();
+      renderBarcode(codigoFinal, "ITF14");
+
+      document.getElementById("estadoCodigo").textContent = estado;
+      document.getElementById("detalleCalculo").innerHTML = detalle;
+    }
+
+    function renderBarcode(codigo, formato) {
+      document.getElementById("qrPreview").innerHTML = "";
+
+      const canvas = document.getElementById("barcodeCanvas");
+      canvas.style.display = "block";
+
+      try {
+        JsBarcode(canvas, codigo, {
+          format: formato,
+          displayValue: true,
+          fontSize: 18,
+          height: 90,
+          margin: 16,
+          lineColor: "#0f2f4f"
+        });
+      } catch (error) {
+        alert("No fue posible generar el código de barras. Revise el valor ingresado.");
+      }
+    }
+
+    function descargarPNG() {
+      let canvas = document.getElementById("barcodeCanvas");
+
+      if (modoActual === "qr") {
+        const qrCanvas = document.querySelector("#qrPreview canvas");
+        const qrImg = document.querySelector("#qrPreview img");
+
+        if (qrCanvas) {
+          canvas = qrCanvas;
+        } else if (qrImg) {
+          const tempCanvas = document.createElement("canvas");
+          tempCanvas.width = qrImg.width;
+          tempCanvas.height = qrImg.height;
+          tempCanvas.getContext("2d").drawImage(qrImg, 0, 0);
+          canvas = tempCanvas;
+        }
+      }
+
+      if (!canvas) {
+        alert("Primero genere un código.");
+        return;
+      }
+
+      const enlace = document.createElement("a");
+      enlace.download = "codigo-generado.png";
+      enlace.href = canvas.toDataURL("image/png");
+      enlace.click();
+    }
+
+    limpiarResultado();
+  </script>
+</body>
+</html>
