@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esteganografía en Imagen | Javier Cortés Mac Evoy</title>
+
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #5f6c7b;
+      --primary: #0f2f4f;
+      --accent: #2563eb;
+      --line: #d9e2ec;
+      --soft: #edf4ff;
+      --ok: #0f766e;
+      --warn: #92400e;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .nav-links a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    main { padding: 70px 0; }
+
+    h1, h2, h3 { color: var(--primary); }
+
+    .intro {
+      max-width: 850px;
+      font-size: 18px;
+      color: var(--muted);
+      text-align: justify;
+    }
+
+    .segmented-control {
+      display: inline-flex;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px;
+      margin-top: 28px;
+      box-shadow: 0 8px 24px rgba(15, 47, 79, 0.05);
+    }
+
+    .segment {
+      border: none;
+      background: transparent;
+      color: var(--primary);
+      padding: 14px 28px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 15px;
+      transition: all 0.25s ease;
+    }
+
+    .segment:hover { background: var(--soft); }
+
+    .segment.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 34px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 26px;
+      box-shadow: 0 10px 30px rgba(15, 47, 79, 0.05);
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .help {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .counter {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .primary-button, .secondary-button {
+      margin-top: 22px;
+      padding: 13px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary-button {
+      border: none;
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .primary-button:hover { background: var(--accent); }
+
+    .secondary-button {
+      border: 1px solid var(--primary);
+      background: #ffffff;
+      color: var(--primary);
+    }
+
+    .primary-button:disabled,
+    .secondary-button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .status {
+      margin-top: 16px;
+      padding: 14px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      color: var(--primary);
+      font-weight: 700;
+      white-space: pre-wrap;
+    }
+
+    .preview {
+      margin-top: 18px;
+      padding: 18px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      min-height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .preview img {
+      max-width: 100%;
+      max-height: 360px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+    }
+
+    .result-box, .note {
+      display: none;
+      margin-top: 26px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .result-message {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .note p {
+      color: var(--muted);
+      text-align: justify;
+    }
+
+    canvas {
+      display: none;
+    }
+
+    footer {
+      margin-top: 60px;
+      padding: 30px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 850px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links a {
+        margin-left: 0;
+        margin-right: 16px;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .segmented-control {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        border-radius: 20px;
+      }
+
+      .segment {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">Javier Cortés Mac Evoy</div>
+        <div class="nav-links">
+          <a href="../../">Inicio</a>
+          <a href="../../proyectos/">Proyectos</a>
+          <a href="../../#sobre-mi">Sobre mí</a>
+          <a href="../../#contacto">Contacto</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Esteganografía en Imagen</h1>
+
+      <p class="intro">
+        Herramienta para ocultar o revelar mensajes breves dentro de una imagen. El proceso se realiza localmente en el navegador, sin subir archivos a ningún servidor.
+      </p>
+
+      <div class="segmented-control">
+        <button id="btnOcultar" class="segment active" type="button">Ocultar mensaje</button>
+        <button id="btnRevelar" class="segment" type="button">Revelar mensaje</button>
+      </div>
+
+      <div class="layout">
+        <div class="card">
+          <h2>Datos de entrada</h2>
+
+          <label for="imageInput">Imagen</label>
+          <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/heic,image/heif">
+          <div class="help">
+            Se aceptan PNG, JPG, WEBP y algunos HEIC si el navegador los soporta. La salida siempre será PNG.
+          </div>
+
+          <div id="hideFields">
+            <label for="messageInput">Mensaje oculto</label>
+            <textarea id="messageInput" maxlength="200" placeholder="Escriba un mensaje de máximo 200 caracteres"></textarea>
+            <div class="counter" id="charCounter">0 / 200</div>
+          </div>
+
+          <label for="keyInput">Clave</label>
+          <input id="keyInput" type="password" maxlength="16" placeholder="Entre 4 y 16 caracteres">
+          <div class="help">
+            La clave se usa para cifrar o revelar el mensaje. Puede tener entre 4 y 16 caracteres.
+          </div>
+
+          <button id="mainAction" class="primary-button" type="button">
+            Ocultar mensaje
+          </button>
+
+          <div class="status" id="statusBox">
+            La imagen no se sube a ningún servidor. Todo el proceso ocurre localmente en este navegador.
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Vista previa</h2>
+
+          <div class="preview" id="previewBox">
+            <span id="previewText">Seleccione una imagen para comenzar.</span>
+          </div>
+
+          <button id="downloadButton" class="secondary-button" type="button" style="display:none;">
+            Descargar PNG
+          </button>
+        </div>
+      </div>
+
+      <div class="result-box" id="resultBox">
+        <h2>Mensaje revelado</h2>
+        <div class="result-message" id="revealedMessage"></div>
+      </div>
+
+      <div class="note" id="noteBox">
+        <h2>Nota</h2>
+        <p>
+          Esta herramienta se proporciona únicamente con fines educativos, de experimentación y apoyo al aprendizaje.
+        </p>
+        <p>
+          La seguridad depende de la clave utilizada. Una clave corta o fácil de adivinar puede comprometer el contenido. Para conservar el mensaje oculto, mantenga la imagen como PNG y evite convertirla a JPG o enviarla mediante servicios que recompriman imágenes.
+        </p>
+      </div>
+
+      <canvas id="workCanvas"></canvas>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 Javier Cortés Mac Evoy · Esteganografía en Imagen
+    </div>
+  </footer>
+
+  <script>
+    "use strict";
+
+    const CONFIG = {
+      maxFileSize: 5 * 1024 * 1024,
+      maxMessageLength: 200,
+      minKeyLength: 4,
+      maxKeyLength: 16,
+      cooldownMs: 10000,
+      pbkdf2Iterations: 600000,
+      magic: "JCMSTEG1"
+    };
+
+    let currentMode = "hide";
+    let lastBlob = null;
+    let lastFileName = "";
+    let cooldown = false;
+
+    const btnOcultar = document.getElementById("btnOcultar");
+    const btnRevelar = document.getElementById("btnRevelar");
+    const hideFields = document.getElementById("hideFields");
+    const mainAction = document.getElementById("mainAction");
+    const imageInput = document.getElementById("imageInput");
+    const messageInput = document.getElementById("messageInput");
+    const charCounter = document.getElementById("charCounter");
+    const keyInput = document.getElementById("keyInput");
+    const statusBox = document.getElementById("statusBox");
+    const previewBox = document.getElementById("previewBox");
+    const previewText = document.getElementById("previewText");
+    const downloadButton = document.getElementById("downloadButton");
+    const resultBox = document.getElementById("resultBox");
+    const revealedMessage = document.getElementById("revealedMessage");
+    const noteBox = document.getElementById("noteBox");
+    const canvas = document.getElementById("workCanvas");
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+    btnOcultar.addEventListener("click", function () {
+      setMode("hide");
+    });
+
+    btnRevelar.addEventListener("click", function () {
+      setMode("reveal");
+    });
+
+    mainAction.addEventListener("click", function () {
+      if (currentMode === "hide") {
+        hideMessage();
+      } else {
+        revealMessage();
+      }
+    });
+
+    downloadButton.addEventListener("click", function () {
+      downloadLastPNG();
+    });
+
+    messageInput.addEventListener("input", function () {
+      const count = messageInput.value.length;
+      charCounter.textContent = count + " / " + CONFIG.maxMessageLength;
+    });
+
+    imageInput.addEventListener("change", function () {
+      resetOutputOnly();
+      statusBox.textContent = "Imagen seleccionada. Presione el botón principal para continuar.";
+    });
+
+    function setMode(mode) {
+      currentMode = mode;
+
+      btnOcultar.classList.toggle("active", mode === "hide");
+      btnRevelar.classList.toggle("active", mode === "reveal");
+
+      hideFields.style.display = mode === "hide" ? "block" : "none";
+      mainAction.textContent = mode === "hide" ? "Ocultar mensaje" : "Revelar mensaje";
+
+      resetOutputOnly();
+      statusBox.textContent = "La imagen no se sube a ningún servidor. Todo el proceso ocurre localmente en este navegador.";
+    }
+
+    function resetOutputOnly() {
+      lastBlob = null;
+      lastFileName = "";
+      downloadButton.style.display = "none";
+      resultBox.style.display = "none";
+      noteBox.style.display = "none";
+      revealedMessage.textContent = "";
+      previewBox.textContent = "";
+      const span = document.createElement("span");
+      span.id = "previewText";
+      span.textContent = "Seleccione una imagen para comenzar.";
+      previewBox.appendChild(span);
+    }
+
+    function setStatus(text) {
+      statusBox.textContent = text;
+    }
+
+    function validateKey(key) {
+      return key.length >= CONFIG.minKeyLength && key.length <= CONFIG.maxKeyLength;
+    }
+
+    async function validateFile(file) {
+      if (!file) {
+        throw new Error("Debe seleccionar una imagen.");
+      }
+
+      if (file.size > CONFIG.maxFileSize) {
+        throw new Error("La imagen supera el tamaño máximo permitido de 5 MB.");
+      }
+
+      const header = new Uint8Array(await file.slice(0, 32).arrayBuffer());
+
+      if (isPNG(header) || isJPEG(header) || isWEBP(header) || isHEIC(header)) {
+        return true;
+      }
+
+      throw new Error("El archivo no corresponde a un formato de imagen válido o compatible.");
+    }
+
+    function isPNG(bytes) {
+      return bytes[0] === 0x89 &&
+             bytes[1] === 0x50 &&
+             bytes[2] === 0x4E &&
+             bytes[3] === 0x47 &&
+             bytes[4] === 0x0D &&
+             bytes[5] === 0x0A &&
+             bytes[6] === 0x1A &&
+             bytes[7] === 0x0A;
+    }
+
+    function isJPEG(bytes) {
+      return bytes[0] === 0xFF &&
+             bytes[1] === 0xD8 &&
+             bytes[2] === 0xFF;
+    }
+
+    function isWEBP(bytes) {
+      return bytes[0] === 0x52 &&
+             bytes[1] === 0x49 &&
+             bytes[2] === 0x46 &&
+             bytes[3] === 0x46 &&
+             bytes[8] === 0x57 &&
+             bytes[9] === 0x45 &&
+             bytes[10] === 0x42 &&
+             bytes[11] === 0x50;
+    }
+
+    function isHEIC(bytes) {
+      const text = bytesToAscii(bytes);
+      return text.indexOf("ftypheic") !== -1 ||
+             text.indexOf("ftypheix") !== -1 ||
+             text.indexOf("ftyphevc") !== -1 ||
+             text.indexOf("ftyphevx") !== -1 ||
+             text.indexOf("ftypmif1") !== -1 ||
+             text.indexOf("ftypmsf1") !== -1;
+    }
+
+    function bytesToAscii(bytes) {
+      let output = "";
+      for (let i = 0; i < bytes.length; i++) {
+        output += String.fromCharCode(bytes[i]);
+      }
+      return output;
+    }
+
+    async function loadImageToCanvas(file) {
+      const url = URL.createObjectURL(file);
+
+      try {
+        const img = await new Promise(function (resolve, reject) {
+          const image = new Image();
+          image.onload = function () { resolve(image); };
+          image.onerror = function () { reject(new Error("No fue posible cargar la imagen en el navegador.")); };
+          image.src = url;
+        });
+
+        canvas.width = img.naturalWidth || img.width;
+        canvas.height = img.naturalHeight || img.height;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+
+        showCanvasPreview();
+
+        return ctx.getImageData(0, 0, canvas.width, canvas.height);
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    function showCanvasPreview() {
+      canvas.toBlob(function (blob) {
+        if (!blob) return;
+
+        const url = URL.createObjectURL(blob);
+        previewBox.textContent = "";
+
+        const img = document.createElement("img");
+        img.alt = "Vista previa de imagen procesada";
+        img.onload = function () {
+          URL.revokeObjectURL(url);
+        };
+        img.src = url;
+
+        previewBox.appendChild(img);
+      }, "image/png");
+    }
+
+    async function hideMessage() {
+      if (cooldown) {
+        setStatus("Espere unos segundos antes de realizar otra operación.");
+        return;
+      }
+
+      try {
+        blockActions();
+
+        const file = imageInput.files[0];
+        const key = keyInput.value;
+        const message = messageInput.value;
+
+        if (!validateKey(key)) {
+          throw new Error("La clave debe tener entre 4 y 16 caracteres.");
+        }
+
+        if (!message || message.length > CONFIG.maxMessageLength) {
+          throw new Error("El mensaje debe tener entre 1 y 200 caracteres.");
+        }
+
+        await validateFile(file);
+        setStatus("Procesando imagen localmente...");
+
+        const imageData = await loadImageToCanvas(file);
+        const encryptedPayload = await buildEncryptedPayload(message, key);
+
+        const header = textToBytes(CONFIG.magic);
+        const lengthBytes = uint32ToBytes(encryptedPayload.length);
+        const fullPayload = concatBytes(header, lengthBytes, encryptedPayload);
+
+        const capacityBytes = Math.floor((imageData.data.length / 4) * 3 / 8);
+
+        if (fullPayload.length > capacityBytes) {
+          throw new Error("La imagen no tiene capacidad suficiente para ocultar el mensaje.");
+        }
+
+        embedBytesLSB(imageData, fullPayload);
+        ctx.putImageData(imageData, 0, 0);
+
+        await createDownloadBlob();
+
+        setStatus("Imagen generada correctamente. Descargue el nuevo archivo PNG.");
+        noteBox.style.display = "block";
+      } catch (error) {
+        setStatus(error.message || "No fue posible procesar la imagen.");
+      } finally {
+        startCooldown();
+      }
+    }
+
+    async function revealMessage() {
+      if (cooldown) {
+        setStatus("Espere unos segundos antes de realizar otra operación.");
+        return;
+      }
+
+      try {
+        blockActions();
+
+        const file = imageInput.files[0];
+        const key = keyInput.value;
+
+        if (!validateKey(key)) {
+          throw new Error("La clave debe tener entre 4 y 16 caracteres.");
+        }
+
+        await validateFile(file);
+        setStatus("Buscando contenido oculto localmente...");
+
+        const imageData = await loadImageToCanvas(file);
+        const message = await extractAndDecrypt(imageData, key);
+
+        resultBox.style.display = "block";
+        noteBox.style.display = "block";
+        revealedMessage.textContent = message;
+        setStatus("Proceso finalizado.");
+      } catch (error) {
+        resultBox.style.display = "block";
+        noteBox.style.display = "block";
+        revealedMessage.textContent = "No se encontró contenido oculto o la clave es incorrecta.";
+        setStatus("Proceso finalizado.");
+      } finally {
+        startCooldown();
+      }
+    }
+
+    async function buildEncryptedPayload(message, keyText) {
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const key = await deriveKey(keyText, salt);
+      const messageBytes = new TextEncoder().encode(message);
+
+      const encrypted = new Uint8Array(
+        await crypto.subtle.encrypt(
+          { name: "AES-GCM", iv: iv },
+          key,
+          messageBytes
+        )
+      );
+
+      return concatBytes(salt, iv, encrypted);
+    }
+
+    async function extractAndDecrypt(imageData, keyText) {
+      const magicLength = CONFIG.magic.length;
+      const headerBytes = extractBytesLSB(imageData, magicLength);
+      const headerText = new TextDecoder().decode(headerBytes);
+
+      if (headerText !== CONFIG.magic) {
+        throw new Error("Sin contenido");
+      }
+
+      const lengthStartByte = magicLength;
+      const lengthBytes = extractBytesLSB(imageData, 4, lengthStartByte);
+      const payloadLength = bytesToUint32(lengthBytes);
+
+      if (payloadLength <= 28 || payloadLength > 50000) {
+        throw new Error("Payload inválido");
+      }
+
+      const payload = extractBytesLSB(imageData, payloadLength, magicLength + 4);
+
+      const salt = payload.slice(0, 16);
+      const iv = payload.slice(16, 28);
+      const encrypted = payload.slice(28);
+
+      const key = await deriveKey(keyText, salt);
+
+      const decrypted = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: iv },
+        key,
+        encrypted
+      );
+
+      return new TextDecoder().decode(decrypted);
+    }
+
+    async function deriveKey(keyText, salt) {
+      const baseKey = await crypto.subtle.importKey(
+        "raw",
+        new TextEncoder().encode(keyText),
+        { name: "PBKDF2" },
+        false,
+        ["deriveKey"]
+      );
+
+      return crypto.subtle.deriveKey(
+        {
+          name: "PBKDF2",
+          salt: salt,
+          iterations: CONFIG.pbkdf2Iterations,
+          hash: "SHA-256"
+        },
+        baseKey,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["encrypt", "decrypt"]
+      );
+    }
+
+    function embedBytesLSB(imageData, bytes) {
+      let bitIndex = 0;
+      const data = imageData.data;
+      const totalBits = bytes.length * 8;
+
+      for (let i = 0; i < data.length && bitIndex < totalBits; i++) {
+        if ((i + 1) % 4 === 0) {
+          continue;
+        }
+
+        const byteIndex = Math.floor(bitIndex / 8);
+        const bitOffset = 7 - (bitIndex % 8);
+        const bit = (bytes[byteIndex] >> bitOffset) & 1;
+
+        data[i] = (data[i] & 0xFE) | bit;
+        bitIndex++;
+      }
+    }
+
+    function extractBytesLSB(imageData, byteCount, byteOffset) {
+      const offset = byteOffset || 0;
+      const totalBits = byteCount * 8;
+      const startBit = offset * 8;
+      const data = imageData.data;
+      const output = new Uint8Array(byteCount);
+
+      let bitIndex = 0;
+      let readableBitIndex = 0;
+
+      for (let i = 0; i < data.length && readableBitIndex < startBit + totalBits; i++) {
+        if ((i + 1) % 4 === 0) {
+          continue;
+        }
+
+        if (readableBitIndex >= startBit) {
+          const relativeBit = readableBitIndex - startBit;
+          const byteIndex = Math.floor(relativeBit / 8);
+          const bitOffset = 7 - (relativeBit % 8);
+          const bit = data[i] & 1;
+
+          output[byteIndex] = output[byteIndex] | (bit << bitOffset);
+        }
+
+        readableBitIndex++;
+        bitIndex++;
+      }
+
+      if (readableBitIndex < startBit + totalBits) {
+        throw new Error("Datos insuficientes");
+      }
+
+      return output;
+    }
+
+    function textToBytes(text) {
+      return new TextEncoder().encode(text);
+    }
+
+    function uint32ToBytes(value) {
+      const bytes = new Uint8Array(4);
+      const view = new DataView(bytes.buffer);
+      view.setUint32(0, value, false);
+      return bytes;
+    }
+
+    function bytesToUint32(bytes) {
+      const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+      return view.getUint32(0, false);
+    }
+
+    function concatBytes() {
+      let total = 0;
+
+      for (let i = 0; i < arguments.length; i++) {
+        total += arguments[i].length;
+      }
+
+      const output = new Uint8Array(total);
+      let offset = 0;
+
+      for (let i = 0; i < arguments.length; i++) {
+        output.set(arguments[i], offset);
+        offset += arguments[i].length;
+      }
+
+      return output;
+    }
+
+    async function createDownloadBlob() {
+      return new Promise(function (resolve, reject) {
+        canvas.toBlob(function (blob) {
+          if (!blob) {
+            reject(new Error("No fue posible generar el archivo PNG."));
+            return;
+          }
+
+          lastBlob = blob;
+          lastFileName = generateFileName();
+
+          downloadButton.style.display = "inline-block";
+          showCanvasPreview();
+          resolve();
+        }, "image/png");
+      });
+    }
+
+    function downloadLastPNG() {
+      if (!lastBlob) {
+        setStatus("Primero genere una imagen.");
+        return;
+      }
+
+      const url = URL.createObjectURL(lastBlob);
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = lastFileName || generateFileName();
+      link.click();
+
+      setTimeout(function () {
+        URL.revokeObjectURL(url);
+      }, 1000);
+    }
+
+    function generateFileName() {
+      const bytes = crypto.getRandomValues(new Uint8Array(4));
+      let hex = "";
+
+      for (let i = 0; i < bytes.length; i++) {
+        hex += bytes[i].toString(16).padStart(2, "0").toUpperCase();
+      }
+
+      return "J_" + hex + ".png";
+    }
+
+    function blockActions() {
+      mainAction.disabled = true;
+      downloadButton.disabled = true;
+    }
+
+    function unblockActions() {
+      mainAction.disabled = false;
+      downloadButton.disabled = false;
+    }
+
+    function startCooldown() {
+      cooldown = true;
+      let seconds = Math.floor(CONFIG.cooldownMs / 1000);
+
+      const originalText = mainAction.textContent;
+
+      const interval = setInterval(function () {
+        seconds--;
+        mainAction.textContent = "Espere " + seconds + " s";
+
+        if (seconds <= 0) {
+          clearInterval(interval);
+          cooldown = false;
+          mainAction.textContent = currentMode === "hide" ? "Ocultar mensaje" : "Revelar mensaje";
+          unblockActions();
+        }
+      }, 1000);
+    }
+
+    setMode("hide");
+  </script>
+</body>
+</html>
