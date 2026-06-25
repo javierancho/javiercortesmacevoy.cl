@@ -15,6 +15,9 @@
       --accent: #2563eb;
       --line: #d9e2ec;
       --soft: #edf4ff;
+      --green: #16a34a;
+      --purple: #6d28d9;
+      --orange: #f97316;
     }
 
     * {
@@ -35,9 +38,13 @@
     }
 
     header {
-      padding: 28px 0;
+      padding: 24px 0;
       border-bottom: 1px solid var(--line);
-      background: var(--card);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     nav {
@@ -48,24 +55,36 @@
     }
 
     .brand {
-      font-weight: 700;
+      font-weight: 800;
       color: var(--primary);
       letter-spacing: 0.2px;
+      font-size: 18px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
     }
 
     .nav-links a {
-      margin-left: 20px;
       text-decoration: none;
       color: var(--muted);
       font-size: 15px;
+      font-weight: 700;
     }
 
     .nav-links a:hover {
       color: var(--accent);
     }
 
+    main {
+      padding-bottom: 20px;
+    }
+
     .hero {
-      padding: 80px 0 22px;
+      padding: 58px 0 18px;
     }
 
     .hero-card {
@@ -88,7 +107,7 @@
     }
 
     .hero-image {
-      width: 290px;
+      width: 320px;
       flex-shrink: 0;
     }
 
@@ -101,7 +120,7 @@
 
     .eyebrow {
       color: var(--accent);
-      font-weight: 700;
+      font-weight: 800;
       text-transform: uppercase;
       font-size: 13px;
       letter-spacing: 1.4px;
@@ -133,10 +152,10 @@
     }
 
     .tools-section {
-      padding: 10px 0 42px;
+      padding: 10px 0 26px;
     }
 
-    .tools-panel {
+    .panel {
       background: #ffffff;
       border: 1px solid var(--line);
       border-radius: 24px;
@@ -144,7 +163,8 @@
       box-shadow: 0 18px 45px rgba(15, 47, 79, 0.07);
     }
 
-    .tools-heading {
+    .tools-heading,
+    .interest-heading {
       display: flex;
       align-items: center;
       gap: 14px;
@@ -152,20 +172,26 @@
     }
 
     .tools-heading::before,
-    .tools-heading::after {
+    .tools-heading::after,
+    .interest-heading::after {
       content: "";
       height: 1px;
       background: var(--line);
       flex: 1;
     }
 
-    .tools-heading span {
+    .tools-heading span,
+    .interest-heading span {
       color: var(--accent);
       font-size: 13px;
       font-weight: 800;
       letter-spacing: 1.4px;
       text-transform: uppercase;
       white-space: nowrap;
+    }
+
+    .interest-heading {
+      justify-content: flex-start;
     }
 
     .tools-grid {
@@ -184,11 +210,34 @@
       padding-left: 0;
     }
 
-    .tool-group h3 {
-      margin: 0 0 16px;
+    .tool-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .tool-title h3 {
+      margin: 0;
       color: var(--primary);
       font-size: 20px;
     }
+
+    .tool-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .tool-icon.radio { background: var(--accent); }
+    .tool-icon.sc { background: var(--green); }
+    .tool-icon.fin { background: var(--purple); }
+    .tool-icon.other { background: var(--orange); }
 
     .tool-list {
       display: grid;
@@ -209,6 +258,7 @@
       font-weight: 700;
       font-size: 14px;
       box-shadow: 0 8px 18px rgba(15, 47, 79, 0.04);
+      transition: all 0.2s ease;
     }
 
     .tool-link:hover {
@@ -236,30 +286,174 @@
       text-align: justify;
     }
 
-    .grid {
+    .interests-section {
+      padding-top: 24px;
+    }
+
+    .interests-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      margin-top: 22px;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0;
     }
 
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(15, 47, 79, 0.05);
+    .interest-card {
+      min-height: 205px;
+      padding: 8px 18px 0;
+      text-align: center;
+      border-left: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-decoration: none;
+      color: var(--primary);
+      position: relative;
     }
 
-    .card h3 {
-      margin-top: 0;
+    .interest-card:first-child {
+      border-left: none;
+    }
+
+    .interest-card h3 {
+      font-size: 15px;
+      line-height: 1.15;
+      margin: 0 0 14px;
+      min-height: 36px;
       color: var(--primary);
     }
 
-    .card p {
-      color: var(--muted);
-      margin-bottom: 0;
-      text-align: justify;
+    .mini-door {
+      width: 96px;
+      height: 118px;
+      border: 1px solid #cfd9e6;
+      border-radius: 10px 10px 4px 4px;
+      background: linear-gradient(180deg, #ffffff 0%, #edf3f8 100%);
+      box-shadow: 0 12px 24px rgba(15, 47, 79, 0.10);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .mini-door::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      bottom: 16px;
+      border: 1px solid #d7e0ea;
+      border-radius: 6px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.75), rgba(226,235,244,0.75));
+    }
+
+    .mini-door::after {
+      content: "";
+      position: absolute;
+      top: 12px;
+      bottom: 16px;
+      left: 50%;
+      width: 1px;
+      background: #d7e0ea;
+    }
+
+    .door-handle {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #b08d45;
+      position: absolute;
+      right: 18px;
+      top: 60px;
+      z-index: 2;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.7);
+    }
+
+    .lock-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      position: absolute;
+      right: 18px;
+      top: 52px;
+      box-shadow: 0 6px 14px rgba(15, 47, 79, 0.25);
+      z-index: 3;
+    }
+
+    .plant {
+      position: absolute;
+      left: 18px;
+      bottom: 24px;
+      width: 22px;
+      height: 34px;
+      z-index: 2;
+    }
+
+    .plant::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 7px;
+      width: 10px;
+      height: 8px;
+      background: #d6dee8;
+      border: 1px solid #c1ccd8;
+      border-radius: 2px;
+    }
+
+    .plant::after {
+      content: "";
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      width: 7px;
+      height: 22px;
+      background: #54a365;
+      border-radius: 8px 8px 0 0;
+      box-shadow:
+        -8px 7px 0 -2px #6fbd7a,
+        8px 9px 0 -2px #6fbd7a,
+        -5px 1px 0 -2px #5daa6a,
+        5px 3px 0 -2px #5daa6a;
+    }
+
+    .interest-card.available .mini-door {
+      border-color: #b8cdf8;
+    }
+
+    .interest-card.available:hover .mini-door {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 30px rgba(15, 47, 79, 0.14);
+    }
+
+    .interest-card.locked {
+      cursor: default;
+      opacity: 0.92;
+    }
+
+    .project-button-wrap {
+      margin-top: 22px;
+      text-align: center;
+    }
+
+    .project-button {
+      display: inline-block;
+      padding: 13px 24px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 800;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
+    }
+
+    .project-button:hover {
+      background: var(--primary);
     }
 
     footer {
@@ -268,6 +462,17 @@
       border-top: 1px solid var(--line);
       color: var(--muted);
       font-size: 14px;
+    }
+
+    @media (max-width: 1050px) {
+      .interests-grid {
+        grid-template-columns: repeat(3, 1fr);
+        row-gap: 24px;
+      }
+
+      .interest-card:nth-child(4) {
+        border-left: none;
+      }
     }
 
     @media (max-width: 950px) {
@@ -287,13 +492,12 @@
         flex-direction: column;
       }
 
-      .nav-links a {
-        margin-left: 0;
-        margin-right: 16px;
+      .nav-links {
+        gap: 14px;
       }
 
       .hero {
-        padding-top: 48px;
+        padding-top: 42px;
       }
 
       .hero-card {
@@ -309,14 +513,10 @@
         width: 100%;
         max-width: 320px;
       }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
     }
 
     @media (max-width: 620px) {
-      .tools-panel {
+      .panel {
         padding: 24px;
       }
 
@@ -334,6 +534,15 @@
       .tool-group:first-child {
         border-top: none;
         padding-top: 0;
+      }
+
+      .interests-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .interest-card,
+      .interest-card:nth-child(4) {
+        border-left: none;
       }
     }
   </style>
@@ -361,7 +570,6 @@
       <div class="container">
         <div class="hero-card">
           <div class="hero-content">
-
             <div class="hero-text">
               <div class="eyebrow">Página personal</div>
 
@@ -381,7 +589,6 @@
             <div class="hero-image">
               <img src="assets/img/Javier.jpeg" alt="Javier Cortés Mac Evoy">
             </div>
-
           </div>
         </div>
       </div>
@@ -389,14 +596,17 @@
 
     <section id="herramientas" class="tools-section">
       <div class="container">
-        <div class="tools-panel">
+        <div class="panel">
           <div class="tools-heading">
             <span>Herramientas</span>
           </div>
 
           <div class="tools-grid">
             <div class="tool-group">
-              <h3>Radioafición</h3>
+              <div class="tool-title">
+                <span class="tool-icon radio">⌁</span>
+                <h3>Radioafición</h3>
+              </div>
 
               <div class="tool-list">
                 <a class="tool-link" href="herramientas/radioaficion/antenas/">
@@ -407,7 +617,10 @@
             </div>
 
             <div class="tool-group">
-              <h3>Supply Chain</h3>
+              <div class="tool-title">
+                <span class="tool-icon sc">□</span>
+                <h3>Supply Chain</h3>
+              </div>
 
               <div class="tool-list">
                 <a class="tool-link" href="herramientas/supplychain/rop/">
@@ -418,7 +631,10 @@
             </div>
 
             <div class="tool-group">
-              <h3>Finanzas</h3>
+              <div class="tool-title">
+                <span class="tool-icon fin">%</span>
+                <h3>Finanzas</h3>
+              </div>
 
               <div class="tool-list">
                 <a class="tool-link" href="herramientas/simulador-cuotas/">
@@ -433,21 +649,28 @@
               </div>
             </div>
 
-<div class="tool-group">
-  <h3>Otros</h3>
+            <div class="tool-group">
+              <div class="tool-title">
+                <span class="tool-icon other">▦</span>
+                <h3>Otros</h3>
+              </div>
 
-  <div class="tool-list">
-    <a class="tool-link" href="herramientas/generador-codigos/">
-      <span>Generador de Códigos</span>
-      <span>›</span>
-    </a>
+              <div class="tool-list">
+                <a class="tool-link" href="herramientas/generador-codigos/">
+                  <span>Generador de Códigos</span>
+                  <span>›</span>
+                </a>
 
-    <a class="tool-link" href="herramientas/esteganografia/">
-      <span>Esteganografía</span>
-      <span>›</span>
-    </a>
-  </div>
-</div>
+                <a class="tool-link" href="herramientas/esteganografia/">
+                  <span>Esteganografía</span>
+                  <span>›</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <section id="sobre-mi">
       <div class="container">
@@ -470,57 +693,71 @@
       </div>
     </section>
 
-    <section id="intereses">
+    <section id="intereses" class="interests-section">
       <div class="container">
-        <h2 class="section-title">Áreas de interés</h2>
-
-        <div class="grid">
-          <div class="card">
-            <h3>Familia y paternidad</h3>
-            <p>
-              Ser padre es una parte central de mi vida y también una experiencia que ha cambiado
-              mi forma de mirar el tiempo, las prioridades y los proyectos personales.
-            </p>
+        <div class="panel">
+          <div class="interest-heading">
+            <span>Áreas de interés</span>
           </div>
 
-          <div class="card">
-            <h3>Radioafición</h3>
-            <p>
-              Me atrae el mundo de las comunicaciones, la tecnología radial y la posibilidad
-              de conectar personas a través de distintos medios y frecuencias.
-            </p>
+          <div class="interests-grid">
+            <a class="interest-card locked" href="#intereses" aria-label="Familia y paternidad próximamente">
+              <h3>Familia y paternidad</h3>
+              <div class="mini-door">
+                <span class="door-handle"></span>
+                <span class="plant"></span>
+              </div>
+              <span class="lock-badge">⌂</span>
+            </a>
+
+            <a class="interest-card locked" href="#intereses" aria-label="Radioafición próximamente">
+              <h3>Radioafición</h3>
+              <div class="mini-door">
+                <span class="door-handle"></span>
+                <span class="plant"></span>
+              </div>
+              <span class="lock-badge">⌂</span>
+            </a>
+
+            <a class="interest-card locked" href="#intereses" aria-label="Naturaleza próximamente">
+              <h3>Naturaleza</h3>
+              <div class="mini-door">
+                <span class="door-handle"></span>
+                <span class="plant"></span>
+              </div>
+              <span class="lock-badge">⌂</span>
+            </a>
+
+            <a class="interest-card locked" href="#intereses" aria-label="Trekking próximamente">
+              <h3>Trekking</h3>
+              <div class="mini-door">
+                <span class="door-handle"></span>
+                <span class="plant"></span>
+              </div>
+              <span class="lock-badge">⌂</span>
+            </a>
+
+            <a class="interest-card locked" href="#intereses" aria-label="Jeepeo próximamente">
+              <h3>Jeepeo</h3>
+              <div class="mini-door">
+                <span class="door-handle"></span>
+                <span class="plant"></span>
+              </div>
+              <span class="lock-badge">⌂</span>
+            </a>
+
+            <a class="interest-card locked" href="#intereses" aria-label="Tecnología y proyectos próximamente">
+              <h3>Tecnología y proyectos</h3>
+              <div class="mini-door">
+                <span class="door-handle"></span>
+                <span class="plant"></span>
+              </div>
+              <span class="lock-badge">⌂</span>
+            </a>
           </div>
 
-          <div class="card">
-            <h3>Naturaleza</h3>
-            <p>
-              Disfruto los espacios abiertos, el aire libre y las experiencias que permiten
-              desconectarse del ritmo cotidiano.
-            </p>
-          </div>
-
-          <div class="card">
-            <h3>Trekking</h3>
-            <p>
-              Caminar, explorar rutas y estar en contacto con distintos paisajes es una forma
-              simple de ordenar ideas y recuperar perspectiva.
-            </p>
-          </div>
-
-          <div class="card">
-            <h3>Jeepeo</h3>
-            <p>
-              Me gusta la exploración en ruta, la conducción fuera de camino y la mezcla entre
-              técnica, planificación y aventura.
-            </p>
-          </div>
-
-          <div class="card">
-            <h3>Tecnología y proyectos</h3>
-            <p>
-              Me interesan las herramientas digitales, los datos, la automatización y las formas
-              prácticas de aplicar tecnología a problemas reales.
-            </p>
+          <div class="project-button-wrap">
+            <a class="project-button" href="proyectos/">Ver todos los proyectos</a>
           </div>
         </div>
       </div>
