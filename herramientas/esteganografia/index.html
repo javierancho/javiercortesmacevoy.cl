@@ -15,8 +15,6 @@
       --accent: #2563eb;
       --line: #d9e2ec;
       --soft: #edf4ff;
-      --ok: #0f766e;
-      --warn: #92400e;
     }
 
     * { box-sizing: border-box; }
@@ -50,6 +48,7 @@
     .brand {
       font-weight: 700;
       color: var(--primary);
+      letter-spacing: 0.2px;
     }
 
     .nav-links a {
@@ -138,17 +137,41 @@
       resize: vertical;
     }
 
-    .help {
+    .drop-zone {
+      margin-top: 8px;
+      padding: 28px;
+      border: 2px dashed var(--line);
+      border-radius: 18px;
+      background: #ffffff;
+      color: var(--muted);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .drop-zone strong {
+      display: block;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .drop-zone.active {
+      border-color: var(--accent);
+      background: #f8fbff;
+    }
+
+    .help, .counter, .file-name {
       margin-top: 6px;
       font-size: 13px;
       color: var(--muted);
     }
 
-    .counter {
-      margin-top: 6px;
-      font-size: 13px;
-      color: var(--muted);
-      text-align: right;
+    .counter { text-align: right; }
+
+    .file-name {
+      color: var(--primary);
+      font-weight: 700;
+      word-break: break-word;
     }
 
     .primary-button, .secondary-button {
@@ -234,9 +257,7 @@
       text-align: justify;
     }
 
-    canvas {
-      display: none;
-    }
+    canvas { display: none; }
 
     footer {
       margin-top: 60px;
@@ -257,9 +278,7 @@
         margin-right: 16px;
       }
 
-      .layout {
-        grid-template-columns: 1fr;
-      }
+      .layout { grid-template-columns: 1fr; }
 
       .segmented-control {
         width: 100%;
@@ -268,9 +287,7 @@
         border-radius: 20px;
       }
 
-      .segment {
-        width: 100%;
-      }
+      .segment { width: 100%; }
     }
   </style>
 </head>
@@ -299,67 +316,59 @@
       </p>
 
       <div class="segmented-control">
-        <button id="btnOcultar" class="segment active" type="button">Ocultar mensaje</button>
-        <button id="btnRevelar" class="segment" type="button">Revelar mensaje</button>
+        <button id="btnHide" class="segment active" type="button">Ocultar mensaje</button>
+        <button id="btnReveal" class="segment" type="button">Revelar mensaje</button>
       </div>
 
       <div class="layout">
         <div class="card">
           <h2>Datos de entrada</h2>
 
-          <label for="imageInput">Imagen</label>
-          <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/heic,image/heif">
-          <div class="help">
-            Se aceptan PNG, JPG, WEBP y algunos HEIC si el navegador los soporta. La salida siempre será PNG.
+          <label>Imagen</label>
+          <div id="dropZone" class="drop-zone" tabindex="0">
+            <strong>Seleccione, arrastre o pegue una imagen</strong>
+            <span>Formatos compatibles: PNG, JPG, WEBP y algunos HEIC si el navegador lo permite.</span>
           </div>
+
+          <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/heic,image/heif" hidden>
+          <div id="fileName" class="file-name"></div>
 
           <div id="hideFields">
             <label for="messageInput">Mensaje oculto</label>
             <textarea id="messageInput" maxlength="200" placeholder="Escriba un mensaje de máximo 200 caracteres"></textarea>
-            <div class="counter" id="charCounter">0 / 200</div>
+            <div id="charCounter" class="counter">0 / 200</div>
           </div>
 
           <label for="keyInput">Clave</label>
           <input id="keyInput" type="password" maxlength="16" placeholder="Entre 4 y 16 caracteres">
-          <div class="help">
-            La clave se usa para cifrar o revelar el mensaje. Puede tener entre 4 y 16 caracteres.
-          </div>
+          <div class="help">La clave se usa para cifrar o revelar el mensaje. Puede tener entre 4 y 16 caracteres.</div>
 
-          <button id="mainAction" class="primary-button" type="button">
-            Ocultar mensaje
-          </button>
+          <button id="mainAction" class="primary-button" type="button">Ocultar mensaje</button>
 
-          <div class="status" id="statusBox">
+          <div id="statusBox" class="status">
             La imagen no se sube a ningún servidor. Todo el proceso ocurre localmente en este navegador.
           </div>
         </div>
 
         <div class="card">
           <h2>Vista previa</h2>
-
-          <div class="preview" id="previewBox">
-            <span id="previewText">Seleccione una imagen para comenzar.</span>
+          <div id="previewBox" class="preview">
+            <span>Seleccione una imagen para comenzar.</span>
           </div>
 
-          <button id="downloadButton" class="secondary-button" type="button" style="display:none;">
-            Descargar PNG
-          </button>
+          <button id="downloadButton" class="secondary-button" type="button" style="display:none;">Descargar PNG</button>
         </div>
       </div>
 
-      <div class="result-box" id="resultBox">
+      <div id="resultBox" class="result-box">
         <h2>Mensaje revelado</h2>
-        <div class="result-message" id="revealedMessage"></div>
+        <div id="revealedMessage" class="result-message"></div>
       </div>
 
-      <div class="note" id="noteBox">
+      <div id="noteBox" class="note">
         <h2>Nota</h2>
-        <p>
-          Esta herramienta se proporciona únicamente con fines educativos, de experimentación y apoyo al aprendizaje.
-        </p>
-        <p>
-          La seguridad depende de la clave utilizada. Una clave corta o fácil de adivinar puede comprometer el contenido. Para conservar el mensaje oculto, mantenga la imagen como PNG y evite convertirla a JPG o enviarla mediante servicios que recompriman imágenes.
-        </p>
+        <p>Esta herramienta se proporciona únicamente con fines educativos, de experimentación y apoyo al aprendizaje.</p>
+        <p>La seguridad depende de la clave utilizada. Una clave corta o fácil de adivinar puede comprometer el contenido. Para conservar el mensaje oculto, mantenga la imagen como PNG y evite convertirla a JPG o enviarla mediante servicios que recompriman imágenes.</p>
       </div>
 
       <canvas id="workCanvas"></canvas>
@@ -367,262 +376,238 @@
   </main>
 
   <footer>
-    <div class="container">
-      © 2026 Javier Cortés Mac Evoy · Esteganografía en Imagen
-    </div>
+    <div class="container">© 2026 Javier Cortés Mac Evoy · Esteganografía en Imagen</div>
   </footer>
 
   <script>
     "use strict";
 
-    const CONFIG = {
+    const CONFIG = Object.freeze({
       maxFileSize: 5 * 1024 * 1024,
       maxMessageLength: 200,
       minKeyLength: 4,
       maxKeyLength: 16,
       cooldownMs: 10000,
-      pbkdf2Iterations: 600000,
-      magic: "JCMSTEG1"
+      pbkdf2Iterations: 350000,
+      magic: "JCMSTEG3",
+      maxPayloadLength: 4096
+    });
+
+    const state = {
+      mode: "hide",
+      file: null,
+      lastBlob: null,
+      lastFileName: "",
+      cooldown: false,
+      objectUrl: null
     };
 
-    let currentMode = "hide";
-    let lastBlob = null;
-    let lastFileName = "";
-    let cooldown = false;
+    const dom = {
+      btnHide: document.getElementById("btnHide"),
+      btnReveal: document.getElementById("btnReveal"),
+      dropZone: document.getElementById("dropZone"),
+      imageInput: document.getElementById("imageInput"),
+      fileName: document.getElementById("fileName"),
+      hideFields: document.getElementById("hideFields"),
+      messageInput: document.getElementById("messageInput"),
+      charCounter: document.getElementById("charCounter"),
+      keyInput: document.getElementById("keyInput"),
+      mainAction: document.getElementById("mainAction"),
+      statusBox: document.getElementById("statusBox"),
+      previewBox: document.getElementById("previewBox"),
+      downloadButton: document.getElementById("downloadButton"),
+      resultBox: document.getElementById("resultBox"),
+      revealedMessage: document.getElementById("revealedMessage"),
+      noteBox: document.getElementById("noteBox"),
+      canvas: document.getElementById("workCanvas")
+    };
 
-    const btnOcultar = document.getElementById("btnOcultar");
-    const btnRevelar = document.getElementById("btnRevelar");
-    const hideFields = document.getElementById("hideFields");
-    const mainAction = document.getElementById("mainAction");
-    const imageInput = document.getElementById("imageInput");
-    const messageInput = document.getElementById("messageInput");
-    const charCounter = document.getElementById("charCounter");
-    const keyInput = document.getElementById("keyInput");
-    const statusBox = document.getElementById("statusBox");
-    const previewBox = document.getElementById("previewBox");
-    const previewText = document.getElementById("previewText");
-    const downloadButton = document.getElementById("downloadButton");
-    const resultBox = document.getElementById("resultBox");
-    const revealedMessage = document.getElementById("revealedMessage");
-    const noteBox = document.getElementById("noteBox");
-    const canvas = document.getElementById("workCanvas");
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    const ctx = dom.canvas.getContext("2d", { willReadFrequently: true });
 
-    btnOcultar.addEventListener("click", function () {
-      setMode("hide");
+    dom.btnHide.addEventListener("click", function () { setMode("hide"); });
+    dom.btnReveal.addEventListener("click", function () { setMode("reveal"); });
+    dom.mainAction.addEventListener("click", function () { state.mode === "hide" ? runHide() : runReveal(); });
+    dom.downloadButton.addEventListener("click", downloadLastPNG);
+
+    dom.messageInput.addEventListener("input", function () {
+      dom.charCounter.textContent = dom.messageInput.value.length + " / " + CONFIG.maxMessageLength;
     });
 
-    btnRevelar.addEventListener("click", function () {
-      setMode("reveal");
-    });
+    dom.dropZone.addEventListener("click", function () { dom.imageInput.click(); });
 
-    mainAction.addEventListener("click", function () {
-      if (currentMode === "hide") {
-        hideMessage();
-      } else {
-        revealMessage();
+    dom.dropZone.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        dom.imageInput.click();
       }
     });
 
-    downloadButton.addEventListener("click", function () {
-      downloadLastPNG();
+    dom.imageInput.addEventListener("change", function () {
+      if (dom.imageInput.files && dom.imageInput.files[0]) {
+        setSelectedFile(dom.imageInput.files[0]);
+      }
     });
 
-    messageInput.addEventListener("input", function () {
-      const count = messageInput.value.length;
-      charCounter.textContent = count + " / " + CONFIG.maxMessageLength;
+    dom.dropZone.addEventListener("dragover", function (event) {
+      event.preventDefault();
+      dom.dropZone.classList.add("active");
     });
 
-    imageInput.addEventListener("change", function () {
-      resetOutputOnly();
-      statusBox.textContent = "Imagen seleccionada. Presione el botón principal para continuar.";
+    dom.dropZone.addEventListener("dragleave", function () { dom.dropZone.classList.remove("active"); });
+
+    dom.dropZone.addEventListener("drop", function (event) {
+      event.preventDefault();
+      dom.dropZone.classList.remove("active");
+      if (event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {
+        setSelectedFile(event.dataTransfer.files[0]);
+      }
+    });
+
+    document.addEventListener("paste", function (event) {
+      if (!event.clipboardData || !event.clipboardData.items) return;
+
+      for (let i = 0; i < event.clipboardData.items.length; i++) {
+        const item = event.clipboardData.items[i];
+        if (item.kind === "file") {
+          const file = item.getAsFile();
+          if (file) {
+            setSelectedFile(file);
+            break;
+          }
+        }
+      }
     });
 
     function setMode(mode) {
-      currentMode = mode;
-
-      btnOcultar.classList.toggle("active", mode === "hide");
-      btnRevelar.classList.toggle("active", mode === "reveal");
-
-      hideFields.style.display = mode === "hide" ? "block" : "none";
-      mainAction.textContent = mode === "hide" ? "Ocultar mensaje" : "Revelar mensaje";
-
-      resetOutputOnly();
-      statusBox.textContent = "La imagen no se sube a ningún servidor. Todo el proceso ocurre localmente en este navegador.";
+      state.mode = mode;
+      dom.btnHide.classList.toggle("active", mode === "hide");
+      dom.btnReveal.classList.toggle("active", mode === "reveal");
+      dom.hideFields.style.display = mode === "hide" ? "block" : "none";
+      dom.mainAction.textContent = mode === "hide" ? "Ocultar mensaje" : "Revelar mensaje";
+      clearOutput();
+      setStatus("La imagen no se sube a ningún servidor. Todo el proceso ocurre localmente en este navegador.");
     }
 
-    function resetOutputOnly() {
-      lastBlob = null;
-      lastFileName = "";
-      downloadButton.style.display = "none";
-      resultBox.style.display = "none";
-      noteBox.style.display = "none";
-      revealedMessage.textContent = "";
-      previewBox.textContent = "";
-      const span = document.createElement("span");
-      span.id = "previewText";
-      span.textContent = "Seleccione una imagen para comenzar.";
-      previewBox.appendChild(span);
+    function setSelectedFile(file) {
+      state.file = file;
+      clearOutput();
+      dom.fileName.textContent = file.name ? "Archivo seleccionado: " + file.name : "Imagen seleccionada.";
+      setStatus("Imagen seleccionada. Presione el botón principal para continuar.");
     }
 
-    function setStatus(text) {
-      statusBox.textContent = text;
+    function clearOutput() {
+      state.lastBlob = null;
+      state.lastFileName = "";
+      dom.downloadButton.style.display = "none";
+      dom.resultBox.style.display = "none";
+      dom.noteBox.style.display = "none";
+      dom.revealedMessage.textContent = "";
+      clearPreview();
     }
 
-    function validateKey(key) {
-      return key.length >= CONFIG.minKeyLength && key.length <= CONFIG.maxKeyLength;
+    function clearPreview() {
+      if (state.objectUrl) {
+        URL.revokeObjectURL(state.objectUrl);
+        state.objectUrl = null;
+      }
+      dom.previewBox.textContent = "";
+      const placeholder = document.createElement("span");
+      placeholder.textContent = "Seleccione una imagen para comenzar.";
+      dom.previewBox.appendChild(placeholder);
     }
+
+    function setStatus(message) { dom.statusBox.textContent = message; }
+    function showNote() { dom.noteBox.style.display = "block"; }
+    function validateKey(key) { return key.length >= CONFIG.minKeyLength && key.length <= CONFIG.maxKeyLength; }
 
     async function validateFile(file) {
-      if (!file) {
-        throw new Error("Debe seleccionar una imagen.");
-      }
-
-      if (file.size > CONFIG.maxFileSize) {
-        throw new Error("La imagen supera el tamaño máximo permitido de 5 MB.");
-      }
+      if (!file) throw new Error("Debe seleccionar una imagen.");
+      if (file.size > CONFIG.maxFileSize) throw new Error("La imagen supera el tamaño máximo permitido de 5 MB.");
 
       const header = new Uint8Array(await file.slice(0, 32).arrayBuffer());
-
-      if (isPNG(header) || isJPEG(header) || isWEBP(header) || isHEIC(header)) {
-        return true;
-      }
-
+      if (isPNG(header) || isJPEG(header) || isWEBP(header) || isHEIC(header)) return;
       throw new Error("El archivo no corresponde a un formato de imagen válido o compatible.");
     }
 
     function isPNG(bytes) {
-      return bytes[0] === 0x89 &&
-             bytes[1] === 0x50 &&
-             bytes[2] === 0x4E &&
-             bytes[3] === 0x47 &&
-             bytes[4] === 0x0D &&
-             bytes[5] === 0x0A &&
-             bytes[6] === 0x1A &&
-             bytes[7] === 0x0A;
+      return bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4E && bytes[3] === 0x47 &&
+        bytes[4] === 0x0D && bytes[5] === 0x0A && bytes[6] === 0x1A && bytes[7] === 0x0A;
     }
 
-    function isJPEG(bytes) {
-      return bytes[0] === 0xFF &&
-             bytes[1] === 0xD8 &&
-             bytes[2] === 0xFF;
-    }
+    function isJPEG(bytes) { return bytes[0] === 0xFF && bytes[1] === 0xD8 && bytes[2] === 0xFF; }
 
     function isWEBP(bytes) {
-      return bytes[0] === 0x52 &&
-             bytes[1] === 0x49 &&
-             bytes[2] === 0x46 &&
-             bytes[3] === 0x46 &&
-             bytes[8] === 0x57 &&
-             bytes[9] === 0x45 &&
-             bytes[10] === 0x42 &&
-             bytes[11] === 0x50;
+      return bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46 &&
+        bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50;
     }
 
     function isHEIC(bytes) {
       const text = bytesToAscii(bytes);
-      return text.indexOf("ftypheic") !== -1 ||
-             text.indexOf("ftypheix") !== -1 ||
-             text.indexOf("ftyphevc") !== -1 ||
-             text.indexOf("ftyphevx") !== -1 ||
-             text.indexOf("ftypmif1") !== -1 ||
-             text.indexOf("ftypmsf1") !== -1;
+      return text.indexOf("ftypheic") !== -1 || text.indexOf("ftypheix") !== -1 ||
+        text.indexOf("ftyphevc") !== -1 || text.indexOf("ftyphevx") !== -1 ||
+        text.indexOf("ftypmif1") !== -1 || text.indexOf("ftypmsf1") !== -1;
     }
 
     function bytesToAscii(bytes) {
       let output = "";
-      for (let i = 0; i < bytes.length; i++) {
-        output += String.fromCharCode(bytes[i]);
-      }
+      for (let i = 0; i < bytes.length; i++) output += String.fromCharCode(bytes[i]);
       return output;
     }
 
-    async function loadImageToCanvas(file) {
+    async function loadImageData(file) {
       const url = URL.createObjectURL(file);
-
       try {
         const img = await new Promise(function (resolve, reject) {
           const image = new Image();
           image.onload = function () { resolve(image); };
-          image.onerror = function () { reject(new Error("No fue posible cargar la imagen en el navegador.")); };
+          image.onerror = function () { reject(new Error("No fue posible cargar la imagen en este navegador.")); };
           image.src = url;
         });
 
-        canvas.width = img.naturalWidth || img.width;
-        canvas.height = img.naturalHeight || img.height;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        dom.canvas.width = img.naturalWidth || img.width;
+        dom.canvas.height = img.naturalHeight || img.height;
+        ctx.clearRect(0, 0, dom.canvas.width, dom.canvas.height);
         ctx.drawImage(img, 0, 0);
 
-        showCanvasPreview();
-
-        return ctx.getImageData(0, 0, canvas.width, canvas.height);
+        return ctx.getImageData(0, 0, dom.canvas.width, dom.canvas.height);
       } finally {
         URL.revokeObjectURL(url);
       }
     }
 
-    function showCanvasPreview() {
-      canvas.toBlob(function (blob) {
-        if (!blob) return;
-
-        const url = URL.createObjectURL(blob);
-        previewBox.textContent = "";
-
-        const img = document.createElement("img");
-        img.alt = "Vista previa de imagen procesada";
-        img.onload = function () {
-          URL.revokeObjectURL(url);
-        };
-        img.src = url;
-
-        previewBox.appendChild(img);
-      }, "image/png");
-    }
-
-    async function hideMessage() {
-      if (cooldown) {
+    async function runHide() {
+      if (state.cooldown) {
         setStatus("Espere unos segundos antes de realizar otra operación.");
         return;
       }
 
       try {
-        blockActions();
+        lockActions();
 
-        const file = imageInput.files[0];
-        const key = keyInput.value;
-        const message = messageInput.value;
+        const key = dom.keyInput.value;
+        const message = dom.messageInput.value;
 
-        if (!validateKey(key)) {
-          throw new Error("La clave debe tener entre 4 y 16 caracteres.");
-        }
+        if (!validateKey(key)) throw new Error("La clave debe tener entre 4 y 16 caracteres.");
+        if (!message || message.length > CONFIG.maxMessageLength) throw new Error("El mensaje debe tener entre 1 y 200 caracteres.");
 
-        if (!message || message.length > CONFIG.maxMessageLength) {
-          throw new Error("El mensaje debe tener entre 1 y 200 caracteres.");
-        }
-
-        await validateFile(file);
+        await validateFile(state.file);
         setStatus("Procesando imagen localmente...");
 
-        const imageData = await loadImageToCanvas(file);
+        const imageData = await loadImageData(state.file);
+        forceOpaqueAlpha(imageData);
+
         const encryptedPayload = await buildEncryptedPayload(message, key);
+        const fullPayload = concatBytes(textToBytes(CONFIG.magic), uint32ToBytes(encryptedPayload.length), encryptedPayload);
+        const capacityBytes = Math.floor((imageData.data.length / 4) / 8);
 
-        const header = textToBytes(CONFIG.magic);
-        const lengthBytes = uint32ToBytes(encryptedPayload.length);
-        const fullPayload = concatBytes(header, lengthBytes, encryptedPayload);
+        if (fullPayload.length > capacityBytes) throw new Error("La imagen no tiene capacidad suficiente para ocultar el mensaje.");
 
-        const capacityBytes = Math.floor((imageData.data.length / 4) * 3 / 8);
-
-        if (fullPayload.length > capacityBytes) {
-          throw new Error("La imagen no tiene capacidad suficiente para ocultar el mensaje.");
-        }
-
-        embedBytesLSB(imageData, fullPayload);
+        embedBytesInAlphaLSB(imageData, fullPayload);
         ctx.putImageData(imageData, 0, 0);
 
         await createDownloadBlob();
-
         setStatus("Imagen generada correctamente. Descargue el nuevo archivo PNG.");
-        noteBox.style.display = "block";
+        showNote();
       } catch (error) {
         setStatus(error.message || "No fue posible procesar la imagen.");
       } finally {
@@ -630,40 +615,42 @@
       }
     }
 
-    async function revealMessage() {
-      if (cooldown) {
+    async function runReveal() {
+      if (state.cooldown) {
         setStatus("Espere unos segundos antes de realizar otra operación.");
         return;
       }
 
       try {
-        blockActions();
+        lockActions();
 
-        const file = imageInput.files[0];
-        const key = keyInput.value;
+        const key = dom.keyInput.value;
+        if (!validateKey(key)) throw new Error("La clave debe tener entre 4 y 16 caracteres.");
 
-        if (!validateKey(key)) {
-          throw new Error("La clave debe tener entre 4 y 16 caracteres.");
-        }
-
-        await validateFile(file);
+        await validateFile(state.file);
         setStatus("Buscando contenido oculto localmente...");
 
-        const imageData = await loadImageToCanvas(file);
+        const imageData = await loadImageData(state.file);
         const message = await extractAndDecrypt(imageData, key);
 
-        resultBox.style.display = "block";
-        noteBox.style.display = "block";
-        revealedMessage.textContent = message;
+        dom.resultBox.style.display = "block";
+        dom.revealedMessage.textContent = message;
         setStatus("Proceso finalizado.");
+        showNote();
+        showCanvasPreview();
       } catch (error) {
-        resultBox.style.display = "block";
-        noteBox.style.display = "block";
-        revealedMessage.textContent = "No se encontró contenido oculto o la clave es incorrecta.";
+        dom.resultBox.style.display = "block";
+        dom.revealedMessage.textContent = "No se encontró contenido oculto o la clave es incorrecta.";
         setStatus("Proceso finalizado.");
+        showNote();
       } finally {
         startCooldown();
       }
+    }
+
+    function forceOpaqueAlpha(imageData) {
+      const data = imageData.data;
+      for (let i = 3; i < data.length; i += 4) data[i] = 255;
     }
 
     async function buildEncryptedPayload(message, keyText) {
@@ -671,238 +658,191 @@
       const iv = crypto.getRandomValues(new Uint8Array(12));
       const key = await deriveKey(keyText, salt);
       const messageBytes = new TextEncoder().encode(message);
-
-      const encrypted = new Uint8Array(
-        await crypto.subtle.encrypt(
-          { name: "AES-GCM", iv: iv },
-          key,
-          messageBytes
-        )
-      );
-
-      return concatBytes(salt, iv, encrypted);
+      const encryptedBytes = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, key, messageBytes));
+      return concatBytes(salt, iv, encryptedBytes);
     }
 
     async function extractAndDecrypt(imageData, keyText) {
       const magicLength = CONFIG.magic.length;
-      const headerBytes = extractBytesLSB(imageData, magicLength);
-      const headerText = new TextDecoder().decode(headerBytes);
+      const magicBytes = extractBytesFromAlphaLSB(imageData, magicLength, 0);
+      const magicText = new TextDecoder().decode(magicBytes);
 
-      if (headerText !== CONFIG.magic) {
-        throw new Error("Sin contenido");
-      }
+      if (magicText !== CONFIG.magic) throw new Error("Sin contenido");
 
-      const lengthStartByte = magicLength;
-      const lengthBytes = extractBytesLSB(imageData, 4, lengthStartByte);
+      const lengthBytes = extractBytesFromAlphaLSB(imageData, 4, magicLength);
       const payloadLength = bytesToUint32(lengthBytes);
 
-      if (payloadLength <= 28 || payloadLength > 50000) {
-        throw new Error("Payload inválido");
-      }
+      if (payloadLength <= 28 || payloadLength > CONFIG.maxPayloadLength) throw new Error("Payload inválido");
 
-      const payload = extractBytesLSB(imageData, payloadLength, magicLength + 4);
-
+      const payload = extractBytesFromAlphaLSB(imageData, payloadLength, magicLength + 4);
       const salt = payload.slice(0, 16);
       const iv = payload.slice(16, 28);
       const encrypted = payload.slice(28);
-
       const key = await deriveKey(keyText, salt);
-
-      const decrypted = await crypto.subtle.decrypt(
-        { name: "AES-GCM", iv: iv },
-        key,
-        encrypted
-      );
+      const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, encrypted);
 
       return new TextDecoder().decode(decrypted);
     }
 
     async function deriveKey(keyText, salt) {
-      const baseKey = await crypto.subtle.importKey(
-        "raw",
-        new TextEncoder().encode(keyText),
-        { name: "PBKDF2" },
-        false,
-        ["deriveKey"]
-      );
-
+      const importedKey = await crypto.subtle.importKey("raw", new TextEncoder().encode(keyText), { name: "PBKDF2" }, false, ["deriveKey"]);
       return crypto.subtle.deriveKey(
-        {
-          name: "PBKDF2",
-          salt: salt,
-          iterations: CONFIG.pbkdf2Iterations,
-          hash: "SHA-256"
-        },
-        baseKey,
+        { name: "PBKDF2", salt: salt, iterations: CONFIG.pbkdf2Iterations, hash: "SHA-256" },
+        importedKey,
         { name: "AES-GCM", length: 256 },
         false,
         ["encrypt", "decrypt"]
       );
     }
 
-    function embedBytesLSB(imageData, bytes) {
-      let bitIndex = 0;
+    function embedBytesInAlphaLSB(imageData, bytes) {
       const data = imageData.data;
       const totalBits = bytes.length * 8;
+      let bitIndex = 0;
 
-      for (let i = 0; i < data.length && bitIndex < totalBits; i++) {
-        if ((i + 1) % 4 === 0) {
-          continue;
-        }
-
+      for (let i = 3; i < data.length && bitIndex < totalBits; i += 4) {
         const byteIndex = Math.floor(bitIndex / 8);
         const bitOffset = 7 - (bitIndex % 8);
         const bit = (bytes[byteIndex] >> bitOffset) & 1;
-
         data[i] = (data[i] & 0xFE) | bit;
         bitIndex++;
       }
+
+      if (bitIndex < totalBits) throw new Error("Capacidad insuficiente.");
     }
 
-    function extractBytesLSB(imageData, byteCount, byteOffset) {
-      const offset = byteOffset || 0;
-      const totalBits = byteCount * 8;
-      const startBit = offset * 8;
-      const data = imageData.data;
+    function extractBytesFromAlphaLSB(imageData, byteCount, byteOffset) {
       const output = new Uint8Array(byteCount);
-
-      let bitIndex = 0;
+      const data = imageData.data;
+      const startBit = byteOffset * 8;
+      const totalBits = byteCount * 8;
+      const endBit = startBit + totalBits;
       let readableBitIndex = 0;
 
-      for (let i = 0; i < data.length && readableBitIndex < startBit + totalBits; i++) {
-        if ((i + 1) % 4 === 0) {
-          continue;
-        }
-
+      for (let i = 3; i < data.length && readableBitIndex < endBit; i += 4) {
         if (readableBitIndex >= startBit) {
           const relativeBit = readableBitIndex - startBit;
           const byteIndex = Math.floor(relativeBit / 8);
           const bitOffset = 7 - (relativeBit % 8);
           const bit = data[i] & 1;
-
           output[byteIndex] = output[byteIndex] | (bit << bitOffset);
         }
-
         readableBitIndex++;
-        bitIndex++;
       }
 
-      if (readableBitIndex < startBit + totalBits) {
-        throw new Error("Datos insuficientes");
-      }
-
+      if (readableBitIndex < endBit) throw new Error("Datos insuficientes.");
       return output;
     }
 
-    function textToBytes(text) {
-      return new TextEncoder().encode(text);
-    }
+    function textToBytes(text) { return new TextEncoder().encode(text); }
 
     function uint32ToBytes(value) {
       const bytes = new Uint8Array(4);
-      const view = new DataView(bytes.buffer);
-      view.setUint32(0, value, false);
+      new DataView(bytes.buffer).setUint32(0, value, false);
       return bytes;
     }
 
     function bytesToUint32(bytes) {
-      const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-      return view.getUint32(0, false);
+      return new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(0, false);
     }
 
     function concatBytes() {
       let total = 0;
-
-      for (let i = 0; i < arguments.length; i++) {
-        total += arguments[i].length;
-      }
+      for (let i = 0; i < arguments.length; i++) total += arguments[i].length;
 
       const output = new Uint8Array(total);
       let offset = 0;
-
       for (let i = 0; i < arguments.length; i++) {
         output.set(arguments[i], offset);
         offset += arguments[i].length;
       }
-
       return output;
     }
 
     async function createDownloadBlob() {
       return new Promise(function (resolve, reject) {
-        canvas.toBlob(function (blob) {
+        dom.canvas.toBlob(function (blob) {
           if (!blob) {
             reject(new Error("No fue posible generar el archivo PNG."));
             return;
           }
 
-          lastBlob = blob;
-          lastFileName = generateFileName();
-
-          downloadButton.style.display = "inline-block";
+          state.lastBlob = blob;
+          state.lastFileName = generateFileName();
+          dom.downloadButton.style.display = "inline-block";
           showCanvasPreview();
           resolve();
         }, "image/png");
       });
     }
 
+    function showCanvasPreview() {
+      dom.canvas.toBlob(function (blob) {
+        if (!blob) return;
+        if (state.objectUrl) URL.revokeObjectURL(state.objectUrl);
+
+        state.objectUrl = URL.createObjectURL(blob);
+        dom.previewBox.textContent = "";
+
+        const image = document.createElement("img");
+        image.alt = "Vista previa de imagen";
+        image.src = state.objectUrl;
+        dom.previewBox.appendChild(image);
+      }, "image/png");
+    }
+
     function downloadLastPNG() {
-      if (!lastBlob) {
+      if (!state.lastBlob) {
         setStatus("Primero genere una imagen.");
         return;
       }
 
-      const url = URL.createObjectURL(lastBlob);
+      const url = URL.createObjectURL(state.lastBlob);
       const link = document.createElement("a");
-
       link.href = url;
-      link.download = lastFileName || generateFileName();
+      link.download = state.lastFileName || generateFileName();
       link.click();
 
-      setTimeout(function () {
-        URL.revokeObjectURL(url);
-      }, 1000);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
     }
 
     function generateFileName() {
       const bytes = crypto.getRandomValues(new Uint8Array(4));
       let hex = "";
-
-      for (let i = 0; i < bytes.length; i++) {
-        hex += bytes[i].toString(16).padStart(2, "0").toUpperCase();
-      }
-
+      for (let i = 0; i < bytes.length; i++) hex += bytes[i].toString(16).padStart(2, "0").toUpperCase();
       return "J_" + hex + ".png";
     }
 
-    function blockActions() {
-      mainAction.disabled = true;
-      downloadButton.disabled = true;
+    function lockActions() {
+      dom.mainAction.disabled = true;
+      dom.downloadButton.disabled = true;
     }
 
-    function unblockActions() {
-      mainAction.disabled = false;
-      downloadButton.disabled = false;
+    function unlockActions() {
+      dom.mainAction.disabled = false;
+      dom.downloadButton.disabled = false;
     }
 
     function startCooldown() {
-      cooldown = true;
+      state.cooldown = true;
       let seconds = Math.floor(CONFIG.cooldownMs / 1000);
 
-      const originalText = mainAction.textContent;
-
       const interval = setInterval(function () {
+        dom.mainAction.textContent = "Espere " + seconds + " s";
         seconds--;
-        mainAction.textContent = "Espere " + seconds + " s";
 
-        if (seconds <= 0) {
+        if (seconds < 0) {
           clearInterval(interval);
-          cooldown = false;
-          mainAction.textContent = currentMode === "hide" ? "Ocultar mensaje" : "Revelar mensaje";
-          unblockActions();
+          state.cooldown = false;
+          dom.mainAction.textContent = state.mode === "hide" ? "Ocultar mensaje" : "Revelar mensaje";
+          unlockActions();
         }
       }, 1000);
     }
+
+    window.addEventListener("beforeunload", function () {
+      if (state.objectUrl) URL.revokeObjectURL(state.objectUrl);
+    });
 
     setMode("hide");
   </script>
