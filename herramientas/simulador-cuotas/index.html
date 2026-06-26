@@ -317,7 +317,7 @@
 
             <label for="precioReferencia">Precio del producto conocido u observado</label>
             <input id="precioReferencia" type="number" placeholder="Opcional. Ej: 10000000" step="1000">
-            <div class="help">Si no conoce el precio original, deje este campo vacío.</div>
+            <div class="help">Si no conoce el precio original, deje este campo vacío. Para estimar intereses y generar un detalle de pagos, ingrese también este valor.</div>
           </div>
 
           <label for="seguro">Seguro mensual</label>
@@ -530,40 +530,118 @@
       const totalCostos = costosMensuales * cuotas;
       const totalDesembolsado = pie + totalCuotas + totalCostos;
 
+      const tienePrecioReferencia = !isNaN(precioReferencia) && precioReferencia > 0;
+      let montoFinanciado = null;
+      let intereses = null;
       let diferencia = null;
       let incremento = null;
+      let tasaImplicita = null;
 
-      if (!isNaN(precioReferencia) && precioReferencia > 0) {
+      if (tienePrecioReferencia) {
+        if (pie > precioReferencia) {
+          alert("El pie no puede ser mayor que el precio del producto.");
+          return;
+        }
+
+        montoFinanciado = precioReferencia - pie;
+        intereses = totalCuotas - montoFinanciado;
         diferencia = totalDesembolsado - precioReferencia;
         incremento = (diferencia / precioReferencia) * 100;
+
+        if (montoFinanciado > 0 && intereses >= 0) {
+          tasaImplicita = calcularTasaImplicita(montoFinanciado, valorCuota, cuotas);
+        }
       }
 
       mostrarBloques();
 
-      document.getElementById("labelMonto").textContent = "Total de cuotas";
-      document.getElementById("montoFinanciado").textContent = moneda(totalCuotas);
-      document.getElementById("pagoMensual").textContent = moneda(pagoMensualTotal);
-      document.getElementById("totalPagado").textContent = moneda(totalDesembolsado);
-      document.getElementById("interesesPagados").textContent = "No calculable";
-      document.getElementById("costosAdicionales").textContent = moneda(totalCostos);
-      document.getElementById("diferencia").textContent = diferencia === null ? "Sin precio base" : moneda(diferencia);
-
-      if (diferencia === null) {
-        document.getElementById("resumenTexto").textContent =
-          "Con una cuota de " + moneda(valorCuota) + " durante " + cuotas + " meses, más costos adicionales mensuales por " + moneda(costosMensuales) + ", " +
-          "el pago mensual estimado sería de " + moneda(pagoMensualTotal) + ". " +
-          "Al finalizar el período, el total desembolsado sería de " + moneda(totalDesembolsado) + ". " +
-          "Como no se ingresó un precio de referencia, no es posible calcular la diferencia contra el precio original ni separar intereses.";
+      if (tienePrecioReferencia) {
+        document.getElementById("labelMonto").textContent = "Monto financiado";
+        document.getElementById("montoFinanciado").textContent = moneda(montoFinanciado);
+        document.getElementById("interesesPagados").textContent = moneda(Math.max(intereses, 0));
+        document.getElementById("diferencia").textContent = moneda(diferencia);
       } else {
-        document.getElementById("resumenTexto").textContent =
-          "Con una cuota de " + moneda(valorCuota) + " durante " + cuotas + " meses, más costos adicionales mensuales por " + moneda(costosMensuales) + ", " +
-          "el pago mensual estimado sería de " + moneda(pagoMensualTotal) + ". " +
-          "Al finalizar el período, el total desembolsado sería de " + moneda(totalDesembolsado) + ". " +
-          "Comparado con un precio de referencia de " + moneda(precioReferencia) + ", esto equivale a pagar " + moneda(diferencia) +
-          " adicionales, con un incremento aproximado de " + incremento.toFixed(1) + "%.";
+        document.getElementById("labelMonto").textContent = "Total de cuotas";
+        document.getElementById("montoFinanciado").textContent = moneda(totalCuotas);
+        document.getElementById("interesesPagados").textContent = "Ingrese precio base";
+        document.getElementById("diferencia").textContent = "Sin precio base";
       }
 
-      generarTablaCuotaConocida(valorCuota, cuotas, costosMensuales);
+      document.getElementById("pagoMensual").textContent = moneda(pagoMensualTotal);
+      document.getElementById("totalPagado").textContent = moneda(totalDesembolsado);
+      document.getElementById("costosAdicionales").textContent = moneda(totalCostos);
+
+      if (!tienePrecioReferencia) {
+        document.getElementById("resumenTexto").textContent =
+          "Con una cuota de " + moneda(valorCuota) + " durante " + cuotas + " meses, más costos adicionales mensuales por " + moneda(costosMensuales) + ", " +
+          "el pago mensual estimado sería de " + moneda(pagoMensualTotal) + ". " +
+          "Al finalizar el período, el total desembolsado sería de " + moneda(totalDesembolsado) + ". " +
+          "Como no se ingresó un precio de referencia, no es posible separar capital e intereses.";
+      } else if (intereses < 0) {
+        document.getElementById("resumenTexto").textContent =
+          "Con una cuota de " + moneda(valorCuota) + " durante " + cuotas + " meses, el total de cuotas sería de " + moneda(totalCuotas) + ". " +
+          "Sin embargo, ese total es menor que el monto financiado estimado de " + moneda(montoFinanciado) + ". " +
+          "Revise los datos ingresados, porque no es posible construir una tabla de pagos consistente con interés no negativo.";
+      } else {
+        const textoTasa = tasaImplicita === null
+          ? "No fue posible estimar una tasa mensual implícita consistente."
+          : "La tasa mensual implícita estimada sería de " + (tasaImplicita * 100).toFixed(2) + "%.";
+
+        document.getElementById("resumenTexto").textContent =
+          "Con una cuota de " + moneda(valorCuota) + " durante " + cuotas + " meses, más costos adicionales mensuales por " + moneda(costosMensuales) + ", " +
+          "el pago mensual estimado sería de " + moneda(pagoMensualTotal) + ". " +
+          "Considerando un precio de referencia de " + moneda(precioReferencia) + " y un pie de " + moneda(pie) + ", el monto financiado sería de " + moneda(montoFinanciado) + ". " +
+          "Los intereses estimados serían de " + moneda(intereses) + ". " +
+          "Al finalizar el período, el total desembolsado sería de " + moneda(totalDesembolsado) + ", equivalente a una diferencia de " + moneda(diferencia) +
+          " respecto al precio original, con un incremento aproximado de " + incremento.toFixed(1) + "%. " +
+          textoTasa;
+      }
+
+      generarTablaCuotaConocida(valorCuota, cuotas, costosMensuales, montoFinanciado, tasaImplicita);
+    }
+
+    function calcularTasaImplicita(montoFinanciado, valorCuota, cuotas) {
+      const cuotaSinInteres = montoFinanciado / cuotas;
+
+      if (Math.abs(valorCuota - cuotaSinInteres) < 0.01) {
+        return 0;
+      }
+
+      if (valorCuota < cuotaSinInteres) {
+        return null;
+      }
+
+      let bajo = 0;
+      let alto = 1;
+
+      while (calcularCuotaDesdeTasa(montoFinanciado, alto, cuotas) < valorCuota && alto < 10) {
+        alto *= 2;
+      }
+
+      if (alto >= 10) {
+        return null;
+      }
+
+      for (let i = 0; i < 100; i++) {
+        const medio = (bajo + alto) / 2;
+        const cuotaEstimada = calcularCuotaDesdeTasa(montoFinanciado, medio, cuotas);
+
+        if (cuotaEstimada < valorCuota) {
+          bajo = medio;
+        } else {
+          alto = medio;
+        }
+      }
+
+      return (bajo + alto) / 2;
+    }
+
+    function calcularCuotaDesdeTasa(montoFinanciado, tasa, cuotas) {
+      if (tasa === 0) {
+        return montoFinanciado / cuotas;
+      }
+
+      return montoFinanciado * (tasa * Math.pow(1 + tasa, cuotas)) / (Math.pow(1 + tasa, cuotas) - 1);
     }
 
     function generarTabla(montoFinanciado, tasa, cuotas, cuotaBase, costosMensuales) {
@@ -593,22 +671,48 @@
       }
     }
 
-    function generarTablaCuotaConocida(valorCuota, cuotas, costosMensuales) {
+    function generarTablaCuotaConocida(valorCuota, cuotas, costosMensuales, montoFinanciado, tasaImplicita) {
       const tbody = document.getElementById("tablaPagos");
       tbody.innerHTML = "";
 
+      if (montoFinanciado === null || tasaImplicita === null) {
+        for (let i = 1; i <= cuotas; i++) {
+          const fila = document.createElement("tr");
+
+          fila.innerHTML =
+            "<td>" + i + "</td>" +
+            "<td>No disponible</td>" +
+            "<td>No calculable</td>" +
+            "<td>No calculable</td>" +
+            "<td>" + moneda(valorCuota + costosMensuales) + "</td>" +
+            "<td>No disponible</td>";
+
+          tbody.appendChild(fila);
+        }
+
+        return;
+      }
+
+      let saldo = montoFinanciado;
+
       for (let i = 1; i <= cuotas; i++) {
+        const interes = saldo * tasaImplicita;
+        const abono = valorCuota - interes;
+        const saldoFinal = Math.max(saldo - abono, 0);
+        const pagoMensual = valorCuota + costosMensuales;
+
         const fila = document.createElement("tr");
 
         fila.innerHTML =
           "<td>" + i + "</td>" +
-          "<td>No disponible</td>" +
-          "<td>No calculable</td>" +
-          "<td>No calculable</td>" +
-          "<td>" + moneda(valorCuota + costosMensuales) + "</td>" +
-          "<td>No disponible</td>";
+          "<td>" + moneda(saldo) + "</td>" +
+          "<td>" + moneda(interes) + "</td>" +
+          "<td>" + moneda(abono) + "</td>" +
+          "<td>" + moneda(pagoMensual) + "</td>" +
+          "<td>" + moneda(saldoFinal) + "</td>";
 
         tbody.appendChild(fila);
+        saldo = saldoFinal;
       }
     }
 
