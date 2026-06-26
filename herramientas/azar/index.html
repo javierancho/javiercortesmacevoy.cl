@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azar | Javier Cortés Mac Evoy</title>
+
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #5f6c7b;
+      --primary: #0f2f4f;
+      --accent: #2563eb;
+      --line: #d9e2ec;
+      --soft: #edf4ff;
+      --green: #0f8a43;
+      --purple: #6d28d9;
+      --orange: #f97316;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1200px, 92%);
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .nav-links a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    main { padding: 60px 0; }
+
+    h1, h2, h3 { color: var(--primary); }
+
+    .intro {
+      max-width: 880px;
+      font-size: 18px;
+      color: var(--muted);
+      text-align: justify;
+    }
+
+    .tabs {
+      display: inline-flex;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px;
+      margin-top: 28px;
+      box-shadow: 0 8px 24px rgba(15, 47, 79, 0.05);
+    }
+
+    .tab {
+      border: none;
+      background: transparent;
+      color: var(--primary);
+      padding: 14px 28px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 15px;
+      transition: all 0.25s ease;
+    }
+
+    .tab:hover { background: var(--soft); }
+
+    .tab.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .panel {
+      margin-top: 30px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 18px 45px rgba(15, 47, 79, 0.07);
+    }
+
+    .tool-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 26px;
+      align-items: start;
+    }
+
+    .sidebar-title {
+      margin: 0 0 12px;
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 800;
+    }
+
+    .list-menu {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .list-button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border: none;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      font-size: 15px;
+    }
+
+    .list-button:last-child { border-bottom: none; }
+
+    .list-button:hover { background: #f8fbff; }
+
+    .list-button.active {
+      background: var(--soft);
+      color: var(--accent);
+    }
+
+    .side-card {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      padding: 16px;
+    }
+
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .switch {
+      width: 48px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #e5e7eb;
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .switch::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+      transition: all 0.2s ease;
+    }
+
+    .switch.active {
+      background: var(--accent);
+    }
+
+    .switch.active::after {
+      left: 23px;
+    }
+
+    .machine-card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 26px;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+    }
+
+    .machine-head {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .machine-head h2 {
+      margin: 0;
+      font-size: 30px;
+      color: var(--accent);
+    }
+
+    .machine-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+    }
+
+    .selector-area {
+      display: grid;
+      grid-template-columns: 1fr 140px;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .slot-shell {
+      position: relative;
+      border: 1px solid #ccd8ea;
+      border-radius: 30px;
+      padding: 34px 34px;
+      background: linear-gradient(180deg, #ffffff 0%, #eef5ff 100%);
+      box-shadow: inset 0 0 0 6px rgba(255,255,255,0.7), 0 20px 45px rgba(15,47,79,0.08);
+    }
+
+    .slot-window {
+      position: relative;
+      height: 270px;
+      border-radius: 18px;
+      border: 1px solid #c9d7ea;
+      overflow: hidden;
+      background: linear-gradient(180deg, #e8edf5 0%, #ffffff 22%, #dcecff 50%, #ffffff 78%, #e8edf5 100%);
+      box-shadow: inset 0 12px 24px rgba(15,47,79,0.18), inset 0 -12px 24px rgba(15,47,79,0.12);
+    }
+
+    .slot-window::before,
+    .slot-window::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 70px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .slot-window::before {
+      top: 0;
+      background: linear-gradient(180deg, rgba(248,250,252,0.95), rgba(248,250,252,0));
+    }
+
+    .slot-window::after {
+      bottom: 0;
+      background: linear-gradient(0deg, rgba(248,250,252,0.95), rgba(248,250,252,0));
+    }
+
+    .slot-center-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+      height: 72px;
+      background: rgba(37,99,235,0.10);
+      border-top: 1px solid #aac4f6;
+      border-bottom: 1px solid #aac4f6;
+      z-index: 1;
+    }
+
+    .slot-items {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0;
+      z-index: 3;
+    }
+
+    .slot-item {
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 18px;
+      font-size: 22px;
+      font-weight: 700;
+      color: rgba(31,41,51,0.55);
+      transition: all 0.15s ease;
+    }
+
+    .slot-item.main {
+      min-height: 74px;
+      font-size: clamp(24px, 4vw, 36px);
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .lever-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .lever {
+      position: relative;
+      width: 88px;
+      height: 260px;
+      border: none;
+      background: transparent;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .lever:active { cursor: grabbing; }
+
+    .lever-base {
+      position: absolute;
+      bottom: 38px;
+      left: 26px;
+      width: 48px;
+      height: 100px;
+      border-radius: 26px;
+      background: linear-gradient(90deg, #e5e7eb, #ffffff, #94a3b8);
+      border: 1px solid #cbd5e1;
+      box-shadow: inset 0 0 8px rgba(15,47,79,0.20);
+    }
+
+    .lever-stick {
+      position: absolute;
+      bottom: 86px;
+      left: 43px;
+      width: 18px;
+      height: 142px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #94a3b8, #ffffff, #64748b);
+      transform-origin: bottom center;
+      transform: rotate(var(--lever-angle, -18deg));
+      transition: transform 0.25s ease;
+      box-shadow: 0 8px 16px rgba(15,47,79,0.16);
+    }
+
+    .lever-knob {
+      position: absolute;
+      top: -35px;
+      left: -22px;
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 25%, #ffffff, #2563eb 38%, #0f2f4f 100%);
+      box-shadow: 0 12px 24px rgba(15,47,79,0.22);
+    }
+
+    .lever-text {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 130px;
+    }
+
+    .result-card {
+      margin: 26px auto 0;
+      max-width: 650px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(15,47,79,0.05);
+    }
+
+    .result-label {
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 1px;
+      font-size: 13px;
+    }
+
+    .result-value {
+      margin-top: 6px;
+      color: var(--accent);
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 800;
+      line-height: 1.1;
+      word-break: break-word;
+    }
+
+    .copy-button,
+    .primary-button,
+    .secondary-button {
+      margin-top: 16px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .copy-button,
+    .secondary-button {
+      border: 1px solid var(--primary);
+      background: #fff;
+      color: var(--primary);
+    }
+
+    .primary-button {
+      border: none;
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .primary-button:hover,
+    .copy-button:hover,
+    .secondary-button:hover {
+      transform: translateY(-1px);
+    }
+
+    .custom-box {
+      display: none;
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      padding: 16px;
+    }
+
+    textarea,
+    input,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 15px;
+      margin-top: 8px;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .help {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .simple-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .metric {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .metric span {
+      color: var(--muted);
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 6px;
+      color: var(--primary);
+      font-size: 28px;
+    }
+
+    .dice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    .die {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 28px;
+      font-weight: 800;
+      box-shadow: 0 10px 24px rgba(15,47,79,0.08);
+    }
+
+    .choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .choice-button {
+      flex: 1;
+      min-width: 120px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 16px;
+      padding: 18px;
+      font-weight: 800;
+      color: var(--primary);
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(15,47,79,0.04);
+    }
+
+    .choice-button:hover {
+      background: var(--soft);
+      border-color: #b8cdf8;
+    }
+
+    .note {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .hidden { display: none; }
+
+    footer {
+      margin-top: 60px;
+      padding: 30px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 950px) {
+      .tool-layout,
+      .selector-area {
+        grid-template-columns: 1fr;
+      }
+
+      .lever-wrap {
+        display: none;
+      }
+
+      .simple-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links a {
+        margin-left: 0;
+        margin-right: 16px;
+      }
+
+      .tabs {
+        width: 100%;
+        flex-direction: column;
+        border-radius: 20px;
+      }
+
+      .tab {
+        width: 100%;
+      }
+
+      .panel {
+        padding: 22px;
+      }
+
+      .slot-shell {
+        padding: 22px;
+      }
+
+      .slot-window {
+        height: 230px;
+      }
+
+      .slot-item {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">Javier Cortés Mac Evoy</div>
+        <div class="nav-links">
+          <a href="../../">Inicio</a>
+          <a href="../../proyectos/">Proyectos</a>
+          <a href="../../#sobre-mi">Sobre mí</a>
+          <a href="../../#contacto">Contacto</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Azar</h1>
+      <p class="intro">
+        Herramienta para lanzar dados, elegir opciones al azar y jugar cachipún. Los resultados se generan localmente en el navegador usando un generador aleatorio seguro.
+      </p>
+
+      <div class="tabs">
+        <button class="tab" id="tabDice" type="button">Dados</button>
+        <button class="tab active" id="tabSelector" type="button">Selector</button>
+        <button class="tab" id="tabRps" type="button">Cachipún</button>
+      </div>
+
+      <section class="panel" id="selectorPanel">
+        <div class="tool-layout">
+          <aside>
+            <p class="sidebar-title">Elegir lista</p>
+            <div class="list-menu" id="listMenu"></div>
+
+            <div class="side-card">
+              <button class="secondary-button" id="newListButton" type="button">Nueva lista</button>
+              <div class="custom-box" id="customBox">
+                <label for="customListName">Nombre de la lista</label>
+                <input id="customListName" type="text" placeholder="Ej: Restaurantes">
+                <label for="customOptions">Opciones</label>
+                <textarea id="customOptions" placeholder="Escriba una opción por línea"></textarea>
+                <button class="primary-button" id="saveCustomButton" type="button">Guardar lista local</button>
+                <p class="help">La lista se guarda solo en este navegador.</p>
+              </div>
+            </div>
+
+            <div class="side-card">
+              <div class="switch-row">
+                <span>Eliminar resultados ya seleccionados</span>
+                <button class="switch active" id="removeSelectedSwitch" type="button" aria-label="Eliminar resultados ya seleccionados"></button>
+              </div>
+            </div>
+          </aside>
+
+          <div class="machine-card">
+            <div class="machine-head">
+              <h2 id="currentListTitle">Trabajo</h2>
+              <p>Selecciona una opción al azar</p>
+            </div>
+
+            <div class="selector-area">
+              <div>
+                <div class="slot-shell">
+                  <div class="slot-window">
+                    <div class="slot-center-line"></div>
+                    <div class="slot-items" id="slotItems"></div>
+                  </div>
+                </div>
+                <p class="note">Tira de la palanca hacia abajo o presiona el botón de selección.</p>
+              </div>
+
+              <div class="lever-wrap">
+                <button class="lever" id="leverButton" type="button" aria-label="Palanca de selección">
+                  <span class="lever-base"></span>
+                  <span class="lever-stick">
+                    <span class="lever-knob"></span>
+                  </span>
+                </button>
+                <div class="lever-text">Baja la palanca para girar</div>
+              </div>
+            </div>
+
+            <div class="result-card">
+              <div class="result-label">Resultado</div>
+              <div class="result-value" id="selectorResult">Pendiente</div>
+              <button class="copy-button" id="copyResultButton" type="button">Copiar resultado</button>
+              <button class="primary-button" id="spinButton" type="button">Elegir al azar</button>
+              <button class="secondary-button" id="resetUsedButton" type="button">Reiniciar lista</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel hidden" id="dicePanel">
+        <h2>Dados</h2>
+        <p class="intro">Seleccione la cantidad de dados, el número de caras y realice un lanzamiento.</p>
+
+        <div class="simple-grid">
+          <div>
+            <label for="diceCount">Cantidad de dados</label>
+            <input id="diceCount" type="number" min="1" max="10" value="2">
+          </div>
+          <div>
+            <label for="diceFaces">Caras por dado</label>
+            <select id="diceFaces">
+              <option value="4">4</option>
+              <option value="6" selected>6</option>
+              <option value="8">8</option>
+              <option value="10">10</option>
+              <option value="12">12</option>
+              <option value="20">20</option>
+            </select>
+          </div>
+          <div>
+            <button class="primary-button" id="rollDiceButton" type="button">Lanzar dados</button>
+          </div>
+        </div>
+
+        <div class="dice-row" id="diceRow"></div>
+
+        <div class="simple-grid">
+          <div class="metric"><span>Total</span><strong id="diceTotal">-</strong></div>
+          <div class="metric"><span>Promedio</span><strong id="diceAverage">-</strong></div>
+          <div class="metric"><span>Lanzamientos</span><strong id="diceRolls">0</strong></div>
+        </div>
+      </section>
+
+      <section class="panel hidden" id="rpsPanel">
+        <h2>Cachipún</h2>
+        <p class="intro">Elige piedra, papel o tijera. El computador elegirá una opción al azar.</p>
+
+        <div class="choice-row">
+          <button class="choice-button" data-choice="Piedra" type="button">Piedra</button>
+          <button class="choice-button" data-choice="Papel" type="button">Papel</button>
+          <button class="choice-button" data-choice="Tijera" type="button">Tijera</button>
+        </div>
+
+        <div class="result-card">
+          <div class="result-label">Resultado</div>
+          <div class="result-value" id="rpsResult">Pendiente</div>
+          <p id="rpsDetail"></p>
+        </div>
+
+        <div class="simple-grid">
+          <div class="metric"><span>Victorias</span><strong id="rpsWins">0</strong></div>
+          <div class="metric"><span>Empates</span><strong id="rpsDraws">0</strong></div>
+          <div class="metric"><span>Derrotas</span><strong id="rpsLosses">0</strong></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 Javier Cortés Mac Evoy · Azar
+    </div>
+  </footer>
+
+  <script>
+    "use strict";
+
+    const defaultLists = {
+      "Fiesta": [
+        "Bebe 1 sorbo", "Bebe 2 sorbos", "Bebe 3 sorbos", "Bebe 5 sorbos", "Termina tu vaso",
+        "Todos beben 1 sorbo", "Todos beben 2 sorbos", "Elige quién bebe", "El de la izquierda bebe", "El de la derecha bebe",
+        "Pierdes el siguiente turno", "Vuelves a jugar", "Todos levantan el vaso", "Brinda con alguien", "Cuenta una anécdota divertida",
+        "Cuenta una vergüenza", "Imita a un famoso", "Imita a otro jugador", "Baila durante 20 segundos", "Canta el coro de una canción",
+        "Habla con acento durante una ronda", "Cuenta un chiste", "Haz una pregunta incómoda", "Responde una pregunta", "Haz un brindis creativo",
+        "Todos cambian de asiento", "Intercambia tu vaso", "Habla sin decir sí durante un turno", "Habla sin decir no durante un turno", "Elige una categoría y todos participan",
+        "Pide un deseo", "Haz una pose ridícula", "Selfie grupal", "Todos aplauden", "Todos ríen durante 10 segundos",
+        "Elige un compañero", "Reparte 3 sorbos", "Recibe 3 sorbos", "Comodín", "Vuelve a girar"
+      ],
+      "Romántico": [
+        "Dar un abrazo de 20 segundos", "Dar un beso en la mejilla", "Dar un beso", "Tomarse de la mano durante un minuto", "Mirarse a los ojos durante 30 segundos",
+        "Decir tres cosas que admiras", "Recordar la primera cita", "Contar el mejor recuerdo juntos", "Elegir la próxima película", "Elegir el próximo restaurante",
+        "Elegir el próximo viaje", "Elegir el próximo paseo", "Preparar el café", "Preparar el postre", "Preparar la próxima comida",
+        "Dar un masaje de hombros", "Dar un masaje de manos", "Escoger la música", "Bailar una canción", "Tomarse una fotografía juntos",
+        "Decir un cumplido", "Decir algo que agradeces", "Hacer una pregunta profunda", "Responder con total sinceridad", "Compartir un sueño",
+        "Compartir una meta", "Hablar de un lugar que quieran visitar", "Planificar una cita", "Planificar un viaje", "Ver las estrellas juntos",
+        "Ver un atardecer", "Apagar los teléfonos durante 30 minutos", "Elegir una actividad para el fin de semana", "Escribir una nota", "Leer una nota en voz alta",
+        "Abrazarse en silencio durante un minuto", "Recordar un momento divertido", "Contar algo que nunca habías dicho", "Compartir una canción especial", "Elegir quién decide hoy",
+        "Preparar una sorpresa", "Hacer una promesa sencilla", "Tomarse una selfie", "Dar un beso en la frente", "Escoger una serie para ver",
+        "Elegir un postre", "Contar qué fue lo primero que te gustó", "Decir te quiero en otro idioma", "Inventar un apodo cariñoso", "Comodín romántico"
+      ],
+      "Panoramas": [
+        "Ir al cine", "Salir a caminar", "Ir a un café", "Ir a desayunar", "Ir a almorzar", "Ir a cenar", "Ir por helado", "Ver una película",
+        "Ver una serie", "Ir al parque", "Hacer un picnic", "Salir en bicicleta", "Ir a la playa", "Ir a la montaña", "Hacer trekking", "Ir a un museo",
+        "Ir a un mirador", "Ir a fotografiar la ciudad", "Ir de compras", "Salir en auto sin destino", "Visitar un pueblo cercano", "Ir a un concierto", "Ir a un bar", "Ir a una feria",
+        "Jugar videojuegos", "Jugar juegos de mesa", "Preparar una comida especial", "Hacer una parrillada", "Ir a un jardín botánico", "Ver el amanecer", "Ver el atardecer",
+        "Acampar", "Hacer una fogata", "Ir a pescar", "Leer un libro", "Hacer deporte", "Ir a una exposición", "Hacer una escapada", "Volver a elegir"
+      ],
+      "Comidas": [
+        "Pizza", "Hamburguesa", "Sushi", "Comida china", "Comida japonesa", "Comida mexicana", "Comida peruana", "Comida italiana", "Comida árabe", "Comida india",
+        "Parrillada", "Pasta", "Empanadas", "Sándwich", "Hot dog", "Pollo", "Ensaladas", "Mariscos", "Pescado", "Completo", "Ramen", "Tacos", "Burritos", "Lasaña",
+        "Risotto", "Ceviche", "Helado", "Pastelería", "Café", "Desayuno", "Brunch", "Comida rápida", "Comida casera", "Postres", "Asado", "Comida vegetariana",
+        "Comida vegana", "Buffet", "Lo que tú quieras", "Volver a elegir"
+      ],
+      "Trabajo": [
+        "Empiezas tú", "Empieza un compañero", "Se suspende la reunión", "Pedimos pizza", "Se posterga", "Continuamos mañana", "Pedir otra opinión", "Nos quedamos hasta terminar", "Pausa de café y seguimos"
+      ],
+      "Viajes": [
+        "Escapada a la playa", "Escapada a la montaña", "Ciudad cercana", "Camping", "Hotel", "Cabaña", "Ruta gastronómica", "Museo", "Termas", "Road trip",
+        "Viaje nacional", "Viaje internacional", "Viaje en auto", "Viaje en bus", "Viaje corto", "Viaje largo", "Visitar un lago", "Visitar un río", "Visitar una viña", "Visitar un parque nacional"
+      ],
+      "Niños": [
+        "Dibujar", "Colorear", "Leer un cuento", "Armar un puzzle", "Bailar", "Cantar", "Jugar a las escondidas", "Inventar una historia", "Construir algo", "Ver una película",
+        "Ordenar juguetes", "Hacer una manualidad", "Jugar con bloques", "Preparar una colación", "Elegir un juego", "Hacer una carrera", "Jugar memoria", "Hacer una tarjeta", "Contar chistes", "Crear un personaje"
+      ],
+      "Decisiones": [
+        "Sí", "No", "Espera", "Hazlo", "No lo hagas", "Piensa un poco más", "Consulta a alguien", "Haz una pausa", "Es una buena idea", "No es el momento",
+        "Inténtalo mañana", "Ve por ello", "Busca otra opción", "Confía en tu intuición", "Analízalo mejor", "Empieza ahora", "Termina primero lo pendiente", "Pide ayuda", "Arriesga un poco", "No cambies nada",
+        "Haz una prueba", "Reduce el riesgo", "Investiga más", "Elige la opción A", "Elige la opción B", "Lanza otra decisión", "Date un descanso", "Sigue tu plan", "Improvisa", "Vuelve a decidir"
+      ]
+    };
+
+    const state = {
+      activeTab: "selector",
+      activeList: "Trabajo",
+      removeSelected: true,
+      used: {},
+      spinning: false,
+      diceRolls: 0,
+      rps: { wins: 0, draws: 0, losses: 0 }
+    };
+
+    const dom = {
+      tabDice: document.getElementById("tabDice"),
+      tabSelector: document.getElementById("tabSelector"),
+      tabRps: document.getElementById("tabRps"),
+      dicePanel: document.getElementById("dicePanel"),
+      selectorPanel: document.getElementById("selectorPanel"),
+      rpsPanel: document.getElementById("rpsPanel"),
+      listMenu: document.getElementById("listMenu"),
+      currentListTitle: document.getElementById("currentListTitle"),
+      slotItems: document.getElementById("slotItems"),
+      selectorResult: document.getElementById("selectorResult"),
+      spinButton: document.getElementById("spinButton"),
+      leverButton: document.getElementById("leverButton"),
+      copyResultButton: document.getElementById("copyResultButton"),
+      resetUsedButton: document.getElementById("resetUsedButton"),
+      removeSelectedSwitch: document.getElementById("removeSelectedSwitch"),
+      newListButton: document.getElementById("newListButton"),
+      customBox: document.getElementById("customBox"),
+      customListName: document.getElementById("customListName"),
+      customOptions: document.getElementById("customOptions"),
+      saveCustomButton: document.getElementById("saveCustomButton"),
+      diceCount: document.getElementById("diceCount"),
+      diceFaces: document.getElementById("diceFaces"),
+      rollDiceButton: document.getElementById("rollDiceButton"),
+      diceRow: document.getElementById("diceRow"),
+      diceTotal: document.getElementById("diceTotal"),
+      diceAverage: document.getElementById("diceAverage"),
+      diceRolls: document.getElementById("diceRolls"),
+      rpsResult: document.getElementById("rpsResult"),
+      rpsDetail: document.getElementById("rpsDetail"),
+      rpsWins: document.getElementById("rpsWins"),
+      rpsDraws: document.getElementById("rpsDraws"),
+      rpsLosses: document.getElementById("rpsLosses")
+    };
+
+    function secureRandomInt(max) {
+      if (max <= 0) return 0;
+      const array = new Uint32Array(1);
+      const limit = Math.floor(0x100000000 / max) * max;
+      let value;
+
+      do {
+        crypto.getRandomValues(array);
+        value = array[0];
+      } while (value >= limit);
+
+      return value % max;
+    }
+
+    function getCustomLists() {
+      try {
+        return JSON.parse(localStorage.getItem("jcm_azar_custom_lists") || "{}");
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function saveCustomLists(lists) {
+      localStorage.setItem("jcm_azar_custom_lists", JSON.stringify(lists));
+    }
+
+    function getAllLists() {
+      return Object.assign({}, defaultLists, getCustomLists());
+    }
+
+    function renderListMenu() {
+      const lists = getAllLists();
+      dom.listMenu.textContent = "";
+
+      Object.keys(lists).forEach(function (name) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "list-button" + (name === state.activeList ? " active" : "");
+        button.textContent = name;
+        button.addEventListener("click", function () {
+          state.activeList = name;
+          renderListMenu();
+          renderSlotPreview(name);
+        });
+        dom.listMenu.appendChild(button);
+      });
+    }
+
+    function getAvailableOptions(listName) {
+      const lists = getAllLists();
+      const options = lists[listName] || [];
+      const used = state.used[listName] || [];
+
+      if (!state.removeSelected) return options.slice();
+
+      const filtered = options.filter(function (option) {
+        return used.indexOf(option) === -1;
+      });
+
+      return filtered.length ? filtered : options.slice();
+    }
+
+    function renderSlotPreview(listName, center) {
+      const lists = getAllLists();
+      const options = lists[listName] || [];
+      const selected = center || options[secureRandomInt(options.length)] || "Sin opciones";
+      const around = makeVisibleItems(options, selected);
+
+      dom.currentListTitle.textContent = listName;
+      dom.slotItems.textContent = "";
+
+      around.forEach(function (item, index) {
+        const div = document.createElement("div");
+        div.className = "slot-item" + (index === 2 ? " main" : "");
+        div.textContent = item;
+        dom.slotItems.appendChild(div);
+      });
+    }
+
+    function makeVisibleItems(options, center) {
+      if (!options.length) return ["-", "-", "Sin opciones", "-", "-"];
+
+      const centerIndex = options.indexOf(center) >= 0 ? options.indexOf(center) : 0;
+      const result = [];
+
+      for (let offset = -2; offset <= 2; offset++) {
+        const index = (centerIndex + offset + options.length) % options.length;
+        result.push(options[index]);
+      }
+
+      return result;
+    }
+
+    function spinSelector(durationFactor) {
+      if (state.spinning) return;
+
+      const options = getAvailableOptions(state.activeList);
+
+      if (!options.length) {
+        dom.selectorResult.textContent = "Sin opciones";
+        return;
+      }
+
+      state.spinning = true;
+      dom.spinButton.disabled = true;
+
+      const result = options[secureRandomInt(options.length)];
+      const duration = 1200 + Math.round((durationFactor || 1) * 1600);
+      const start = Date.now();
+
+      function tick() {
+        const elapsed = Date.now() - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const delay = 45 + Math.pow(progress, 3) * 180;
+        const randomItem = options[secureRandomInt(options.length)];
+
+        renderSlotPreview(state.activeList, progress < 1 ? randomItem : result);
+
+        if (progress < 1) {
+          setTimeout(tick, delay);
+        } else {
+          dom.selectorResult.textContent = result;
+          markUsed(result);
+          state.spinning = false;
+          dom.spinButton.disabled = false;
+        }
+      }
+
+      tick();
+    }
+
+    function markUsed(result) {
+      if (!state.removeSelected) return;
+
+      if (!state.used[state.activeList]) {
+        state.used[state.activeList] = [];
+      }
+
+      if (state.used[state.activeList].indexOf(result) === -1) {
+        state.used[state.activeList].push(result);
+      }
+    }
+
+    function setTab(tab) {
+      state.activeTab = tab;
+      dom.tabDice.classList.toggle("active", tab === "dice");
+      dom.tabSelector.classList.toggle("active", tab === "selector");
+      dom.tabRps.classList.toggle("active", tab === "rps");
+
+      dom.dicePanel.classList.toggle("hidden", tab !== "dice");
+      dom.selectorPanel.classList.toggle("hidden", tab !== "selector");
+      dom.rpsPanel.classList.toggle("hidden", tab !== "rps");
+    }
+
+    function rollDice() {
+      const count = Math.max(1, Math.min(10, parseInt(dom.diceCount.value, 10) || 1));
+      const faces = parseInt(dom.diceFaces.value, 10) || 6;
+      const values = [];
+      let total = 0;
+
+      for (let i = 0; i < count; i++) {
+        const value = secureRandomInt(faces) + 1;
+        values.push(value);
+        total += value;
+      }
+
+      dom.diceRow.textContent = "";
+      values.forEach(function (value) {
+        const die = document.createElement("div");
+        die.className = "die";
+        die.textContent = value;
+        dom.diceRow.appendChild(die);
+      });
+
+      state.diceRolls++;
+      dom.diceTotal.textContent = total;
+      dom.diceAverage.textContent = (total / count).toFixed(1);
+      dom.diceRolls.textContent = state.diceRolls;
+    }
+
+    function playRps(userChoice) {
+      const choices = ["Piedra", "Papel", "Tijera"];
+      const computer = choices[secureRandomInt(choices.length)];
+      let result;
+
+      if (userChoice === computer) {
+        result = "Empate";
+        state.rps.draws++;
+      } else if (
+        (userChoice === "Piedra" && computer === "Tijera") ||
+        (userChoice === "Papel" && computer === "Piedra") ||
+        (userChoice === "Tijera" && computer === "Papel")
+      ) {
+        result = "Ganaste";
+        state.rps.wins++;
+      } else {
+        result = "Perdiste";
+        state.rps.losses++;
+      }
+
+      dom.rpsResult.textContent = result;
+      dom.rpsDetail.textContent = "Tú elegiste " + userChoice + ". El computador eligió " + computer + ".";
+      dom.rpsWins.textContent = state.rps.wins;
+      dom.rpsDraws.textContent = state.rps.draws;
+      dom.rpsLosses.textContent = state.rps.losses;
+    }
+
+    dom.tabDice.addEventListener("click", function () { setTab("dice"); });
+    dom.tabSelector.addEventListener("click", function () { setTab("selector"); });
+    dom.tabRps.addEventListener("click", function () { setTab("rps"); });
+
+    dom.spinButton.addEventListener("click", function () { spinSelector(1); });
+    dom.leverButton.addEventListener("click", function () {
+      dom.leverButton.style.setProperty("--lever-angle", "22deg");
+      setTimeout(function () { dom.leverButton.style.setProperty("--lever-angle", "-18deg"); }, 380);
+      spinSelector(1.4);
+    });
+
+    dom.copyResultButton.addEventListener("click", function () {
+      const text = dom.selectorResult.textContent;
+      if (!text || text === "Pendiente") return;
+      navigator.clipboard.writeText(text).catch(function () {});
+    });
+
+    dom.resetUsedButton.addEventListener("click", function () {
+      state.used[state.activeList] = [];
+      renderSlotPreview(state.activeList);
+    });
+
+    dom.removeSelectedSwitch.addEventListener("click", function () {
+      state.removeSelected = !state.removeSelected;
+      dom.removeSelectedSwitch.classList.toggle("active", state.removeSelected);
+    });
+
+    dom.newListButton.addEventListener("click", function () {
+      dom.customBox.style.display = dom.customBox.style.display === "block" ? "none" : "block";
+    });
+
+    dom.saveCustomButton.addEventListener("click", function () {
+      const name = dom.customListName.value.trim();
+      const options = dom.customOptions.value
+        .split("\n")
+        .map(function (item) { return item.trim(); })
+        .filter(function (item) { return item.length > 0; });
+
+      if (!name || options.length < 2) {
+        alert("Ingrese un nombre y al menos dos opciones.");
+        return;
+      }
+
+      const customLists = getCustomLists();
+      customLists[name] = options;
+      saveCustomLists(customLists);
+
+      state.activeList = name;
+      dom.customListName.value = "";
+      dom.customOptions.value = "";
+      dom.customBox.style.display = "none";
+      renderListMenu();
+      renderSlotPreview(name);
+    });
+
+    dom.rollDiceButton.addEventListener("click", rollDice);
+
+    document.querySelectorAll(".choice-button").forEach(function (button) {
+      button.addEventListener("click", function () {
+        playRps(button.getAttribute("data-choice"));
+      });
+    });
+
+    renderListMenu();
+    renderSlotPreview(state.activeList);
+    rollDice();
+  </script>
+</body>
+</html>
