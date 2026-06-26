@@ -453,6 +453,26 @@
       padding: 16px;
     }
 
+    .list-actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    .list-actions .secondary-button {
+      margin-top: 0;
+      width: 100%;
+    }
+
+    .local-note {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #f8fafc;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
     textarea,
     input,
     select {
@@ -696,14 +716,31 @@
             <div class="list-menu" id="listMenu"></div>
 
             <div class="side-card">
-              <button class="secondary-button" id="newListButton" type="button">Nueva lista</button>
+              <div class="list-actions">
+                <button class="secondary-button" id="newListButton" type="button">Nueva lista</button>
+                <button class="secondary-button" id="editListButton" type="button">Editar lista</button>
+                <button class="secondary-button" id="duplicateListButton" type="button">Duplicar</button>
+                <button class="secondary-button" id="deleteListButton" type="button">Eliminar</button>
+                <button class="secondary-button" id="resetDefaultsButton" type="button">Restablecer predeterminados</button>
+              </div>
+
               <div class="custom-box" id="customBox">
+                <h3 id="customBoxTitle">Nueva lista</h3>
+
                 <label for="customListName">Nombre de la lista</label>
                 <input id="customListName" type="text" placeholder="Ej: Restaurantes">
+
                 <label for="customOptions">Opciones</label>
                 <textarea id="customOptions" placeholder="Escriba una opción por línea"></textarea>
+
                 <button class="primary-button" id="saveCustomButton" type="button">Guardar lista local</button>
-                <p class="help">La lista se guarda solo en este navegador.</p>
+                <button class="secondary-button" id="cancelCustomButton" type="button">Cancelar</button>
+
+                <p class="help">Las listas se guardan solo en este navegador.</p>
+              </div>
+
+              <div class="local-note">
+                Las listas personalizadas y ediciones se almacenan únicamente en este navegador. No se suben a GitHub ni a ningún servidor.
               </div>
             </div>
 
@@ -884,6 +921,8 @@
     const state = {
       activeTab: "selector",
       activeList: "Trabajo",
+      customMode: "new",
+      editingList: null,
       removeSelected: true,
       used: {},
       spinning: false,
@@ -913,10 +952,16 @@
       resetUsedButton: document.getElementById("resetUsedButton"),
       removeSelectedSwitch: document.getElementById("removeSelectedSwitch"),
       newListButton: document.getElementById("newListButton"),
+      editListButton: document.getElementById("editListButton"),
+      duplicateListButton: document.getElementById("duplicateListButton"),
+      deleteListButton: document.getElementById("deleteListButton"),
+      resetDefaultsButton: document.getElementById("resetDefaultsButton"),
       customBox: document.getElementById("customBox"),
+      customBoxTitle: document.getElementById("customBoxTitle"),
       customListName: document.getElementById("customListName"),
       customOptions: document.getElementById("customOptions"),
       saveCustomButton: document.getElementById("saveCustomButton"),
+      cancelCustomButton: document.getElementById("cancelCustomButton"),
       diceCount: document.getElementById("diceCount"),
       diceFaces: document.getElementById("diceFaces"),
       rollDiceButton: document.getElementById("rollDiceButton"),
@@ -963,6 +1008,65 @@
       return Object.assign({}, defaultLists, getCustomLists());
     }
 
+    function isDefaultList(name) {
+      return Object.prototype.hasOwnProperty.call(defaultLists, name);
+    }
+
+    function uniqueListName(baseName, allLists) {
+      const cleanBase = (baseName || "Nueva lista").trim() || "Nueva lista";
+
+      if (!Object.prototype.hasOwnProperty.call(allLists, cleanBase)) {
+        return cleanBase;
+      }
+
+      let counter = 2;
+      let candidate = cleanBase + " (" + counter + ")";
+
+      while (Object.prototype.hasOwnProperty.call(allLists, candidate)) {
+        counter++;
+        candidate = cleanBase + " (" + counter + ")";
+      }
+
+      return candidate;
+    }
+
+    function parseOptions(text) {
+      return text
+        .split("\n")
+        .map(function (item) { return item.trim(); })
+        .filter(function (item) { return item.length > 0; });
+    }
+
+    function openListEditor(mode) {
+      const lists = getAllLists();
+
+      state.customMode = mode;
+      state.editingList = mode === "edit" ? state.activeList : null;
+
+      if (mode === "edit") {
+        dom.customBoxTitle.textContent = "Editar lista";
+        dom.customListName.value = state.activeList;
+        dom.customOptions.value = (lists[state.activeList] || []).join("\n");
+        dom.saveCustomButton.textContent = "Guardar cambios";
+      } else {
+        dom.customBoxTitle.textContent = "Nueva lista";
+        dom.customListName.value = "";
+        dom.customOptions.value = "";
+        dom.saveCustomButton.textContent = "Guardar lista local";
+      }
+
+      dom.customBox.style.display = "block";
+      dom.customListName.focus();
+    }
+
+    function closeListEditor() {
+      dom.customBox.style.display = "none";
+      state.customMode = "new";
+      state.editingList = null;
+      dom.customListName.value = "";
+      dom.customOptions.value = "";
+    }
+
     function renderListMenu() {
       const lists = getAllLists();
       dom.listMenu.textContent = "";
@@ -974,6 +1078,8 @@
         button.textContent = name;
         button.addEventListener("click", function () {
           state.activeList = name;
+          dom.selectorResult.textContent = "Pendiente";
+          closeListEditor();
           renderListMenu();
           renderSlotPreview(name);
         });
@@ -1249,31 +1355,119 @@
     });
 
     dom.newListButton.addEventListener("click", function () {
-      dom.customBox.style.display = dom.customBox.style.display === "block" ? "none" : "block";
+      openListEditor("new");
+    });
+
+    dom.editListButton.addEventListener("click", function () {
+      openListEditor("edit");
+    });
+
+    dom.cancelCustomButton.addEventListener("click", function () {
+      closeListEditor();
     });
 
     dom.saveCustomButton.addEventListener("click", function () {
-      const name = dom.customListName.value.trim();
-      const options = dom.customOptions.value
-        .split("\n")
-        .map(function (item) { return item.trim(); })
-        .filter(function (item) { return item.length > 0; });
+      const rawName = dom.customListName.value.trim();
+      const options = parseOptions(dom.customOptions.value);
 
-      if (!name || options.length < 2) {
+      if (!rawName || options.length < 2) {
         alert("Ingrese un nombre y al menos dos opciones.");
         return;
       }
 
       const customLists = getCustomLists();
-      customLists[name] = options;
+      const allLists = getAllLists();
+      let finalName = rawName;
+
+      if (state.customMode === "new") {
+        finalName = uniqueListName(rawName, allLists);
+      } else if (state.customMode === "edit") {
+        const previousName = state.editingList;
+
+        if (previousName && rawName !== previousName && Object.prototype.hasOwnProperty.call(allLists, rawName)) {
+          finalName = uniqueListName(rawName, allLists);
+        }
+
+        if (previousName && previousName !== finalName && Object.prototype.hasOwnProperty.call(customLists, previousName)) {
+          delete customLists[previousName];
+        }
+      }
+
+      customLists[finalName] = options;
       saveCustomLists(customLists);
 
-      state.activeList = name;
-      dom.customListName.value = "";
-      dom.customOptions.value = "";
-      dom.customBox.style.display = "none";
+      state.activeList = finalName;
+      state.used[finalName] = [];
+      dom.selectorResult.textContent = "Pendiente";
+
+      closeListEditor();
       renderListMenu();
-      renderSlotPreview(name);
+      renderSlotPreview(finalName);
+    });
+
+    dom.duplicateListButton.addEventListener("click", function () {
+      const lists = getAllLists();
+      const customLists = getCustomLists();
+      const options = (lists[state.activeList] || []).slice();
+
+      if (options.length < 2) {
+        alert("La lista actual no tiene suficientes opciones para duplicarla.");
+        return;
+      }
+
+      const newName = uniqueListName(state.activeList, lists);
+      customLists[newName] = options;
+      saveCustomLists(customLists);
+
+      state.activeList = newName;
+      state.used[newName] = [];
+      dom.selectorResult.textContent = "Pendiente";
+
+      closeListEditor();
+      renderListMenu();
+      renderSlotPreview(newName);
+    });
+
+    dom.deleteListButton.addEventListener("click", function () {
+      const customLists = getCustomLists();
+
+      if (!Object.prototype.hasOwnProperty.call(customLists, state.activeList)) {
+        alert("Las listas predeterminadas no se eliminan. Puede editarlas o restablecer los predeterminados.");
+        return;
+      }
+
+      const removedName = state.activeList;
+      delete customLists[removedName];
+      saveCustomLists(customLists);
+      delete state.used[removedName];
+
+      if (isDefaultList(removedName)) {
+        state.activeList = removedName;
+      } else {
+        state.activeList = "Trabajo";
+      }
+
+      dom.selectorResult.textContent = "Pendiente";
+      closeListEditor();
+      renderListMenu();
+      renderSlotPreview(state.activeList);
+    });
+
+    dom.resetDefaultsButton.addEventListener("click", function () {
+      const confirmReset = window.confirm("Esto eliminará listas personalizadas y restaurará las listas predeterminadas. ¿Desea continuar?");
+
+      if (!confirmReset) {
+        return;
+      }
+
+      localStorage.removeItem("jcm_azar_custom_lists");
+      state.used = {};
+      state.activeList = "Trabajo";
+      dom.selectorResult.textContent = "Pendiente";
+
+      closeListEditor();
+      renderListMenu();
+      renderSlotPreview(state.activeList);
     });
 
     dom.rollDiceButton.addEventListener("click", rollDice);
