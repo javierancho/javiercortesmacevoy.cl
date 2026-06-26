@@ -309,15 +309,18 @@
       justify-content: center;
       text-align: center;
       padding: 0 18px;
-      font-size: 22px;
+      font-size: clamp(14px, 1.7vw, 20px);
+      line-height: 1.2;
       font-weight: 700;
       color: rgba(31,41,51,0.55);
       transition: all 0.15s ease;
+      overflow-wrap: anywhere;
     }
 
     .slot-item.main {
       min-height: 74px;
-      font-size: clamp(24px, 4vw, 36px);
+      font-size: clamp(18px, 2.7vw, 28px);
+      line-height: 1.15;
       color: var(--primary);
       font-weight: 800;
     }
@@ -361,9 +364,8 @@
       height: 142px;
       border-radius: 999px;
       background: linear-gradient(90deg, #94a3b8, #ffffff, #64748b);
-      transform-origin: bottom center;
-      transform: rotate(var(--lever-angle, -18deg));
-      transition: transform 0.25s ease;
+      transform: translateY(var(--lever-pull, 0px));
+      transition: transform 0.12s ease;
       box-shadow: 0 8px 16px rgba(15,47,79,0.16);
     }
 
@@ -549,6 +551,42 @@
     .choice-button:hover {
       background: var(--soft);
       border-color: #b8cdf8;
+    }
+
+    .choice-button.selected {
+      background: var(--soft);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .rps-stage {
+      margin: 24px auto 0;
+      max-width: 520px;
+      min-height: 96px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(135deg, #ffffff 0%, #edf4ff 100%);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 18px;
+      box-shadow: 0 12px 30px rgba(15,47,79,0.05);
+    }
+
+    .rps-stage-text {
+      color: var(--primary);
+      font-weight: 800;
+      font-size: clamp(28px, 5vw, 46px);
+      line-height: 1.1;
+    }
+
+    .rps-stage-text.pulse {
+      animation: rpsPulse 0.34s ease;
+    }
+
+    @keyframes rpsPulse {
+      0% { transform: scale(0.88); opacity: 0.4; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
     .note {
@@ -738,6 +776,7 @@
           </div>
           <div>
             <button class="primary-button" id="rollDiceButton" type="button">Lanzar dados</button>
+            <button class="secondary-button" id="clearDiceButton" type="button">Borrar resultado</button>
           </div>
         </div>
 
@@ -745,7 +784,7 @@
 
         <div class="simple-grid">
           <div class="metric"><span>Total</span><strong id="diceTotal">-</strong></div>
-          <div class="metric"><span>Promedio</span><strong id="diceAverage">-</strong></div>
+          <div class="metric"><span>Promedio por lanzamiento</span><strong id="diceAverage">-</strong></div>
           <div class="metric"><span>Lanzamientos</span><strong id="diceRolls">0</strong></div>
         </div>
       </section>
@@ -758,6 +797,10 @@
           <button class="choice-button" data-choice="Piedra" type="button">Piedra</button>
           <button class="choice-button" data-choice="Papel" type="button">Papel</button>
           <button class="choice-button" data-choice="Tijera" type="button">Tijera</button>
+        </div>
+
+        <div class="rps-stage">
+          <div class="rps-stage-text" id="rpsStageText">Ca · Chi · Pun</div>
         </div>
 
         <div class="result-card">
@@ -845,6 +888,11 @@
       used: {},
       spinning: false,
       diceRolls: 0,
+      diceTotalAccum: 0,
+      leverStartY: 0,
+      leverPull: 0,
+      leverDragging: false,
+      rpsPlaying: false,
       rps: { wins: 0, draws: 0, losses: 0 }
     };
 
@@ -872,11 +920,13 @@
       diceCount: document.getElementById("diceCount"),
       diceFaces: document.getElementById("diceFaces"),
       rollDiceButton: document.getElementById("rollDiceButton"),
+      clearDiceButton: document.getElementById("clearDiceButton"),
       diceRow: document.getElementById("diceRow"),
       diceTotal: document.getElementById("diceTotal"),
       diceAverage: document.getElementById("diceAverage"),
       diceRolls: document.getElementById("diceRolls"),
       rpsResult: document.getElementById("rpsResult"),
+      rpsStageText: document.getElementById("rpsStageText"),
       rpsDetail: document.getElementById("rpsDetail"),
       rpsWins: document.getElementById("rpsWins"),
       rpsDraws: document.getElementById("rpsDraws"),
@@ -1058,36 +1108,85 @@
       });
 
       state.diceRolls++;
+      state.diceTotalAccum += total;
+
       dom.diceTotal.textContent = total;
-      dom.diceAverage.textContent = (total / count).toFixed(1);
+      dom.diceAverage.textContent = (state.diceTotalAccum / state.diceRolls).toFixed(1);
       dom.diceRolls.textContent = state.diceRolls;
     }
 
+    function clearDiceResults() {
+      state.diceRolls = 0;
+      state.diceTotalAccum = 0;
+      dom.diceRow.textContent = "";
+      dom.diceTotal.textContent = "-";
+      dom.diceAverage.textContent = "-";
+      dom.diceRolls.textContent = "0";
+    }
+
+    function setRpsStage(text) {
+      dom.rpsStageText.textContent = text;
+      dom.rpsStageText.classList.remove("pulse");
+      void dom.rpsStageText.offsetWidth;
+      dom.rpsStageText.classList.add("pulse");
+    }
+
+    function setRpsButtonsDisabled(disabled) {
+      document.querySelectorAll(".choice-button").forEach(function (button) {
+        button.disabled = disabled;
+      });
+    }
+
     function playRps(userChoice) {
-      const choices = ["Piedra", "Papel", "Tijera"];
-      const computer = choices[secureRandomInt(choices.length)];
-      let result;
+      if (state.rpsPlaying) return;
 
-      if (userChoice === computer) {
-        result = "Empate";
-        state.rps.draws++;
-      } else if (
-        (userChoice === "Piedra" && computer === "Tijera") ||
-        (userChoice === "Papel" && computer === "Piedra") ||
-        (userChoice === "Tijera" && computer === "Papel")
-      ) {
-        result = "Ganaste";
-        state.rps.wins++;
-      } else {
-        result = "Perdiste";
-        state.rps.losses++;
-      }
+      state.rpsPlaying = true;
+      setRpsButtonsDisabled(true);
+      dom.rpsResult.textContent = "Pendiente";
+      dom.rpsDetail.textContent = "";
 
-      dom.rpsResult.textContent = result;
-      dom.rpsDetail.textContent = "Tú elegiste " + userChoice + ". El computador eligió " + computer + ".";
-      dom.rpsWins.textContent = state.rps.wins;
-      dom.rpsDraws.textContent = state.rps.draws;
-      dom.rpsLosses.textContent = state.rps.losses;
+      document.querySelectorAll(".choice-button").forEach(function (button) {
+        button.classList.toggle("selected", button.dataset.choice === userChoice);
+      });
+
+      const sequence = ["Ca", "Chi", "Pun"];
+
+      sequence.forEach(function (text, index) {
+        setTimeout(function () {
+          setRpsStage(text);
+        }, index * 450);
+      });
+
+      setTimeout(function () {
+        const choices = ["Piedra", "Papel", "Tijera"];
+        const computer = choices[secureRandomInt(choices.length)];
+        let result;
+
+        if (userChoice === computer) {
+          result = "Empate";
+          state.rps.draws++;
+        } else if (
+          (userChoice === "Piedra" && computer === "Tijera") ||
+          (userChoice === "Papel" && computer === "Piedra") ||
+          (userChoice === "Tijera" && computer === "Papel")
+        ) {
+          result = "Ganaste";
+          state.rps.wins++;
+        } else {
+          result = "Perdiste";
+          state.rps.losses++;
+        }
+
+        setRpsStage(result);
+        dom.rpsResult.textContent = result;
+        dom.rpsDetail.textContent = "Tú elegiste " + userChoice + ". El computador eligió " + computer + ".";
+        dom.rpsWins.textContent = state.rps.wins;
+        dom.rpsDraws.textContent = state.rps.draws;
+        dom.rpsLosses.textContent = state.rps.losses;
+
+        state.rpsPlaying = false;
+        setRpsButtonsDisabled(false);
+      }, sequence.length * 450 + 250);
     }
 
     dom.tabDice.addEventListener("click", function () { setTab("dice"); });
@@ -1095,11 +1194,43 @@
     dom.tabRps.addEventListener("click", function () { setTab("rps"); });
 
     dom.spinButton.addEventListener("click", function () { spinSelector(1); });
-    dom.leverButton.addEventListener("click", function () {
-      dom.leverButton.style.setProperty("--lever-angle", "22deg");
-      setTimeout(function () { dom.leverButton.style.setProperty("--lever-angle", "-18deg"); }, 380);
-      spinSelector(1.4);
+
+    function setLeverPull(value) {
+      const pull = Math.max(0, Math.min(86, value));
+      state.leverPull = pull;
+      dom.leverButton.style.setProperty("--lever-pull", pull + "px");
+    }
+
+    function releaseLever() {
+      if (!state.leverDragging) return;
+
+      state.leverDragging = false;
+      const factor = Math.max(0.55, state.leverPull / 46);
+      const shouldSpin = state.leverPull >= 14;
+
+      setLeverPull(0);
+
+      if (shouldSpin) {
+        spinSelector(factor);
+      }
+    }
+
+    dom.leverButton.addEventListener("pointerdown", function (event) {
+      event.preventDefault();
+      state.leverDragging = true;
+      state.leverStartY = event.clientY;
+      dom.leverButton.setPointerCapture(event.pointerId);
+      setLeverPull(0);
     });
+
+    dom.leverButton.addEventListener("pointermove", function (event) {
+      if (!state.leverDragging) return;
+      event.preventDefault();
+      setLeverPull(event.clientY - state.leverStartY);
+    });
+
+    dom.leverButton.addEventListener("pointerup", releaseLever);
+    dom.leverButton.addEventListener("pointercancel", releaseLever);
 
     dom.copyResultButton.addEventListener("click", function () {
       const text = dom.selectorResult.textContent;
@@ -1146,6 +1277,7 @@
     });
 
     dom.rollDiceButton.addEventListener("click", rollDice);
+    dom.clearDiceButton.addEventListener("click", clearDiceResults);
 
     document.querySelectorAll(".choice-button").forEach(function (button) {
       button.addEventListener("click", function () {
@@ -1155,7 +1287,7 @@
 
     renderListMenu();
     renderSlotPreview(state.activeList);
-    rollDice();
+    clearDiceResults();
   </script>
 </body>
 </html>
