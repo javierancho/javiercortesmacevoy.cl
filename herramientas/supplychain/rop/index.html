@@ -62,15 +62,51 @@
       letter-spacing: 0.2px;
     }
 
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
     .nav-links a {
-      margin-left: 20px;
       text-decoration: none;
       color: var(--muted);
       font-size: 15px;
+      font-weight: 700;
     }
 
     .nav-links a:hover {
       color: var(--accent);
+    }
+
+    .lang-switch {
+      display: inline-flex;
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px;
+      box-shadow: 0 6px 18px rgba(15, 47, 79, 0.05);
+    }
+
+    .lang-option {
+      width: auto;
+      margin: 0;
+      padding: 7px 11px;
+      border: none;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .lang-option.active {
+      background: var(--primary);
+      color: #ffffff;
     }
 
     main {
@@ -406,9 +442,8 @@
         align-items: flex-start;
       }
 
-      .nav-links a {
-        margin-left: 0;
-        margin-right: 16px;
+      .nav-links {
+        gap: 14px;
       }
 
       .result-grid,
@@ -428,11 +463,18 @@
     <div class="container">
       <nav>
         <div class="brand">Javier Cortés Mac Evoy</div>
+
         <div class="nav-links">
-          <a href="../../../">Inicio</a>
-          <a href="../../../proyectos/">Proyectos</a>
-          <a href="../../../#sobre-mi">Sobre mí</a>
-          <a href="../../../#contacto">Contacto</a>
+          <a href="../../../#sobre-mi" data-i18n="nav_about">Sobre mí</a>
+          <a href="../../../#herramientas" data-i18n="nav_tools">Herramientas</a>
+          <a href="../../../#intereses" data-i18n="nav_interests">Intereses</a>
+          <a href="../../../proyectos/" data-i18n="nav_projects">Proyectos</a>
+          <a href="../../../#contacto" data-i18n="nav_contact">Contacto</a>
+
+          <div class="lang-switch" aria-label="Selector de idioma">
+            <button id="langEs" class="lang-option active" type="button" onclick="setLanguage('es')">ES</button>
+            <button id="langEn" class="lang-option" type="button" onclick="setLanguage('en')">EN</button>
+          </div>
         </div>
       </nav>
     </div>
@@ -440,9 +482,9 @@
 
   <main>
     <div class="container">
-      <h1>Punto de Reorden (ROP)</h1>
+      <h1 data-i18n="page_title">Punto de Reorden (ROP)</h1>
 
-      <p class="intro">
+      <p class="intro" data-i18n="intro">
         Herramienta para calcular el punto de reorden y visualizar el comportamiento esperado
         del inventario durante un horizonte de simulación. Permite identificar cuándo generar
         una orden de compra y cuándo se recibiría la reposición bajo supuestos simples de demanda
@@ -451,93 +493,93 @@
 
       <div class="dashboard">
         <aside class="card form-card">
-          <h2>Datos de entrada</h2>
-          <p class="input-help">Ingrese los parámetros para calcular el punto de reorden.</p>
+          <h2 data-i18n="input_title">Datos de entrada</h2>
+          <p class="input-help" data-i18n="input_help">Ingrese los parámetros para calcular el punto de reorden.</p>
 
-          <label for="demanda">Demanda diaria promedio</label>
+          <label for="demanda" data-i18n="demand_label">Demanda diaria promedio</label>
           <input id="demanda" type="number" value="100" step="1">
-          <div class="input-help">Unidades por día.</div>
+          <div class="input-help" data-i18n="units_day">Unidades por día.</div>
 
-          <label for="leadtime">Lead Time (días)</label>
+          <label for="leadtime" data-i18n="leadtime_label">Lead Time (días)</label>
           <input id="leadtime" type="number" value="10" step="1">
 
-          <label for="metodoSS">Método de stock de seguridad</label>
+          <label for="metodoSS" data-i18n="ss_method_label">Método de stock de seguridad</label>
           <select id="metodoSS" onchange="mostrarCampoSS()">
-            <option value="dias">Días de cobertura</option>
-            <option value="unidades">Unidades</option>
+            <option value="dias" data-i18n="ss_days_option">Días de cobertura</option>
+            <option value="unidades" data-i18n="ss_units_option">Unidades</option>
           </select>
 
           <div id="campoDiasSS">
-            <label for="diasSS">Días de stock de seguridad</label>
+            <label for="diasSS" data-i18n="ss_days_label">Días de stock de seguridad</label>
             <input id="diasSS" type="number" value="5" step="1">
           </div>
 
           <div id="campoUnidadesSS" style="display:none;">
-            <label for="unidadesSS">Stock de seguridad (unidades)</label>
+            <label for="unidadesSS" data-i18n="ss_units_label">Stock de seguridad (unidades)</label>
             <input id="unidadesSS" type="number" value="500" step="1">
           </div>
 
-          <label for="stockActual">Stock actual</label>
+          <label for="stockActual" data-i18n="current_stock_label">Stock actual</label>
           <input id="stockActual" type="number" value="5000" step="1">
 
-          <label for="reposicion">Cantidad de reposición</label>
+          <label for="reposicion" data-i18n="replenishment_label">Cantidad de reposición</label>
           <input id="reposicion" type="number" value="2000" step="1">
 
-          <label for="horizonte">Horizonte de simulación (días)</label>
+          <label for="horizonte" data-i18n="horizon_label">Horizonte de simulación (días)</label>
           <input id="horizonte" type="number" value="180" step="1">
 
-          <button onclick="calcular()">Calcular</button>
+          <button onclick="calcular()" data-i18n="calculate">Calcular</button>
         </aside>
 
         <section class="output" id="output">
           <div class="card">
-            <h2>Resultados clave</h2>
+            <h2 data-i18n="key_results">Resultados clave</h2>
 
             <div class="result-grid">
               <div class="metric green">
-                <div class="tag">Stock de seguridad</div>
+                <div class="tag" data-i18n="metric_ss">Stock de seguridad</div>
                 <strong id="resultadoSS">-</strong>
-                <span>unidades</span>
+                <span data-i18n="units">unidades</span>
               </div>
 
               <div class="metric blue">
-                <div class="tag">Punto de Reorden (ROP)</div>
+                <div class="tag" data-i18n="metric_rop">Punto de Reorden (ROP)</div>
                 <strong id="resultadoROP">-</strong>
-                <span>unidades</span>
+                <span data-i18n="units">unidades</span>
               </div>
 
               <div class="metric purple">
-                <div class="tag">Cobertura actual</div>
+                <div class="tag" data-i18n="metric_coverage">Cobertura actual</div>
                 <strong id="resultadoCobertura">-</strong>
-                <span>días</span>
+                <span data-i18n="days">días</span>
               </div>
 
               <div class="metric orange">
-                <div class="tag">Días hasta ROP</div>
+                <div class="tag" data-i18n="metric_days_rop">Días hasta ROP</div>
                 <strong id="resultadoDiasROP">-</strong>
-                <span>días</span>
+                <span data-i18n="days">días</span>
               </div>
 
               <div class="metric teal">
-                <div class="tag">Primera recepción</div>
+                <div class="tag" data-i18n="metric_first_receipt">Primera recepción</div>
                 <strong id="resultadoRecepcion">-</strong>
-                <span>días</span>
+                <span data-i18n="days">días</span>
               </div>
             </div>
           </div>
 
           <div class="card chart-card">
             <div class="chart-title">
-              <h2>Proyección de inventario</h2>
-              <p id="chartSubtitle">Horizonte de simulación</p>
+              <h2 data-i18n="chart_title">Proyección de inventario</h2>
+              <p id="chartSubtitle" data-i18n="chart_subtitle">Horizonte de simulación</p>
             </div>
 
             <div class="legend">
-              <span class="legend-item"><span class="legend-line"></span>Stock proyectado</span>
-              <span class="legend-item"><span class="legend-dash"></span>Punto de Reorden (ROP)</span>
-              <span class="legend-item"><span class="legend-dash gray"></span>Stock de seguridad</span>
-              <span class="legend-item"><span class="legend-dot"></span>Recepción OC</span>
-              <span class="legend-item"><span class="legend-dot dark"></span>Generar OC</span>
+              <span class="legend-item"><span class="legend-line"></span><span data-i18n="legend_projected">Stock proyectado</span></span>
+              <span class="legend-item"><span class="legend-dash"></span><span data-i18n="legend_rop">Punto de Reorden (ROP)</span></span>
+              <span class="legend-item"><span class="legend-dash gray"></span><span data-i18n="legend_ss">Stock de seguridad</span></span>
+              <span class="legend-item"><span class="legend-dot"></span><span data-i18n="legend_receipt">Recepción OC</span></span>
+              <span class="legend-item"><span class="legend-dot dark"></span><span data-i18n="legend_order">Generar OC</span></span>
             </div>
 
             <div class="chart-frame">
@@ -546,38 +588,38 @@
           </div>
 
           <div class="card evaluation">
-            <h2>Evaluación</h2>
+            <h2 data-i18n="evaluation">Evaluación</h2>
             <p id="eval1">-</p>
             <p id="eval2">-</p>
             <p id="eval3">-</p>
           </div>
 
           <div class="card">
-            <h2>Cálculos paso a paso</h2>
+            <h2 data-i18n="steps_title">Cálculos paso a paso</h2>
 
             <div class="steps-grid">
               <div class="step">
-                <h3>1. Stock de seguridad</h3>
+                <h3 data-i18n="step1_title">1. Stock de seguridad</h3>
                 <p id="pasoSS">-</p>
               </div>
 
               <div class="step">
-                <h3>2. Punto de Reorden</h3>
+                <h3 data-i18n="step2_title">2. Punto de Reorden</h3>
                 <p id="pasoROP">-</p>
               </div>
 
               <div class="step">
-                <h3>3. Cobertura actual</h3>
+                <h3 data-i18n="step3_title">3. Cobertura actual</h3>
                 <p id="pasoCobertura">-</p>
               </div>
 
               <div class="step">
-                <h3>4. Días hasta ROP</h3>
+                <h3 data-i18n="step4_title">4. Días hasta ROP</h3>
                 <p id="pasoDiasROP">-</p>
               </div>
 
               <div class="step">
-                <h3>5. Simulación de reposición</h3>
+                <h3 data-i18n="step5_title">5. Simulación de reposición</h3>
                 <p id="pasoSimulacion">-</p>
               </div>
             </div>
@@ -586,12 +628,12 @@
       </div>
 
       <div class="note">
-        <h2>Nota</h2>
-        <p>
+        <h2 data-i18n="note_title">Nota</h2>
+        <p data-i18n="note_1">
           Esta información se proporciona únicamente con fines educativos, de experimentación
           y apoyo al aprendizaje.
         </p>
-        <p>
+        <p data-i18n="note_2">
           Los resultados son referenciales y dependen de los supuestos utilizados, tales como
           demanda constante, lead time estable y reposición completa según la cantidad definida.
         </p>
@@ -601,11 +643,183 @@
 
   <footer>
     <div class="container">
-      © 2026 Javier Cortés Mac Evoy · Punto de Reorden
+      <span data-i18n="footer">© 2026 Javier Cortés Mac Evoy · Punto de Reorden</span>
     </div>
   </footer>
 
   <script>
+
+    const translations = {
+      es: {
+        nav_about: "Sobre mí",
+        nav_tools: "Herramientas",
+        nav_interests: "Intereses",
+        nav_projects: "Proyectos",
+        nav_contact: "Contacto",
+        page_title: "Punto de Reorden (ROP)",
+        intro: "Herramienta para calcular el punto de reorden y visualizar el comportamiento esperado del inventario durante un horizonte de simulación. Permite identificar cuándo generar una orden de compra y cuándo se recibiría la reposición bajo supuestos simples de demanda constante y lead time estable.",
+        input_title: "Datos de entrada",
+        input_help: "Ingrese los parámetros para calcular el punto de reorden.",
+        demand_label: "Demanda diaria promedio",
+        units_day: "Unidades por día.",
+        leadtime_label: "Lead Time (días)",
+        ss_method_label: "Método de stock de seguridad",
+        ss_days_option: "Días de cobertura",
+        ss_units_option: "Unidades",
+        ss_days_label: "Días de stock de seguridad",
+        ss_units_label: "Stock de seguridad (unidades)",
+        current_stock_label: "Stock actual",
+        replenishment_label: "Cantidad de reposición",
+        horizon_label: "Horizonte de simulación (días)",
+        calculate: "Calcular",
+        key_results: "Resultados clave",
+        metric_ss: "Stock de seguridad",
+        metric_rop: "Punto de Reorden (ROP)",
+        metric_coverage: "Cobertura actual",
+        metric_days_rop: "Días hasta ROP",
+        metric_first_receipt: "Primera recepción",
+        units: "unidades",
+        days: "días",
+        chart_title: "Proyección de inventario",
+        chart_subtitle: "Horizonte de simulación",
+        chart_horizon: "Horizonte",
+        legend_projected: "Stock proyectado",
+        legend_rop: "Punto de Reorden (ROP)",
+        legend_ss: "Stock de seguridad",
+        legend_receipt: "Recepción OC",
+        legend_order: "Generar OC",
+        evaluation: "Evaluación",
+        steps_title: "Cálculos paso a paso",
+        step1_title: "1. Stock de seguridad",
+        step2_title: "2. Punto de Reorden",
+        step3_title: "3. Cobertura actual",
+        step4_title: "4. Días hasta ROP",
+        step5_title: "5. Simulación de reposición",
+        note_title: "Nota",
+        note_1: "Esta información se proporciona únicamente con fines educativos, de experimentación y apoyo al aprendizaje.",
+        note_2: "Los resultados son referenciales y dependen de los supuestos utilizados, tales como demanda constante, lead time estable y reposición completa según la cantidad definida.",
+        footer: "© 2026 Javier Cortés Mac Evoy · Punto de Reorden",
+        alert_invalid: "Revise los datos ingresados. Todos los valores deben ser válidos.",
+        alert_ss_days: "Revise los días de stock de seguridad.",
+        alert_ss_units: "Revise el stock de seguridad en unidades.",
+        eval1: "→ La orden de compra debería generarse al alcanzar {rop} unidades.",
+        eval2: "→ Bajo los supuestos ingresados, el stock actual permite una cobertura aproximada de {coverage} días.",
+        eval3_ok: "→ No se observa quiebre antes de la primera recepción estimada.",
+        eval3_risk: "→ Existe riesgo de quiebre antes de la recepción. Revise lead time, stock de seguridad o cantidad de reposición.",
+        ss_formula_days: "SS = Demanda diaria × Días SS<br>SS = {demand} × {days}<br>SS = {ss} unidades",
+        ss_formula_units: "SS = Stock de seguridad ingresado<br>SS = {ss} unidades",
+        rop_formula: "ROP = Demanda diaria × Lead Time + SS<br>ROP = {demand} × {leadtime} + {ss}<br>ROP = {rop} unidades",
+        coverage_formula: "Cobertura = Stock actual / Demanda diaria<br>Cobertura = {stock} / {demand}<br>Cobertura = {coverage} días",
+        days_rop_formula: "Días hasta ROP = (Stock actual - ROP) / Demanda diaria<br>Días hasta ROP = ({stock} - {rop}) / {demand}<br>Días hasta ROP = {days} días",
+        simulation_formula: "Al llegar al ROP se genera una OC.<br>La recepción ocurre después del Lead Time definido.<br>Cada recepción repone {qty} unidades.",
+        receipt_event: "Recepción OC",
+        order_event: "Generar OC",
+        axis_days: "Días",
+        axis_units: "Unidades",
+        ss_ref: "Stock seguridad"
+      },
+      en: {
+        nav_about: "About me",
+        nav_tools: "Tools",
+        nav_interests: "Interests",
+        nav_projects: "Projects",
+        nav_contact: "Contact",
+        page_title: "Reorder Point (ROP)",
+        intro: "Tool for calculating the reorder point and visualizing expected inventory behavior over a simulation horizon. It helps identify when to place a purchase order and when replenishment would be received under simple assumptions of constant demand and stable lead time.",
+        input_title: "Input data",
+        input_help: "Enter the parameters to calculate the reorder point.",
+        demand_label: "Average daily demand",
+        units_day: "Units per day.",
+        leadtime_label: "Lead Time (days)",
+        ss_method_label: "Safety stock method",
+        ss_days_option: "Coverage days",
+        ss_units_option: "Units",
+        ss_days_label: "Safety stock days",
+        ss_units_label: "Safety stock (units)",
+        current_stock_label: "Current stock",
+        replenishment_label: "Replenishment quantity",
+        horizon_label: "Simulation horizon (days)",
+        calculate: "Calculate",
+        key_results: "Key results",
+        metric_ss: "Safety stock",
+        metric_rop: "Reorder Point (ROP)",
+        metric_coverage: "Current coverage",
+        metric_days_rop: "Days until ROP",
+        metric_first_receipt: "First receipt",
+        units: "units",
+        days: "days",
+        chart_title: "Inventory projection",
+        chart_subtitle: "Simulation horizon",
+        chart_horizon: "Horizon",
+        legend_projected: "Projected stock",
+        legend_rop: "Reorder Point (ROP)",
+        legend_ss: "Safety stock",
+        legend_receipt: "PO receipt",
+        legend_order: "Place PO",
+        evaluation: "Evaluation",
+        steps_title: "Step-by-step calculations",
+        step1_title: "1. Safety stock",
+        step2_title: "2. Reorder Point",
+        step3_title: "3. Current coverage",
+        step4_title: "4. Days until ROP",
+        step5_title: "5. Replenishment simulation",
+        note_title: "Note",
+        note_1: "This information is provided solely for educational, experimental and learning-support purposes.",
+        note_2: "Results are indicative and depend on the assumptions used, such as constant demand, stable lead time and complete replenishment according to the defined quantity.",
+        footer: "© 2026 Javier Cortés Mac Evoy · Reorder Point",
+        alert_invalid: "Review the entered data. All values must be valid.",
+        alert_ss_days: "Review the safety stock days.",
+        alert_ss_units: "Review the safety stock in units.",
+        eval1: "→ The purchase order should be placed when stock reaches {rop} units.",
+        eval2: "→ Under the entered assumptions, current stock provides approximately {coverage} days of coverage.",
+        eval3_ok: "→ No stockout is observed before the estimated first receipt.",
+        eval3_risk: "→ There is a stockout risk before receipt. Review lead time, safety stock or replenishment quantity.",
+        ss_formula_days: "SS = Daily demand × SS days<br>SS = {demand} × {days}<br>SS = {ss} units",
+        ss_formula_units: "SS = Entered safety stock<br>SS = {ss} units",
+        rop_formula: "ROP = Daily demand × Lead Time + SS<br>ROP = {demand} × {leadtime} + {ss}<br>ROP = {rop} units",
+        coverage_formula: "Coverage = Current stock / Daily demand<br>Coverage = {stock} / {demand}<br>Coverage = {coverage} days",
+        days_rop_formula: "Days until ROP = (Current stock - ROP) / Daily demand<br>Days until ROP = ({stock} - {rop}) / {demand}<br>Days until ROP = {days} days",
+        simulation_formula: "When the ROP is reached, a PO is placed.<br>The receipt occurs after the defined Lead Time.<br>Each receipt replenishes {qty} units.",
+        receipt_event: "PO receipt",
+        order_event: "Place PO",
+        axis_days: "Days",
+        axis_units: "Units",
+        ss_ref: "Safety stock"
+      }
+    };
+
+    let currentLang = localStorage.getItem("jcm_lang") || "es";
+
+    function t(key) {
+      return (translations[currentLang] && translations[currentLang][key]) || translations.es[key] || key;
+    }
+
+    function replaceVars(template, values) {
+      return template.replace(/\{(\w+)\}/g, function (_, key) {
+        return values[key] !== undefined ? values[key] : "";
+      });
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem("jcm_lang", lang);
+      document.documentElement.lang = lang;
+
+      document.getElementById("langEs").classList.toggle("active", lang === "es");
+      document.getElementById("langEn").classList.toggle("active", lang === "en");
+
+      document.querySelectorAll("[data-i18n]").forEach(function (element) {
+        const key = element.getAttribute("data-i18n");
+        element.textContent = t(key);
+      });
+
+      document.title = t("page_title") + " | Javier Cortés Mac Evoy";
+
+      if (document.getElementById("output").style.display === "block") {
+        calcular();
+      }
+    }
+
     function mostrarCampoSS() {
       const metodo = document.getElementById("metodoSS").value;
       document.getElementById("campoDiasSS").style.display = metodo === "dias" ? "block" : "none";
@@ -633,7 +847,7 @@
         isNaN(reposicion) || reposicion <= 0 ||
         isNaN(horizonte) || horizonte <= 0
       ) {
-        alert("Revise los datos ingresados. Todos los valores deben ser válidos.");
+        alert(t("alert_invalid"));
         return;
       }
 
@@ -641,14 +855,14 @@
 
       if (metodoSS === "dias") {
         if (isNaN(diasSS) || diasSS < 0) {
-          alert("Revise los días de stock de seguridad.");
+          alert(t("alert_ss_days"));
           return;
         }
 
         stockSeguridad = demanda * diasSS;
       } else {
         if (isNaN(unidadesSS) || unidadesSS < 0) {
-          alert("Revise el stock de seguridad en unidades.");
+          alert(t("alert_ss_units"));
           return;
         }
 
@@ -662,7 +876,7 @@
       const primeraRecepcion = diasHastaROP + leadtime;
 
       document.getElementById("output").style.display = "block";
-      document.getElementById("chartSubtitle").textContent = "Horizonte: " + formato(horizonte) + " días";
+      document.getElementById("chartSubtitle").textContent = t("chart_horizon") + ": " + formato(horizonte) + " " + t("days");
 
       document.getElementById("resultadoSS").textContent = formato(stockSeguridad);
       document.getElementById("resultadoROP").textContent = formato(rop);
@@ -678,51 +892,60 @@
 
     function generarEvaluacion(rop, cobertura, recepcion, quiebre) {
       document.getElementById("eval1").textContent =
-        "→ La orden de compra debería generarse al alcanzar " + formato(rop) + " unidades.";
+        replaceVars(t("eval1"), { rop: formato(rop) });
 
       document.getElementById("eval2").textContent =
-        "→ Bajo los supuestos ingresados, el stock actual permite una cobertura aproximada de " + cobertura.toFixed(1) + " días.";
+        replaceVars(t("eval2"), { coverage: cobertura.toFixed(1) });
 
       if (recepcion <= quiebre) {
-        document.getElementById("eval3").textContent =
-          "→ No se observa quiebre antes de la primera recepción estimada.";
+        document.getElementById("eval3").textContent = t("eval3_ok");
       } else {
-        document.getElementById("eval3").textContent =
-          "→ Existe riesgo de quiebre antes de la recepción. Revise lead time, stock de seguridad o cantidad de reposición.";
+        document.getElementById("eval3").textContent = t("eval3_risk");
       }
     }
 
     function generarPasos(demanda, leadtime, metodoSS, diasSS, unidadesSS, ss, rop, stockActual, cobertura, diasROP, reposicion) {
       if (metodoSS === "dias") {
         document.getElementById("pasoSS").innerHTML =
-          "SS = Demanda diaria × Días SS<br>" +
-          "SS = " + demanda.toFixed(1) + " × " + diasSS.toFixed(1) + "<br>" +
-          "SS = " + formato(ss) + " unidades";
+          replaceVars(t("ss_formula_days"), {
+            demand: demanda.toFixed(1),
+            days: diasSS.toFixed(1),
+            ss: formato(ss)
+          });
       } else {
         document.getElementById("pasoSS").innerHTML =
-          "SS = Stock de seguridad ingresado<br>" +
-          "SS = " + formato(unidadesSS) + " unidades";
+          replaceVars(t("ss_formula_units"), {
+            ss: formato(unidadesSS)
+          });
       }
 
       document.getElementById("pasoROP").innerHTML =
-        "ROP = Demanda diaria × Lead Time + SS<br>" +
-        "ROP = " + demanda.toFixed(1) + " × " + leadtime.toFixed(1) + " + " + formato(ss) + "<br>" +
-        "ROP = " + formato(rop) + " unidades";
+        replaceVars(t("rop_formula"), {
+          demand: demanda.toFixed(1),
+          leadtime: leadtime.toFixed(1),
+          ss: formato(ss),
+          rop: formato(rop)
+        });
 
       document.getElementById("pasoCobertura").innerHTML =
-        "Cobertura = Stock actual / Demanda diaria<br>" +
-        "Cobertura = " + formato(stockActual) + " / " + demanda.toFixed(1) + "<br>" +
-        "Cobertura = " + cobertura.toFixed(1) + " días";
+        replaceVars(t("coverage_formula"), {
+          stock: formato(stockActual),
+          demand: demanda.toFixed(1),
+          coverage: cobertura.toFixed(1)
+        });
 
       document.getElementById("pasoDiasROP").innerHTML =
-        "Días hasta ROP = (Stock actual - ROP) / Demanda diaria<br>" +
-        "Días hasta ROP = (" + formato(stockActual) + " - " + formato(rop) + ") / " + demanda.toFixed(1) + "<br>" +
-        "Días hasta ROP = " + diasROP.toFixed(1) + " días";
+        replaceVars(t("days_rop_formula"), {
+          stock: formato(stockActual),
+          rop: formato(rop),
+          demand: demanda.toFixed(1),
+          days: diasROP.toFixed(1)
+        });
 
       document.getElementById("pasoSimulacion").innerHTML =
-        "Al llegar al ROP se genera una OC.<br>" +
-        "La recepción ocurre después del Lead Time definido.<br>" +
-        "Cada recepción repone " + formato(reposicion) + " unidades.";
+        replaceVars(t("simulation_formula"), {
+          qty: formato(reposicion)
+        });
     }
 
     function simularInventario(demanda, leadtime, rop, stockInicial, reposicion, horizonte) {
@@ -738,13 +961,13 @@
           stock += reposicion;
           ordenPendiente = false;
           diaRecepcion = null;
-          evento = "Recepción OC";
+          evento = "receipt";
         }
 
         if (!ordenPendiente && stock <= rop && stock > 0) {
           ordenPendiente = true;
           diaRecepcion = dia + leadtime;
-          evento = evento ? evento + " / Generar OC" : "Generar OC";
+          evento = evento ? evento + " / order" : "order";
         }
 
         datos.push({
@@ -813,7 +1036,7 @@
       ctx.stroke();
 
       dibujarLineaReferencia(ctx, margenIzq, canvas.width - margenDer, y(rop), "ROP", "#2563eb");
-      dibujarLineaReferencia(ctx, margenIzq, canvas.width - margenDer, y(ss), "Stock seguridad", "#64748b");
+      dibujarLineaReferencia(ctx, margenIzq, canvas.width - margenDer, y(ss), t("ss_ref"), "#64748b");
 
       ctx.strokeStyle = "#0f2f4f";
       ctx.lineWidth = 3;
@@ -833,20 +1056,20 @@
       let etiquetaRecepcion = false;
 
       datos.forEach(d => {
-        if (d.evento.includes("Generar OC")) {
+        if (d.evento.includes("order")) {
           dibujarEvento(ctx, x(d.dia), y(d.stock), "#0f2f4f");
 
           if (!etiquetaCompra) {
-            dibujarEtiqueta(ctx, x(d.dia), y(d.stock), "Generar OC", "#0f2f4f", "abajo");
+            dibujarEtiqueta(ctx, x(d.dia), y(d.stock), t("order_event"), "#0f2f4f", "abajo");
             etiquetaCompra = true;
           }
         }
 
-        if (d.evento.includes("Recepción OC")) {
+        if (d.evento.includes("receipt")) {
           dibujarEvento(ctx, x(d.dia), y(d.stock), "#2563eb");
 
           if (!etiquetaRecepcion) {
-            dibujarEtiqueta(ctx, x(d.dia), y(d.stock), "Recepción OC", "#2563eb", "arriba");
+            dibujarEtiqueta(ctx, x(d.dia), y(d.stock), t("receipt_event"), "#2563eb", "arriba");
             etiquetaRecepcion = true;
           }
         }
@@ -854,12 +1077,12 @@
 
       ctx.fillStyle = "#64748b";
       ctx.font = "13px Arial";
-      ctx.fillText("Días", canvas.width / 2, canvas.height - 15);
+      ctx.fillText(t("axis_days"), canvas.width / 2, canvas.height - 15);
 
       ctx.save();
       ctx.translate(24, canvas.height / 2 + 24);
       ctx.rotate(-Math.PI / 2);
-      ctx.fillText("Unidades", 0, 0);
+      ctx.fillText(t("axis_units"), 0, 0);
       ctx.restore();
     }
 
@@ -909,6 +1132,7 @@
     }
 
     mostrarCampoSS();
+    setLanguage(currentLang);
   </script>
 </body>
 </html>
