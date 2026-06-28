@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Esteganografía en Imagen | Javier Cortés Mac Evoy</title>
+  <title data-title-key="pageTitle">Esteganografía en Imagen | Javier Cortés Mac Evoy</title>
 
   <style>
     :root {
@@ -51,14 +51,49 @@
       letter-spacing: 0.2px;
     }
 
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
     .nav-links a {
-      margin-left: 20px;
       text-decoration: none;
       color: var(--muted);
       font-size: 15px;
+      font-weight: 700;
     }
 
     .nav-links a:hover { color: var(--accent); }
+
+    .language-switch {
+      display: inline-flex;
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px;
+      box-shadow: 0 6px 18px rgba(15, 47, 79, 0.05);
+    }
+
+    .lang-button {
+      margin: 0;
+      width: auto;
+      border: none;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--primary);
+      padding: 7px 11px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .lang-button.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
 
     main { padding: 70px 0; }
 
@@ -273,9 +308,8 @@
         align-items: flex-start;
       }
 
-      .nav-links a {
-        margin-left: 0;
-        margin-right: 16px;
+      .nav-links {
+        gap: 14px;
       }
 
       .layout { grid-template-columns: 1fr; }
@@ -298,10 +332,16 @@
       <nav>
         <div class="brand">Javier Cortés Mac Evoy</div>
         <div class="nav-links">
-          <a href="../../">Inicio</a>
-          <a href="../../proyectos/">Proyectos</a>
-          <a href="../../#sobre-mi">Sobre mí</a>
-          <a href="../../#contacto">Contacto</a>
+          <a href="../../#sobre-mi" data-i18n="navAbout">Sobre mí</a>
+          <a href="../../#herramientas" data-i18n="navTools">Herramientas</a>
+          <a href="../../#intereses" data-i18n="navInterests">Intereses</a>
+          <a href="../../proyectos/" data-i18n="navProjects">Proyectos</a>
+          <a href="../../#contacto" data-i18n="navContact">Contacto</a>
+
+          <div class="language-switch" aria-label="Selector de idioma">
+            <button id="langES" class="lang-button active" type="button">ES</button>
+            <button id="langEN" class="lang-button" type="button">EN</button>
+          </div>
         </div>
       </nav>
     </div>
@@ -309,66 +349,66 @@
 
   <main>
     <div class="container">
-      <h1>Esteganografía en Imagen</h1>
+      <h1 data-i18n="pageTitle">Esteganografía en Imagen</h1>
 
-      <p class="intro">
+      <p class="intro" data-i18n="intro">
         Herramienta para ocultar o revelar mensajes breves dentro de una imagen. El proceso se realiza localmente en el navegador, sin subir archivos a ningún servidor.
       </p>
 
       <div class="segmented-control">
-        <button id="btnHide" class="segment active" type="button">Ocultar mensaje</button>
-        <button id="btnReveal" class="segment" type="button">Revelar mensaje</button>
+        <button id="btnHide" class="segment active" type="button" data-i18n="tabHide">Ocultar mensaje</button>
+        <button id="btnReveal" class="segment" type="button" data-i18n="tabReveal">Revelar mensaje</button>
       </div>
 
       <div class="layout">
         <div class="card">
-          <h2>Datos de entrada</h2>
+          <h2 data-i18n="inputTitle">Datos de entrada</h2>
 
-          <label>Imagen</label>
+          <label data-i18n="imageLabel">Imagen</label>
           <div id="dropZone" class="drop-zone" tabindex="0">
-            <strong>Seleccione, arrastre o pegue una imagen</strong>
-            <span>Formatos compatibles: PNG, JPG, WEBP y algunos HEIC si el navegador lo permite.</span>
+            <strong data-i18n="dropTitle">Seleccione, arrastre o pegue una imagen</strong>
+            <span data-i18n="dropHelp">Formatos compatibles: PNG, JPG, WEBP y algunos HEIC si el navegador lo permite.</span>
           </div>
 
           <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/heic,image/heif" hidden>
           <div id="fileName" class="file-name"></div>
 
           <div id="hideFields">
-            <label for="messageInput">Mensaje oculto</label>
-            <textarea id="messageInput" maxlength="200" placeholder="Escriba un mensaje de máximo 200 caracteres"></textarea>
+            <label for="messageInput" data-i18n="messageLabel">Mensaje oculto</label>
+            <textarea id="messageInput" maxlength="200" placeholder="Escriba un mensaje de máximo 200 caracteres" data-i18n-placeholder="messagePlaceholder"></textarea>
             <div id="charCounter" class="counter">0 / 200</div>
           </div>
 
-          <label for="keyInput">Clave</label>
-          <input id="keyInput" type="password" maxlength="16" placeholder="Entre 4 y 16 caracteres">
-          <div class="help">La clave se usa para cifrar o revelar el mensaje. Puede tener entre 4 y 16 caracteres.</div>
+          <label for="keyInput" data-i18n="keyLabel">Clave</label>
+          <input id="keyInput" type="password" maxlength="16" placeholder="Entre 4 y 16 caracteres" data-i18n-placeholder="keyPlaceholder">
+          <div class="help" data-i18n="keyHelp">La clave se usa para cifrar o revelar el mensaje. Puede tener entre 4 y 16 caracteres.</div>
 
-          <button id="mainAction" class="primary-button" type="button">Ocultar mensaje</button>
+          <button id="mainAction" class="primary-button" type="button" data-i18n="hideAction">Ocultar mensaje</button>
 
-          <div id="statusBox" class="status">
+          <div id="statusBox" class="status" data-i18n="localStatus">
             La imagen no se sube a ningún servidor. Todo el proceso ocurre localmente en este navegador.
           </div>
         </div>
 
         <div class="card">
-          <h2>Vista previa</h2>
+          <h2 data-i18n="previewTitle">Vista previa</h2>
           <div id="previewBox" class="preview">
-            <span>Seleccione una imagen para comenzar.</span>
+            <span data-i18n="previewPlaceholder">Seleccione una imagen para comenzar.</span>
           </div>
 
-          <button id="downloadButton" class="secondary-button" type="button" style="display:none;">Descargar PNG</button>
+          <button id="downloadButton" class="secondary-button" type="button" style="display:none;" data-i18n="downloadPNG">Descargar PNG</button>
         </div>
       </div>
 
       <div id="resultBox" class="result-box">
-        <h2>Mensaje revelado</h2>
+        <h2 data-i18n="revealedTitle">Mensaje revelado</h2>
         <div id="revealedMessage" class="result-message"></div>
       </div>
 
       <div id="noteBox" class="note">
-        <h2>Nota</h2>
-        <p>Esta herramienta se proporciona únicamente con fines educativos, de experimentación y apoyo al aprendizaje.</p>
-        <p>La seguridad depende de la clave utilizada. Una clave corta o fácil de adivinar puede comprometer el contenido. Para conservar el mensaje oculto, mantenga la imagen como PNG y evite convertirla a JPG o enviarla mediante servicios que recompriman imágenes.</p>
+        <h2 data-i18n="noteTitle">Nota</h2>
+        <p data-i18n="note1">Esta herramienta se proporciona únicamente con fines educativos, de experimentación y apoyo al aprendizaje.</p>
+        <p data-i18n="note2">La seguridad depende de la clave utilizada. Una clave corta o fácil de adivinar puede comprometer el contenido. Para conservar el mensaje oculto, mantenga la imagen como PNG y evite convertirla a JPG o enviarla mediante servicios que recompriman imágenes.</p>
       </div>
 
       <canvas id="workCanvas"></canvas>
@@ -376,11 +416,148 @@
   </main>
 
   <footer>
-    <div class="container">© 2026 Javier Cortés Mac Evoy · Esteganografía en Imagen</div>
+    <div class="container" data-i18n="footer">© 2026 Javier Cortés Mac Evoy · Esteganografía en Imagen</div>
   </footer>
 
   <script>
     "use strict";
+
+    const I18N = {
+      es: {
+        pageTitle: "Esteganografía en Imagen",
+        navAbout: "Sobre mí",
+        navTools: "Herramientas",
+        navInterests: "Intereses",
+        navProjects: "Proyectos",
+        navContact: "Contacto",
+        intro: "Herramienta para ocultar o revelar mensajes breves dentro de una imagen. El proceso se realiza localmente en el navegador, sin subir archivos a ningún servidor.",
+        tabHide: "Ocultar mensaje",
+        tabReveal: "Revelar mensaje",
+        inputTitle: "Datos de entrada",
+        imageLabel: "Imagen",
+        dropTitle: "Seleccione, arrastre o pegue una imagen",
+        dropHelp: "Formatos compatibles: PNG, JPG, WEBP y algunos HEIC si el navegador lo permite.",
+        messageLabel: "Mensaje oculto",
+        messagePlaceholder: "Escriba un mensaje de máximo 200 caracteres",
+        keyLabel: "Clave",
+        keyPlaceholder: "Entre 4 y 16 caracteres",
+        keyHelp: "La clave se usa para cifrar o revelar el mensaje. Puede tener entre 4 y 16 caracteres.",
+        hideAction: "Ocultar mensaje",
+        revealAction: "Revelar mensaje",
+        previewTitle: "Vista previa",
+        previewPlaceholder: "Seleccione una imagen para comenzar.",
+        downloadPNG: "Descargar PNG",
+        revealedTitle: "Mensaje revelado",
+        noteTitle: "Nota",
+        note1: "Esta herramienta se proporciona únicamente con fines educativos, de experimentación y apoyo al aprendizaje.",
+        note2: "La seguridad depende de la clave utilizada. Una clave corta o fácil de adivinar puede comprometer el contenido. Para conservar el mensaje oculto, mantenga la imagen como PNG y evite convertirla a JPG o enviarla mediante servicios que recompriman imágenes.",
+        footer: "© 2026 Javier Cortés Mac Evoy · Esteganografía en Imagen",
+        localStatus: "La imagen no se sube a ningún servidor. Todo el proceso ocurre localmente en este navegador.",
+        fileSelected: "Archivo seleccionado: ",
+        imageSelected: "Imagen seleccionada.",
+        imageReady: "Imagen seleccionada. Presione el botón principal para continuar.",
+        wait: "Espere unos segundos antes de realizar otra operación.",
+        selectImage: "Debe seleccionar una imagen.",
+        maxFile: "La imagen supera el tamaño máximo permitido de 5 MB.",
+        invalidFile: "El archivo no corresponde a un formato de imagen válido o compatible.",
+        loadError: "No fue posible cargar la imagen en este navegador.",
+        keyError: "La clave debe tener entre 4 y 16 caracteres.",
+        messageError: "El mensaje debe tener entre 1 y 200 caracteres.",
+        processing: "Procesando imagen localmente...",
+        capacityError: "La imagen no tiene capacidad suficiente para ocultar el mensaje.",
+        generated: "Imagen generada correctamente. Descargue el nuevo archivo PNG.",
+        genericError: "No fue posible procesar la imagen.",
+        searching: "Buscando contenido oculto localmente...",
+        finished: "Proceso finalizado.",
+        noContent: "No se encontró contenido oculto o la clave es incorrecta.",
+        firstGenerate: "Primero genere una imagen.",
+        waitButton: "Espere "
+      },
+      en: {
+        pageTitle: "Image Steganography",
+        navAbout: "About me",
+        navTools: "Tools",
+        navInterests: "Interests",
+        navProjects: "Projects",
+        navContact: "Contact",
+        intro: "Tool for hiding or revealing short messages inside an image. The process runs locally in the browser, without uploading files to any server.",
+        tabHide: "Hide message",
+        tabReveal: "Reveal message",
+        inputTitle: "Input data",
+        imageLabel: "Image",
+        dropTitle: "Select, drag, or paste an image",
+        dropHelp: "Supported formats: PNG, JPG, WEBP, and some HEIC files if the browser allows it.",
+        messageLabel: "Hidden message",
+        messagePlaceholder: "Write a message of up to 200 characters",
+        keyLabel: "Key",
+        keyPlaceholder: "Between 4 and 16 characters",
+        keyHelp: "The key is used to encrypt or reveal the message. It can be between 4 and 16 characters.",
+        hideAction: "Hide message",
+        revealAction: "Reveal message",
+        previewTitle: "Preview",
+        previewPlaceholder: "Select an image to begin.",
+        downloadPNG: "Download PNG",
+        revealedTitle: "Revealed message",
+        noteTitle: "Note",
+        note1: "This tool is provided only for educational, experimental, and learning support purposes.",
+        note2: "Security depends on the key used. A short or easy-to-guess key may compromise the content. To preserve the hidden message, keep the image as PNG and avoid converting it to JPG or sending it through services that recompress images.",
+        footer: "© 2026 Javier Cortés Mac Evoy · Image Steganography",
+        localStatus: "The image is not uploaded to any server. The entire process runs locally in this browser.",
+        fileSelected: "Selected file: ",
+        imageSelected: "Image selected.",
+        imageReady: "Image selected. Press the main button to continue.",
+        wait: "Please wait a few seconds before performing another operation.",
+        selectImage: "You must select an image.",
+        maxFile: "The image exceeds the maximum allowed size of 5 MB.",
+        invalidFile: "The file is not a valid or compatible image format.",
+        loadError: "The image could not be loaded in this browser.",
+        keyError: "The key must be between 4 and 16 characters.",
+        messageError: "The message must be between 1 and 200 characters.",
+        processing: "Processing image locally...",
+        capacityError: "The image does not have enough capacity to hide the message.",
+        generated: "Image generated correctly. Download the new PNG file.",
+        genericError: "The image could not be processed.",
+        searching: "Searching for hidden content locally...",
+        finished: "Process completed.",
+        noContent: "No hidden content was found or the key is incorrect.",
+        firstGenerate: "Generate an image first.",
+        waitButton: "Wait "
+      }
+    };
+
+    let currentLang = localStorage.getItem("siteLanguage") || "es";
+
+    function t(key) {
+      return (I18N[currentLang] && I18N[currentLang][key]) || I18N.es[key] || key;
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang === "en" ? "en" : "es";
+      localStorage.setItem("siteLanguage", currentLang);
+      document.documentElement.lang = currentLang;
+      document.title = t("pageTitle") + " | Javier Cortés Mac Evoy";
+
+      document.querySelectorAll("[data-i18n]").forEach(function (element) {
+        const key = element.getAttribute("data-i18n");
+        element.textContent = t(key);
+      });
+
+      document.querySelectorAll("[data-i18n-placeholder]").forEach(function (element) {
+        const key = element.getAttribute("data-i18n-placeholder");
+        element.setAttribute("placeholder", t(key));
+      });
+
+      document.getElementById("langES").classList.toggle("active", currentLang === "es");
+      document.getElementById("langEN").classList.toggle("active", currentLang === "en");
+      dom.mainAction.textContent = state.mode === "hide" ? t("hideAction") : t("revealAction");
+
+      if (!state.file && !state.lastBlob && !dom.revealedMessage.textContent) {
+        setStatus(t("localStatus"));
+      }
+    }
+
+    document.getElementById("langES").addEventListener("click", function () { setLanguage("es"); });
+    document.getElementById("langEN").addEventListener("click", function () { setLanguage("en"); });
 
     const CONFIG = Object.freeze({
       maxFileSize: 5 * 1024 * 1024,
@@ -483,16 +660,16 @@
       dom.btnHide.classList.toggle("active", mode === "hide");
       dom.btnReveal.classList.toggle("active", mode === "reveal");
       dom.hideFields.style.display = mode === "hide" ? "block" : "none";
-      dom.mainAction.textContent = mode === "hide" ? "Ocultar mensaje" : "Revelar mensaje";
+      dom.mainAction.textContent = mode === "hide" ? t("hideAction") : t("revealAction");
       clearOutput();
-      setStatus("La imagen no se sube a ningún servidor. Todo el proceso ocurre localmente en este navegador.");
+      setStatus(t("localStatus"));
     }
 
     function setSelectedFile(file) {
       state.file = file;
       clearOutput();
-      dom.fileName.textContent = file.name ? "Archivo seleccionado: " + file.name : "Imagen seleccionada.";
-      setStatus("Imagen seleccionada. Presione el botón principal para continuar.");
+      dom.fileName.textContent = file.name ? t("fileSelected") + file.name : t("imageSelected");
+      setStatus(t("imageReady"));
     }
 
     function clearOutput() {
@@ -512,7 +689,7 @@
       }
       dom.previewBox.textContent = "";
       const placeholder = document.createElement("span");
-      placeholder.textContent = "Seleccione una imagen para comenzar.";
+      placeholder.textContent = t("previewPlaceholder");
       dom.previewBox.appendChild(placeholder);
     }
 
@@ -521,12 +698,12 @@
     function validateKey(key) { return key.length >= CONFIG.minKeyLength && key.length <= CONFIG.maxKeyLength; }
 
     async function validateFile(file) {
-      if (!file) throw new Error("Debe seleccionar una imagen.");
-      if (file.size > CONFIG.maxFileSize) throw new Error("La imagen supera el tamaño máximo permitido de 5 MB.");
+      if (!file) throw new Error(t("selectImage"));
+      if (file.size > CONFIG.maxFileSize) throw new Error(t("maxFile"));
 
       const header = new Uint8Array(await file.slice(0, 32).arrayBuffer());
       if (isPNG(header) || isJPEG(header) || isWEBP(header) || isHEIC(header)) return;
-      throw new Error("El archivo no corresponde a un formato de imagen válido o compatible.");
+      throw new Error(t("invalidFile"));
     }
 
     function isPNG(bytes) {
@@ -560,7 +737,7 @@
         const img = await new Promise(function (resolve, reject) {
           const image = new Image();
           image.onload = function () { resolve(image); };
-          image.onerror = function () { reject(new Error("No fue posible cargar la imagen en este navegador.")); };
+          image.onerror = function () { reject(new Error(t("loadError"))); };
           image.src = url;
         });
 
@@ -577,7 +754,7 @@
 
     async function runHide() {
       if (state.cooldown) {
-        setStatus("Espere unos segundos antes de realizar otra operación.");
+        setStatus(t("wait"));
         return;
       }
 
@@ -587,11 +764,11 @@
         const key = dom.keyInput.value;
         const message = dom.messageInput.value;
 
-        if (!validateKey(key)) throw new Error("La clave debe tener entre 4 y 16 caracteres.");
-        if (!message || message.length > CONFIG.maxMessageLength) throw new Error("El mensaje debe tener entre 1 y 200 caracteres.");
+        if (!validateKey(key)) throw new Error(t("keyError"));
+        if (!message || message.length > CONFIG.maxMessageLength) throw new Error(t("messageError"));
 
         await validateFile(state.file);
-        setStatus("Procesando imagen localmente...");
+        setStatus(t("processing"));
 
         const imageData = await loadImageData(state.file);
         forceOpaqueAlpha(imageData);
@@ -600,16 +777,16 @@
         const fullPayload = concatBytes(textToBytes(CONFIG.magic), uint32ToBytes(encryptedPayload.length), encryptedPayload);
         const capacityBytes = Math.floor((imageData.data.length / 4) / 8);
 
-        if (fullPayload.length > capacityBytes) throw new Error("La imagen no tiene capacidad suficiente para ocultar el mensaje.");
+        if (fullPayload.length > capacityBytes) throw new Error(t("capacityError"));
 
         embedBytesInAlphaLSB(imageData, fullPayload);
         ctx.putImageData(imageData, 0, 0);
 
         await createDownloadBlob();
-        setStatus("Imagen generada correctamente. Descargue el nuevo archivo PNG.");
+        setStatus(t("generated"));
         showNote();
       } catch (error) {
-        setStatus(error.message || "No fue posible procesar la imagen.");
+        setStatus(error.message || t("genericError"));
       } finally {
         startCooldown();
       }
@@ -617,7 +794,7 @@
 
     async function runReveal() {
       if (state.cooldown) {
-        setStatus("Espere unos segundos antes de realizar otra operación.");
+        setStatus(t("wait"));
         return;
       }
 
@@ -625,23 +802,23 @@
         lockActions();
 
         const key = dom.keyInput.value;
-        if (!validateKey(key)) throw new Error("La clave debe tener entre 4 y 16 caracteres.");
+        if (!validateKey(key)) throw new Error(t("keyError"));
 
         await validateFile(state.file);
-        setStatus("Buscando contenido oculto localmente...");
+        setStatus(t("searching"));
 
         const imageData = await loadImageData(state.file);
         const message = await extractAndDecrypt(imageData, key);
 
         dom.resultBox.style.display = "block";
         dom.revealedMessage.textContent = message;
-        setStatus("Proceso finalizado.");
+        setStatus(t("finished"));
         showNote();
         showCanvasPreview();
       } catch (error) {
         dom.resultBox.style.display = "block";
-        dom.revealedMessage.textContent = "No se encontró contenido oculto o la clave es incorrecta.";
-        setStatus("Proceso finalizado.");
+        dom.revealedMessage.textContent = t("noContent");
+        setStatus(t("finished"));
         showNote();
       } finally {
         startCooldown();
@@ -793,7 +970,7 @@
 
     function downloadLastPNG() {
       if (!state.lastBlob) {
-        setStatus("Primero genere una imagen.");
+        setStatus(t("firstGenerate"));
         return;
       }
 
@@ -828,13 +1005,13 @@
       let seconds = Math.floor(CONFIG.cooldownMs / 1000);
 
       const interval = setInterval(function () {
-        dom.mainAction.textContent = "Espere " + seconds + " s";
+        dom.mainAction.textContent = t("waitButton") + seconds + " s";
         seconds--;
 
         if (seconds < 0) {
           clearInterval(interval);
           state.cooldown = false;
-          dom.mainAction.textContent = state.mode === "hide" ? "Ocultar mensaje" : "Revelar mensaje";
+          dom.mainAction.textContent = state.mode === "hide" ? t("hideAction") : t("revealAction");
           unlockActions();
         }
       }, 1000);
@@ -845,6 +1022,7 @@
     });
 
     setMode("hide");
+    setLanguage(currentLang);
   </script>
 </body>
 </html>
