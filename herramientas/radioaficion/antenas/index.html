@@ -53,15 +53,49 @@
       color: var(--primary);
     }
 
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
     .nav-links a {
-      margin-left: 20px;
       text-decoration: none;
       color: var(--muted);
       font-size: 15px;
+      font-weight: 700;
     }
 
     .nav-links a:hover {
       color: var(--accent);
+    }
+
+    .language-switch {
+      display: inline-flex;
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px;
+      box-shadow: 0 6px 18px rgba(15, 47, 79, 0.05);
+    }
+
+    .lang-option {
+      border: none;
+      background: transparent;
+      color: var(--primary);
+      padding: 8px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 13px;
+      margin: 0;
+    }
+
+    .lang-option.active {
+      background: var(--primary);
+      color: #ffffff;
     }
 
     main {
@@ -205,9 +239,8 @@
         align-items: flex-start;
       }
 
-      .nav-links a {
-        margin-left: 0;
-        margin-right: 16px;
+      .nav-links {
+        gap: 14px;
       }
 
       .layout {
@@ -223,11 +256,16 @@
       <nav>
         <div class="brand">Javier Cortés Mac Evoy</div>
         <div class="nav-links">
-          <a href="../../../">Inicio</a>
-          <a href="../../../proyectos/">Proyectos</a>
-          <a href="../../">Herramientas</a>
-          <a href="../../../#sobre-mi">Sobre mí</a>
-          <a href="../../../#contacto">Contacto</a>
+          <a href="../../../#sobre-mi" data-i18n="nav.about">Sobre mí</a>
+          <a href="../../../#herramientas" data-i18n="nav.tools">Herramientas</a>
+          <a href="../../../#intereses" data-i18n="nav.interests">Intereses</a>
+          <a href="../../../proyectos/" data-i18n="nav.projects">Proyectos</a>
+          <a href="../../../#contacto" data-i18n="nav.contact">Contacto</a>
+
+          <div class="language-switch" aria-label="Selector de idioma">
+            <button id="langEs" class="lang-option active" type="button">ES</button>
+            <button id="langEn" class="lang-option" type="button">EN</button>
+          </div>
         </div>
       </nav>
     </div>
@@ -235,9 +273,9 @@
 
   <main>
     <div class="container">
-      <h1>Calculadora de Antenas</h1>
+      <h1 data-i18n="page.title">Calculadora de Antenas</h1>
 
-      <p class="intro">
+      <p class="intro" data-i18n="page.intro">
         Calculadora teórica para estimar dimensiones básicas de dipolos utilizados en radioafición.
         Seleccione el tipo de dipolo, ingrese la frecuencia de operación y la herramienta calculará
         automáticamente las dimensiones recomendadas para construcción.
@@ -245,117 +283,117 @@
 
       <div class="layout">
         <div class="card">
-          <h2>Datos de entrada</h2>
+          <h2 data-i18n="form.title">Datos de entrada</h2>
 
-          <label for="tipo">Tipo de dipolo</label>
+          <label for="tipo" data-i18n="form.type">Tipo de dipolo</label>
           <select id="tipo">
-            <option value="horizontal">Dipolo horizontal</option>
-            <option value="vertical">Dipolo vertical</option>
-            <option value="invertedv">Dipolo invertido V</option>
+            <option value="horizontal" data-i18n="option.horizontal">Dipolo horizontal</option>
+            <option value="vertical" data-i18n="option.vertical">Dipolo vertical</option>
+            <option value="invertedv" data-i18n="option.invertedv">Dipolo invertido V</option>
           </select>
 
-          <label for="frecuencia">Frecuencia de operación (MHz)</label>
+          <label for="frecuencia" data-i18n="form.frequency">Frecuencia de operación (MHz)</label>
           <input id="frecuencia" type="number" value="146.520" step="0.001">
 
-          <label for="factor">Factor de corrección</label>
+          <label for="factor" data-i18n="form.factor">Factor de corrección</label>
           <input id="factor" type="number" value="0.95" step="0.01">
 
-          <label for="cable">Tipo de cable coaxial</label>
+          <label for="cable" data-i18n="form.cable">Tipo de cable coaxial</label>
           <select id="cable" onchange="mostrarCableManual()">
             <option value="rg58">RG-58</option>
             <option value="rg213">RG-213</option>
             <option value="rg8x">RG-8X</option>
             <option value="lmr400">LMR-400</option>
-            <option value="otro">Otro</option>
+            <option value="otro" data-i18n="option.other">Otro</option>
           </select>
 
           <div id="manualCable" class="manual-cable">
-            <p class="help-text">
+            <p class="help-text" data-i18n="form.manualHelp">
               Use esta opción si el cable no aparece en la lista. Ingrese los datos técnicos
               entregados por el fabricante o valores estimados conocidos.
             </p>
 
-            <label for="nombreCable">Nombre del cable</label>
+            <label for="nombreCable" data-i18n="form.cableName">Nombre del cable</label>
             <input id="nombreCable" type="text" value="Cable personalizado">
 
-            <label for="impedanciaManual">Impedancia característica (Ω)</label>
+            <label for="impedanciaManual" data-i18n="form.impedance">Impedancia característica (Ω)</label>
             <input id="impedanciaManual" type="number" value="50" step="1">
 
-            <label for="factorVelocidadManual">Factor de velocidad</label>
+            <label for="factorVelocidadManual" data-i18n="form.velocity">Factor de velocidad</label>
             <input id="factorVelocidadManual" type="number" value="0.66" step="0.01">
 
-            <label for="perdidaManual">Pérdida estimada (dB / 100 m)</label>
+            <label for="perdidaManual" data-i18n="form.loss100">Pérdida estimada (dB / 100 m)</label>
             <input id="perdidaManual" type="number" value="14.5" step="0.1">
           </div>
 
-          <label for="largoCable">Largo del cable coaxial (m)</label>
+          <label for="largoCable" data-i18n="form.cableLength">Largo del cable coaxial (m)</label>
           <input id="largoCable" type="number" value="20" step="0.1">
 
-          <label for="potencia">Potencia TX (W)</label>
+          <label for="potencia" data-i18n="form.power">Potencia TX (W)</label>
           <input id="potencia" type="number" value="50" step="1">
 
-          <button onclick="calcular()">Calcular</button>
+          <button onclick="calcular()" data-i18n="button.calculate">Calcular</button>
         </div>
 
         <div class="card results">
-          <h2>Resultados</h2>
+          <h2 data-i18n="results.title">Resultados</h2>
 
-          <p><strong>Longitud de onda:</strong> <span id="lambda">-</span></p>
-          <p><strong>Longitud total del dipolo:</strong> <span id="longitudTotal">-</span></p>
-          <p><strong>Longitud de cada brazo:</strong> <span id="brazo">-</span></p>
-          <p><strong>Impedancia del cable:</strong> <span id="impedanciaCable">-</span></p>
-          <p><strong>Factor de velocidad del cable:</strong> <span id="factorVelocidadCable">-</span></p>
-          <p><strong>Pérdida estimada del cable:</strong> <span id="perdida">-</span></p>
-          <p><strong>Potencia aproximada en antena:</strong> <span id="potenciaAntena">-</span></p>
+          <p><strong data-i18n="results.lambda">Longitud de onda:</strong> <span id="lambda">-</span></p>
+          <p><strong data-i18n="results.totalLength">Longitud total del dipolo:</strong> <span id="longitudTotal">-</span></p>
+          <p><strong data-i18n="results.armLength">Longitud de cada brazo:</strong> <span id="brazo">-</span></p>
+          <p><strong data-i18n="results.impedance">Impedancia del cable:</strong> <span id="impedanciaCable">-</span></p>
+          <p><strong data-i18n="results.velocity">Factor de velocidad del cable:</strong> <span id="factorVelocidadCable">-</span></p>
+          <p><strong data-i18n="results.loss">Pérdida estimada del cable:</strong> <span id="perdida">-</span></p>
+          <p><strong data-i18n="results.antennaPower">Potencia aproximada en antena:</strong> <span id="potenciaAntena">-</span></p>
 
-          <h2>Ficha técnica</h2>
-          <pre id="diagrama">Ingrese los datos y presione Calcular.</pre>
+          <h2 data-i18n="datasheet.title">Ficha técnica</h2>
+          <pre id="diagrama" data-i18n="datasheet.placeholder">Ingrese los datos y presione Calcular.</pre>
         </div>
       </div>
 
       <div class="card steps">
-        <h2>Cálculos paso a paso</h2>
-        <p class="help-text">
+        <h2 data-i18n="steps.title">Cálculos paso a paso</h2>
+        <p class="help-text" data-i18n="steps.intro">
           Estos cálculos muestran el desarrollo utilizado por la herramienta para obtener las
           dimensiones teóricas y las pérdidas estimadas del sistema de alimentación.
         </p>
 
         <div class="step">
-          <h3>1. Longitud de onda</h3>
+          <h3 data-i18n="steps.lambdaTitle">1. Longitud de onda</h3>
           <p id="pasoLambda">-</p>
         </div>
 
         <div class="step">
-          <h3>2. Longitud total del dipolo</h3>
+          <h3 data-i18n="steps.totalTitle">2. Longitud total del dipolo</h3>
           <p id="pasoLongitudTotal">-</p>
         </div>
 
         <div class="step">
-          <h3>3. Longitud de cada brazo</h3>
+          <h3 data-i18n="steps.armTitle">3. Longitud de cada brazo</h3>
           <p id="pasoBrazo">-</p>
         </div>
 
         <div class="step">
-          <h3>4. Pérdida del cable</h3>
+          <h3 data-i18n="steps.lossTitle">4. Pérdida del cable</h3>
           <p id="pasoPerdida">-</p>
         </div>
 
         <div class="step">
-          <h3>5. Potencia aproximada en antena</h3>
+          <h3 data-i18n="steps.powerTitle">5. Potencia aproximada en antena</h3>
           <p id="pasoPotencia">-</p>
         </div>
       </div>
 
       <div class="note">
-        <h2>Nota</h2>
-        <p>
+        <h2 data-i18n="note.title">Nota</h2>
+        <p data-i18n="note.p1">
           Los resultados corresponden a valores teóricos y las dimensiones finales pueden variar según
           la altura de instalación, entorno, materiales utilizados y método de alimentación.
         </p>
-        <p>
+        <p data-i18n="note.p2">
           Siempre se recomienda realizar ajustes finales mediante medición de ROE/SWR.
         </p>
-        <p>
+        <p data-i18n="note.p3">
           Esta información se proporciona únicamente con fines educativos, de experimentación y apoyo
           al diseño preliminar de antenas.
         </p>
@@ -365,11 +403,145 @@
 
   <footer>
     <div class="container">
-      © 2026 Javier Cortés Mac Evoy · Calculadora de Antenas
+      <span data-i18n="footer.text">© 2026 Javier Cortés Mac Evoy · Calculadora de Antenas</span>
     </div>
   </footer>
 
   <script>
+
+    const translations = {
+      es: {
+        "nav.about": "Sobre mí",
+        "nav.tools": "Herramientas",
+        "nav.interests": "Intereses",
+        "nav.projects": "Proyectos",
+        "nav.contact": "Contacto",
+        "page.title": "Calculadora de Antenas",
+        "page.intro": "Calculadora teórica para estimar dimensiones básicas de dipolos utilizados en radioafición. Seleccione el tipo de dipolo, ingrese la frecuencia de operación y la herramienta calculará automáticamente las dimensiones recomendadas para construcción.",
+        "form.title": "Datos de entrada",
+        "form.type": "Tipo de dipolo",
+        "option.horizontal": "Dipolo horizontal",
+        "option.vertical": "Dipolo vertical",
+        "option.invertedv": "Dipolo invertido V",
+        "form.frequency": "Frecuencia de operación (MHz)",
+        "form.factor": "Factor de corrección",
+        "form.cable": "Tipo de cable coaxial",
+        "option.other": "Otro",
+        "form.manualHelp": "Use esta opción si el cable no aparece en la lista. Ingrese los datos técnicos entregados por el fabricante o valores estimados conocidos.",
+        "form.cableName": "Nombre del cable",
+        "form.impedance": "Impedancia característica (Ω)",
+        "form.velocity": "Factor de velocidad",
+        "form.loss100": "Pérdida estimada (dB / 100 m)",
+        "form.cableLength": "Largo del cable coaxial (m)",
+        "form.power": "Potencia TX (W)",
+        "button.calculate": "Calcular",
+        "results.title": "Resultados",
+        "results.lambda": "Longitud de onda:",
+        "results.totalLength": "Longitud total del dipolo:",
+        "results.armLength": "Longitud de cada brazo:",
+        "results.impedance": "Impedancia del cable:",
+        "results.velocity": "Factor de velocidad del cable:",
+        "results.loss": "Pérdida estimada del cable:",
+        "results.antennaPower": "Potencia aproximada en antena:",
+        "datasheet.title": "Ficha técnica",
+        "datasheet.placeholder": "Ingrese los datos y presione Calcular.",
+        "steps.title": "Cálculos paso a paso",
+        "steps.intro": "Estos cálculos muestran el desarrollo utilizado por la herramienta para obtener las dimensiones teóricas y las pérdidas estimadas del sistema de alimentación.",
+        "steps.lambdaTitle": "1. Longitud de onda",
+        "steps.totalTitle": "2. Longitud total del dipolo",
+        "steps.armTitle": "3. Longitud de cada brazo",
+        "steps.lossTitle": "4. Pérdida del cable",
+        "steps.powerTitle": "5. Potencia aproximada en antena",
+        "note.title": "Nota",
+        "note.p1": "Los resultados corresponden a valores teóricos y las dimensiones finales pueden variar según la altura de instalación, entorno, materiales utilizados y método de alimentación.",
+        "note.p2": "Siempre se recomienda realizar ajustes finales mediante medición de ROE/SWR.",
+        "note.p3": "Esta información se proporciona únicamente con fines educativos, de experimentación y apoyo al diseño preliminar de antenas.",
+        "footer.text": "© 2026 Javier Cortés Mac Evoy · Calculadora de Antenas"
+      },
+      en: {
+        "nav.about": "About me",
+        "nav.tools": "Tools",
+        "nav.interests": "Interests",
+        "nav.projects": "Projects",
+        "nav.contact": "Contact",
+        "page.title": "Antenna Calculator",
+        "page.intro": "Theoretical calculator for estimating basic dimensions of dipoles used in amateur radio. Select the dipole type, enter the operating frequency, and the tool will automatically calculate recommended dimensions for construction.",
+        "form.title": "Input data",
+        "form.type": "Dipole type",
+        "option.horizontal": "Horizontal dipole",
+        "option.vertical": "Vertical dipole",
+        "option.invertedv": "Inverted V dipole",
+        "form.frequency": "Operating frequency (MHz)",
+        "form.factor": "Correction factor",
+        "form.cable": "Coaxial cable type",
+        "option.other": "Other",
+        "form.manualHelp": "Use this option if the cable is not listed. Enter manufacturer technical data or known estimated values.",
+        "form.cableName": "Cable name",
+        "form.impedance": "Characteristic impedance (Ω)",
+        "form.velocity": "Velocity factor",
+        "form.loss100": "Estimated loss (dB / 100 m)",
+        "form.cableLength": "Coaxial cable length (m)",
+        "form.power": "TX power (W)",
+        "button.calculate": "Calculate",
+        "results.title": "Results",
+        "results.lambda": "Wavelength:",
+        "results.totalLength": "Total dipole length:",
+        "results.armLength": "Length of each arm:",
+        "results.impedance": "Cable impedance:",
+        "results.velocity": "Cable velocity factor:",
+        "results.loss": "Estimated cable loss:",
+        "results.antennaPower": "Approximate antenna power:",
+        "datasheet.title": "Technical sheet",
+        "datasheet.placeholder": "Enter the data and press Calculate.",
+        "steps.title": "Step-by-step calculations",
+        "steps.intro": "These calculations show the development used by the tool to obtain theoretical dimensions and estimated losses for the feed system.",
+        "steps.lambdaTitle": "1. Wavelength",
+        "steps.totalTitle": "2. Total dipole length",
+        "steps.armTitle": "3. Length of each arm",
+        "steps.lossTitle": "4. Cable loss",
+        "steps.powerTitle": "5. Approximate antenna power",
+        "note.title": "Note",
+        "note.p1": "The results correspond to theoretical values and final dimensions may vary depending on installation height, surroundings, materials used, and feeding method.",
+        "note.p2": "Final adjustments using SWR/ROE measurement are always recommended.",
+        "note.p3": "This information is provided solely for educational, experimental, and preliminary antenna design support purposes.",
+        "footer.text": "© 2026 Javier Cortés Mac Evoy · Antenna Calculator"
+      }
+    };
+
+    let currentLang = localStorage.getItem("siteLang") || "es";
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem("siteLang", lang);
+      document.documentElement.lang = lang;
+
+      document.querySelectorAll("[data-i18n]").forEach(function (element) {
+        const key = element.getAttribute("data-i18n");
+        if (translations[lang] && translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+
+      document.getElementById("langEs").classList.toggle("active", lang === "es");
+      document.getElementById("langEn").classList.toggle("active", lang === "en");
+
+      if (document.getElementById("lambda").textContent !== "-") {
+        calcular();
+      }
+    }
+
+    document.getElementById("langEs").addEventListener("click", function () {
+      setLanguage("es");
+    });
+
+    document.getElementById("langEn").addEventListener("click", function () {
+      setLanguage("en");
+    });
+
+    function t(es, en) {
+      return currentLang === "en" ? en : es;
+    }
+
     const cables = {
       rg58: {
         nombre: "RG-58",
@@ -444,7 +616,7 @@
         isNaN(cable.factorVelocidad) ||
         isNaN(cable.perdida100m)
       ) {
-        alert("Revise los datos ingresados. Todos los valores numéricos deben ser válidos.");
+        alert(t("Revise los datos ingresados. Todos los valores numéricos deben ser válidos.", "Please check the entered data. All numeric values must be valid."));
         return;
       }
 
@@ -467,7 +639,7 @@
       let esquema = "";
 
       if (tipo === "horizontal") {
-        nombreTipo = "DIPOLO HORIZONTAL";
+        nombreTipo = t("DIPOLO HORIZONTAL", "HORIZONTAL DIPOLE");
         esquema =
 `--------------------------------------------------
 ANTENNA DATA SHEET
@@ -478,30 +650,30 @@ ${nombreTipo}
 
 <--------------------|-------------------->
                      |
-              Alimentación
+              ${t('Alimentación', 'Feed point')}
 
-Frecuencia     : ${frecuencia.toFixed(3)} MHz
-Longitud total : ${longitudTotal.toFixed(3)} m
-Cada brazo     : ${brazo.toFixed(3)} m
-Cable          : ${cable.nombre}
-Impedancia     : ${cable.impedancia.toFixed(0)} Ω
-Factor vel.    : ${cable.factorVelocidad.toFixed(2)}
-Pérdida cable  : ${perdidaDb.toFixed(2)} dB
-Potencia TX    : ${potencia.toFixed(1)} W
-Potencia ant.  : ${potenciaAntena.toFixed(1)} W
+${t('Frecuencia     :', 'Frequency     :')} ${frecuencia.toFixed(3)} MHz
+${t('Longitud total :', 'Total length  :')} ${longitudTotal.toFixed(3)} m
+${t('Cada brazo     :', 'Each arm      :')} ${brazo.toFixed(3)} m
+${t('Cable          :', 'Cable         :')} ${cable.nombre}
+${t('Impedancia     :', 'Impedance     :')} ${cable.impedancia.toFixed(0)} Ω
+${t('Factor vel.    :', 'Vel. factor   :')} ${cable.factorVelocidad.toFixed(2)}
+${t('Pérdida cable  :', 'Cable loss    :')} ${perdidaDb.toFixed(2)} dB
+${t('Potencia TX    :', 'TX power      :')} ${potencia.toFixed(1)} W
+${t('Potencia ant.  :', 'Antenna power :')} ${potenciaAntena.toFixed(1)} W
 
 --------------------------------------------------`;
       }
 
       if (tipo === "vertical") {
-        nombreTipo = "DIPOLO VERTICAL";
+        nombreTipo = t("DIPOLO VERTICAL", "VERTICAL DIPOLE");
         esquema =
 `--------------------------------------------------
 ANTENNA DATA SHEET
 ${nombreTipo}
 --------------------------------------------------
 
-              Elemento superior
+              ${t('Elemento superior', 'Upper element')}
                   ${brazo.toFixed(3)} m
 
                       |
@@ -509,38 +681,38 @@ ${nombreTipo}
                       |
                       |
 ----------------------|----------------------
-                Alimentación
+                ${t('Alimentación', 'Feed point')}
 ----------------------|----------------------
                       |
                       |
                       |
                       |
 
-              Elemento inferior
+              ${t('Elemento inferior', 'Lower element')}
                   ${brazo.toFixed(3)} m
 
-Frecuencia     : ${frecuencia.toFixed(3)} MHz
-Longitud total : ${longitudTotal.toFixed(3)} m
-Cada brazo     : ${brazo.toFixed(3)} m
-Cable          : ${cable.nombre}
-Impedancia     : ${cable.impedancia.toFixed(0)} Ω
-Factor vel.    : ${cable.factorVelocidad.toFixed(2)}
-Pérdida cable  : ${perdidaDb.toFixed(2)} dB
-Potencia TX    : ${potencia.toFixed(1)} W
-Potencia ant.  : ${potenciaAntena.toFixed(1)} W
+${t('Frecuencia     :', 'Frequency     :')} ${frecuencia.toFixed(3)} MHz
+${t('Longitud total :', 'Total length  :')} ${longitudTotal.toFixed(3)} m
+${t('Cada brazo     :', 'Each arm      :')} ${brazo.toFixed(3)} m
+${t('Cable          :', 'Cable         :')} ${cable.nombre}
+${t('Impedancia     :', 'Impedance     :')} ${cable.impedancia.toFixed(0)} Ω
+${t('Factor vel.    :', 'Vel. factor   :')} ${cable.factorVelocidad.toFixed(2)}
+${t('Pérdida cable  :', 'Cable loss    :')} ${perdidaDb.toFixed(2)} dB
+${t('Potencia TX    :', 'TX power      :')} ${potencia.toFixed(1)} W
+${t('Potencia ant.  :', 'Antenna power :')} ${potenciaAntena.toFixed(1)} W
 
 --------------------------------------------------`;
       }
 
       if (tipo === "invertedv") {
-        nombreTipo = "DIPOLO INVERTIDO V";
+        nombreTipo = t("DIPOLO INVERTIDO V", "INVERTED V DIPOLE");
         esquema =
 `--------------------------------------------------
 ANTENNA DATA SHEET
 ${nombreTipo}
 --------------------------------------------------
 
-                   Alimentación
+                   ${t('Alimentación', 'Feed point')}
                        |
                       / \\
                      /   \\
@@ -549,15 +721,15 @@ ${nombreTipo}
 
              ${brazo.toFixed(3)} m     ${brazo.toFixed(3)} m
 
-Frecuencia     : ${frecuencia.toFixed(3)} MHz
-Longitud total : ${longitudTotal.toFixed(3)} m
-Cada brazo     : ${brazo.toFixed(3)} m
-Cable          : ${cable.nombre}
-Impedancia     : ${cable.impedancia.toFixed(0)} Ω
-Factor vel.    : ${cable.factorVelocidad.toFixed(2)}
-Pérdida cable  : ${perdidaDb.toFixed(2)} dB
-Potencia TX    : ${potencia.toFixed(1)} W
-Potencia ant.  : ${potenciaAntena.toFixed(1)} W
+${t('Frecuencia     :', 'Frequency     :')} ${frecuencia.toFixed(3)} MHz
+${t('Longitud total :', 'Total length  :')} ${longitudTotal.toFixed(3)} m
+${t('Cada brazo     :', 'Each arm      :')} ${brazo.toFixed(3)} m
+${t('Cable          :', 'Cable         :')} ${cable.nombre}
+${t('Impedancia     :', 'Impedance     :')} ${cable.impedancia.toFixed(0)} Ω
+${t('Factor vel.    :', 'Vel. factor   :')} ${cable.factorVelocidad.toFixed(2)}
+${t('Pérdida cable  :', 'Cable loss    :')} ${perdidaDb.toFixed(2)} dB
+${t('Potencia TX    :', 'TX power      :')} ${potencia.toFixed(1)} W
+${t('Potencia ant.  :', 'Antenna power :')} ${potenciaAntena.toFixed(1)} W
 
 --------------------------------------------------`;
       }
@@ -565,32 +737,33 @@ Potencia ant.  : ${potenciaAntena.toFixed(1)} W
       document.getElementById("diagrama").textContent = esquema;
 
       document.getElementById("pasoLambda").innerHTML =
-        "λ = 300 / frecuencia<br>" +
+        t("λ = 300 / frecuencia<br>", "λ = 300 / frequency<br>") +
         "λ = 300 / " + frecuencia.toFixed(3) + "<br>" +
         "λ = " + lambda.toFixed(3) + " m";
 
       document.getElementById("pasoLongitudTotal").innerHTML =
-        "Longitud total = (λ / 2) × factor de corrección<br>" +
-        "Longitud total = (" + lambda.toFixed(3) + " / 2) × " + factor.toFixed(2) + "<br>" +
-        "Longitud total = " + longitudTotal.toFixed(3) + " m";
+        t("Longitud total = (λ / 2) × factor de corrección<br>", "Total length = (λ / 2) × correction factor<br>") +
+        t("Longitud total = ", "Total length = ") + "(" + lambda.toFixed(3) + " / 2) × " + factor.toFixed(2) + "<br>" +
+        t("Longitud total = ", "Total length = ") + longitudTotal.toFixed(3) + " m";
 
       document.getElementById("pasoBrazo").innerHTML =
-        "Longitud por brazo = longitud total / 2<br>" +
-        "Longitud por brazo = " + longitudTotal.toFixed(3) + " / 2<br>" +
-        "Longitud por brazo = " + brazo.toFixed(3) + " m";
+        t("Longitud por brazo = longitud total / 2<br>", "Arm length = total length / 2<br>") +
+        t("Longitud por brazo = ", "Arm length = ") + longitudTotal.toFixed(3) + " / 2<br>" +
+        t("Longitud por brazo = ", "Arm length = ") + brazo.toFixed(3) + " m";
 
       document.getElementById("pasoPerdida").innerHTML =
-        "Pérdida del tramo = (pérdida cada 100 m / 100) × largo del cable<br>" +
-        "Pérdida del tramo = (" + cable.perdida100m.toFixed(2) + " / 100) × " + largoCable.toFixed(1) + "<br>" +
-        "Pérdida del tramo = " + perdidaDb.toFixed(2) + " dB";
+        t("Pérdida del tramo = (pérdida cada 100 m / 100) × largo del cable<br>", "Cable section loss = (loss per 100 m / 100) × cable length<br>") +
+        t("Pérdida del tramo = ", "Cable section loss = ") + "(" + cable.perdida100m.toFixed(2) + " / 100) × " + largoCable.toFixed(1) + "<br>" +
+        t("Pérdida del tramo = ", "Cable section loss = ") + perdidaDb.toFixed(2) + " dB";
 
       document.getElementById("pasoPotencia").innerHTML =
-        "Potencia en antena = potencia TX × 10 ^ (-pérdida dB / 10)<br>" +
-        "Potencia en antena = " + potencia.toFixed(1) + " × 10 ^ (-" + perdidaDb.toFixed(2) + " / 10)<br>" +
-        "Potencia en antena = " + potenciaAntena.toFixed(1) + " W";
+        t("Potencia en antena = potencia TX × 10 ^ (-pérdida dB / 10)<br>", "Antenna power = TX power × 10 ^ (-loss dB / 10)<br>") +
+        t("Potencia en antena = ", "Antenna power = ") + potencia.toFixed(1) + " × 10 ^ (-" + perdidaDb.toFixed(2) + " / 10)<br>" +
+        t("Potencia en antena = ", "Antenna power = ") + potenciaAntena.toFixed(1) + " W";
     }
 
     mostrarCableManual();
+    setLanguage(currentLang);
     calcular();
   </script>
 </body>
