@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flujo Caja PYME | Javier Cortés Mac Evoy</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">Javier Cortés Mac Evoy</div>
+        <div class="nav-links">
+          <a href="../../#sobre-mi" data-i18n="nav_about">Sobre mí</a>
+          <a href="../../#herramientas" data-i18n="nav_tools">Herramientas</a>
+          <a href="../../#intereses" data-i18n="nav_interests">Intereses</a>
+          <a href="../../proyectos/" data-i18n="nav_projects">Proyectos</a>
+          <a href="../../#contacto" data-i18n="nav_contact">Contacto</a>
+
+          <div class="lang-switch" aria-label="Selector de idioma">
+            <button id="langEs" class="lang-option active" type="button">ES</button>
+            <button id="langEn" class="lang-option" type="button">EN</button>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="hero-text">
+            <div class="eyebrow" data-i18n="eyebrow">Finanzas para pequeñas empresas</div>
+            <h1 data-i18n="title">Flujo Caja PYME</h1>
+            <p class="subtitle" data-i18n="subtitle">
+              Configure una plantilla Excel personalizada para proyectar el efectivo disponible de su empresa y anticipar meses con riesgo de quedarse sin caja.
+            </p>
+            <p class="summary" data-i18n="summary">
+              El flujo de caja permite mirar hacia adelante: cuánto dinero entrará, cuánto saldrá y si la empresa tendrá efectivo suficiente para cumplir sus compromisos.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="steps-section">
+      <div class="container">
+        <div class="steps-bar">
+          <div class="step-pill active" id="stepConfig"><span>1</span><strong data-i18n="step_config">Configuración</strong></div>
+          <div class="step-pill" id="stepPreview"><span>2</span><strong data-i18n="step_preview">Vista previa</strong></div>
+          <div class="step-pill" id="stepDownload"><span>3</span><strong data-i18n="step_download">Descargar</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="builder-section">
+      <div class="container">
+        <div class="layout">
+          <form class="card form-card" id="cashflowForm">
+            <h2 data-i18n="config_title">Datos para generar la plantilla</h2>
+            <p class="help" data-i18n="config_help">
+              Complete los datos principales. El Excel se generará localmente en su navegador.
+            </p>
+
+            <div class="form-grid">
+              <div>
+                <label for="companyName" data-i18n="company_name">Nombre de la empresa</label>
+                <input id="companyName" type="text" maxlength="80" placeholder="Ej: Comercial ABC SpA">
+              </div>
+
+              <div>
+                <label for="businessType" data-i18n="business_type">Giro o actividad</label>
+                <select id="businessType">
+                  <option value="comercio" data-i18n="type_commerce">Comercio</option>
+                  <option value="servicios" data-i18n="type_services">Servicios</option>
+                  <option value="manufactura" data-i18n="type_manufacturing">Manufactura</option>
+                  <option value="restaurante" data-i18n="type_restaurant">Restaurante</option>
+                  <option value="transporte" data-i18n="type_transport">Transporte</option>
+                  <option value="salud" data-i18n="type_health">Salud</option>
+                  <option value="otro" data-i18n="type_other">Otro</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="currency" data-i18n="currency">Moneda</label>
+                <select id="currency">
+                  <option value="CLP">CLP</option>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="country" data-i18n="country_optional">País opcional</label>
+                <input id="country" type="text" maxlength="60" placeholder="Ej: Chile">
+              </div>
+            </div>
+
+            <h3 data-i18n="projection_title">Inicio de la proyección</h3>
+            <div class="form-grid">
+              <div>
+                <label for="startMonth" data-i18n="start_month">Mes de inicio</label>
+                <select id="startMonth">
+                  <option value="0" data-i18n="month_jan">Enero</option>
+                  <option value="1" data-i18n="month_feb">Febrero</option>
+                  <option value="2" data-i18n="month_mar">Marzo</option>
+                  <option value="3" data-i18n="month_apr">Abril</option>
+                  <option value="4" data-i18n="month_may">Mayo</option>
+                  <option value="5" data-i18n="month_jun">Junio</option>
+                  <option value="6" data-i18n="month_jul" selected>Julio</option>
+                  <option value="7" data-i18n="month_aug">Agosto</option>
+                  <option value="8" data-i18n="month_sep">Septiembre</option>
+                  <option value="9" data-i18n="month_oct">Octubre</option>
+                  <option value="10" data-i18n="month_nov">Noviembre</option>
+                  <option value="11" data-i18n="month_dec">Diciembre</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="startYear" data-i18n="start_year">Año de inicio</label>
+                <input id="startYear" type="number" min="2026" max="2040" value="2026">
+              </div>
+            </div>
+
+            <h3 data-i18n="cash_title">Caja y seguridad</h3>
+            <div class="form-grid">
+              <div>
+                <label for="initialCash" data-i18n="initial_cash">Saldo inicial de caja</label>
+                <input id="initialCash" type="number" min="0" step="1000" placeholder="Ej: 5000000">
+                <p class="help" data-i18n="positive_help">Ingrese siempre valores positivos.</p>
+              </div>
+
+              <div>
+                <label for="minimumReserve" data-i18n="minimum_reserve">Reserva mínima de seguridad</label>
+                <input id="minimumReserve" type="number" min="0" step="1000" placeholder="Ej: 1000000">
+                <p class="help" data-i18n="reserve_help">Monto mínimo que la empresa desea mantener disponible.</p>
+              </div>
+            </div>
+
+            <h3 data-i18n="mode_title">Modo de generación</h3>
+            <div class="check-grid">
+              <label class="check-card">
+                <input id="sampleData" type="checkbox">
+                <span data-i18n="sample_data">Generar ejemplo con datos ficticios</span>
+              </label>
+
+              <label class="check-card">
+                <input id="protectFormulas" type="checkbox" checked>
+                <span data-i18n="protect_formulas">Proteger fórmulas</span>
+              </label>
+
+              <label class="check-card">
+                <input id="dataValidation" type="checkbox" checked>
+                <span data-i18n="data_validation">Activar validación de datos</span>
+              </label>
+
+              <label class="check-card">
+                <input id="cashAlerts" type="checkbox" checked>
+                <span data-i18n="cash_alerts">Activar alertas de caja</span>
+              </label>
+            </div>
+
+            <h3 data-i18n="categories_title">Categorías incluidas</h3>
+            <div class="category-grid">
+              <div class="category-box">
+                <h4 data-i18n="income_title">Ingresos</h4>
+                <label><input type="checkbox" name="income" value="Ventas contado" checked> <span data-i18n="income_cash_sales">Ventas contado</span></label>
+                <label><input type="checkbox" name="income" value="Ventas crédito" checked> <span data-i18n="income_credit_sales">Ventas crédito</span></label>
+                <label><input type="checkbox" name="income" value="Cobranza clientes" checked> <span data-i18n="income_collections">Cobranza clientes</span></label>
+                <label><input type="checkbox" name="income" value="Aportes socios"> <span data-i18n="income_partners">Aportes socios</span></label>
+                <label><input type="checkbox" name="income" value="Otros ingresos" checked> <span data-i18n="income_other">Otros ingresos</span></label>
+              </div>
+
+              <div class="category-box">
+                <h4 data-i18n="expense_title">Egresos</h4>
+                <label><input type="checkbox" name="expense" value="Compras" checked> <span data-i18n="expense_purchases">Compras</span></label>
+                <label><input type="checkbox" name="expense" value="Remuneraciones" checked> <span data-i18n="expense_payroll">Remuneraciones</span></label>
+                <label><input type="checkbox" name="expense" value="Arriendo" checked> <span data-i18n="expense_rent">Arriendo</span></label>
+                <label><input type="checkbox" name="expense" value="Servicios básicos" checked> <span data-i18n="expense_utilities">Servicios básicos</span></label>
+                <label><input type="checkbox" name="expense" value="Impuestos" checked> <span data-i18n="expense_taxes">Impuestos</span></label>
+                <label><input type="checkbox" name="expense" value="IVA" checked> <span data-i18n="expense_vat">IVA</span></label>
+                <label><input type="checkbox" name="expense" value="Préstamos / cuotas" checked> <span data-i18n="expense_loans">Préstamos / cuotas</span></label>
+                <label><input type="checkbox" name="expense" value="Marketing"> <span data-i18n="expense_marketing">Marketing</span></label>
+                <label><input type="checkbox" name="expense" value="Otros egresos" checked> <span data-i18n="expense_other">Otros egresos</span></label>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="primary-button" id="previewButton" type="button" data-i18n="preview_button">Actualizar vista previa</button>
+            </div>
+          </form>
+
+          <aside class="card preview-card">
+            <h2 data-i18n="preview_title">Vista previa</h2>
+            <p class="help" data-i18n="preview_help">Revise la configuración antes de generar el archivo Excel.</p>
+
+            <div class="preview-box">
+              <div class="preview-row"><span data-i18n="preview_company">Empresa</span><strong id="previewCompany">Sin nombre</strong></div>
+              <div class="preview-row"><span data-i18n="preview_business">Giro</span><strong id="previewBusiness">Comercio</strong></div>
+              <div class="preview-row"><span data-i18n="preview_period">Período</span><strong id="previewPeriod">Julio 2026 - Diciembre 2029</strong></div>
+              <div class="preview-row"><span data-i18n="preview_months">Meses proyectados</span><strong id="previewMonths">42</strong></div>
+              <div class="preview-row"><span data-i18n="preview_income_count">Filas de ingresos</span><strong id="previewIncomeCount">4</strong></div>
+              <div class="preview-row"><span data-i18n="preview_expense_count">Filas de egresos</span><strong id="previewExpenseCount">7</strong></div>
+              <div class="preview-row"><span data-i18n="preview_currency">Moneda</span><strong id="previewCurrency">CLP</strong></div>
+              <div class="preview-row"><span data-i18n="preview_validation">Validaciones</span><strong id="previewValidation">Sí</strong></div>
+              <div class="preview-row"><span data-i18n="preview_protection">Protección</span><strong id="previewProtection">Sí</strong></div>
+            </div>
+
+            <div class="impact-box">
+              <h3 data-i18n="impact_title">Registro de impacto</h3>
+              <p data-i18n="impact_text">
+                Al generar la plantilla se podrá registrar un evento anónimo para conocer cuántas personas utilizan esta herramienta. Los datos financieros no se envían ni se almacenan.
+              </p>
+            </div>
+
+            <button class="primary-button full" id="generateButton" type="button" data-i18n="generate_button">Generar plantilla Excel</button>
+            <p class="download-note" id="downloadStatus" data-i18n="download_pending">El generador Excel se conectará en la siguiente etapa.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="education-section">
+      <div class="container">
+        <div class="card education-card">
+          <h2 data-i18n="education_title">¿Por qué importa el flujo de caja?</h2>
+          <p data-i18n="education_text_1">
+            Una empresa puede vender y aun así quedarse sin efectivo si cobra tarde y paga antes. El flujo de caja ayuda a anticipar esos momentos críticos.
+          </p>
+          <p data-i18n="education_text_2">
+            El objetivo no es solo sumar ingresos y egresos, sino asegurar que el saldo futuro permita cumplir compromisos como sueldos, proveedores, impuestos, arriendo y créditos.
+          </p>
+          <div class="highlight">
+            <strong data-i18n="education_phrase">La utilidad mantiene viva una empresa en el largo plazo; la caja le permite sobrevivir día a día.</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="disclaimer-section">
+      <div class="container">
+        <div class="note">
+          <h2 data-i18n="disclaimer_title">Uso educativo</h2>
+          <p data-i18n="disclaimer_text_1">
+            Esta herramienta y la plantilla Excel se entregan con fines exclusivamente educativos y de apoyo al aprendizaje de conceptos básicos de flujo de caja.
+          </p>
+          <p data-i18n="disclaimer_text_2">
+            La información generada depende de los datos ingresados por el usuario y no constituye asesoría financiera, contable, tributaria ni legal. Antes de tomar decisiones comerciales o financieras, se recomienda validar la información con un profesional competente.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 Javier Cortés Mac Evoy · Flujo Caja PYME
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/excel.js"></script>
+</body>
+</html>
