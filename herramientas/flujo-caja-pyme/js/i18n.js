@@ -1,171 +1,294 @@
-const LANG = {
+/* ============================================================
+   JCM TOOLS
+   Sistema de internacionalización (ES / EN)
+   Flujo Caja PYME
+============================================================ */
+
+const translations = {
 
     es: {
 
-        pageTitle: "Flujo Caja PYME",
+        /* ---------------- Menú ---------------- */
 
-        heroTitle: "Flujo Caja PYME",
+        nav_about: "Sobre mí",
+        nav_tools: "Herramientas",
+        nav_interests: "Intereses",
+        nav_projects: "Proyectos",
+        nav_contact: "Contacto",
 
-        heroSubtitle:
-            "Planifique el flujo de efectivo de su empresa y genere una plantilla profesional de Excel completamente personalizada.",
+        /* ---------------- Hero ---------------- */
 
-        step1: "Configuración",
-        step2: "Vista previa",
-        step3: "Descargar",
+        eyebrow: "Finanzas para pequeñas empresas",
 
-        company: "Nombre de la empresa",
-        companyPlaceholder: "Ej.: Comercial ABC SpA",
+        title: "Flujo Caja PYME",
 
-        business: "Actividad económica",
+        subtitle:
+            "Configure una plantilla Excel personalizada para proyectar el efectivo disponible de su empresa y anticipar meses con riesgo de quedarse sin caja.",
+
+        summary:
+            "El flujo de caja permite mirar hacia adelante: cuánto dinero entrará, cuánto saldrá y si la empresa tendrá efectivo suficiente para cumplir sus compromisos.",
+
+        /* ---------------- Pasos ---------------- */
+
+        step_config: "Configuración",
+        step_preview: "Vista previa",
+        step_download: "Descargar",
+
+        /* ---------------- Configuración ---------------- */
+
+        config_title: "Datos para generar la plantilla",
+
+        config_help:
+            "Complete los datos principales. El Excel se generará localmente en su navegador.",
+
+        company_name: "Nombre de la empresa",
+
+        business_type: "Giro o actividad",
 
         currency: "Moneda",
 
-        startMonth: "Mes de inicio",
+        country_optional: "País (opcional)",
 
-        startYear: "Año de inicio",
+        projection_title: "Inicio de la proyección",
 
-        openingCash: "Saldo inicial de caja",
+        start_month: "Mes de inicio",
 
-        reserveCash: "Reserva mínima de seguridad",
+        start_year: "Año de inicio",
 
-        reserveHelp:
-            "Corresponde al efectivo mínimo recomendado para enfrentar imprevistos sin comprometer la operación.",
+        cash_title: "Caja y seguridad",
 
-        customization: "Opciones",
+        initial_cash: "Saldo inicial de caja",
 
-        logo: "Permitir incorporar logotipo posteriormente",
+        minimum_reserve: "Reserva mínima de seguridad",
 
-        protect: "Proteger fórmulas",
+        positive_help:
+            "Todos los valores deben ingresarse como positivos.",
 
-        validation: "Validar datos ingresados",
+        reserve_help:
+            "Monto mínimo recomendado para enfrentar imprevistos.",
 
-        alerts: "Activar alertas de caja",
+        mode_title: "Modo de generación",
 
-        sample: "Generar ejemplo con datos ficticios",
+        sample_data:
+            "Generar ejemplo con datos ficticios",
 
-        income: "Categorías de ingresos",
+        protect_formulas:
+            "Proteger fórmulas",
 
-        expenses: "Categorías de egresos",
+        data_validation:
+            "Activar validación de datos",
 
-        preview: "Vista previa",
+        cash_alerts:
+            "Activar alertas de caja",
 
-        generate: "Generar plantilla Excel",
+        categories_title:
+            "Categorías incluidas",
 
-        analyticsTitle: "Estadísticas anónimas",
+        income_title:
+            "Ingresos",
 
-        analyticsText:
-            "Si lo desea, puede compartir información básica y completamente opcional para ayudarnos a conocer el impacto de esta herramienta. Nunca se almacenarán datos financieros ni el contenido de su flujo de caja.",
+        expense_title:
+            "Egresos",
 
-        disclaimer:
-            "Esta herramienta tiene fines exclusivamente educativos y de apoyo a la gestión financiera. No reemplaza la asesoría profesional de un contador, auditor o asesor financiero."
+        preview_button:
+            "Actualizar vista previa",
+
+        preview_title:
+            "Vista previa",
+
+        preview_help:
+            "Revise la configuración antes de generar el archivo Excel.",
+
+        impact_title:
+            "Registro de impacto",
+
+        impact_text:
+            "Al generar la plantilla podrá enviarse un registro completamente anónimo para conocer cuántas personas utilizan esta herramienta. Nunca se envían ni almacenan datos financieros.",
+
+        generate_button:
+            "Generar plantilla Excel",
+
+        download_pending:
+            "El generador Excel se incorporará en la siguiente etapa.",
+
+        education_title:
+            "¿Por qué importa el flujo de caja?",
+
+        education_text_1:
+            "Una empresa puede vender y aun así quedarse sin efectivo si cobra tarde y paga antes.",
+
+        education_text_2:
+            "El objetivo es asegurar que exista caja suficiente para cumplir los compromisos futuros.",
+
+        education_phrase:
+            "La utilidad mantiene viva una empresa en el largo plazo; la caja le permite sobrevivir día a día.",
+
+        disclaimer_title:
+            "Uso educativo",
+
+        disclaimer_text_1:
+            "Esta herramienta tiene fines exclusivamente educativos.",
+
+        disclaimer_text_2:
+            "No reemplaza la asesoría de un contador o asesor financiero."
 
     },
 
     en: {
 
-        pageTitle: "SME Cash Flow",
+        nav_about: "About",
+        nav_tools: "Tools",
+        nav_interests: "Interests",
+        nav_projects: "Projects",
+        nav_contact: "Contact",
 
-        heroTitle: "SME Cash Flow",
+        eyebrow: "Finance for Small Businesses",
 
-        heroSubtitle:
-            "Plan your company's cash flow and generate a fully customized professional Excel workbook.",
+        title: "SME Cash Flow",
 
-        step1: "Configuration",
-        step2: "Preview",
-        step3: "Download",
+        subtitle:
+            "Generate a customized Excel workbook to project your company's available cash and identify future cash shortages.",
 
-        company: "Company name",
-        companyPlaceholder: "Example: ABC Trading Ltd.",
+        summary:
+            "Cash flow helps you anticipate how much money will come in and go out, ensuring enough liquidity to meet future commitments.",
 
-        business: "Business activity",
+        step_config: "Configuration",
+        step_preview: "Preview",
+        step_download: "Download",
+
+        config_title: "Workbook configuration",
+
+        config_help:
+            "Complete the required information. The Excel workbook will be generated locally in your browser.",
+
+        company_name: "Company name",
+
+        business_type: "Business activity",
 
         currency: "Currency",
 
-        startMonth: "Starting month",
+        country_optional: "Country (optional)",
 
-        startYear: "Starting year",
+        projection_title: "Projection start",
 
-        openingCash: "Opening cash balance",
+        start_month: "Starting month",
 
-        reserveCash: "Minimum cash reserve",
+        start_year: "Starting year",
 
-        reserveHelp:
-            "Minimum recommended cash available to face unexpected events.",
+        cash_title: "Cash configuration",
 
-        customization: "Options",
+        initial_cash: "Opening cash balance",
 
-        logo: "Allow future logo",
+        minimum_reserve: "Minimum cash reserve",
 
-        protect: "Protect formulas",
+        positive_help:
+            "Always enter positive values.",
 
-        validation: "Enable validation",
+        reserve_help:
+            "Recommended minimum cash available.",
 
-        alerts: "Enable cash alerts",
+        mode_title: "Generation mode",
 
-        sample: "Generate sample data",
+        sample_data:
+            "Generate sample data",
 
-        income: "Income categories",
+        protect_formulas:
+            "Protect formulas",
 
-        expenses: "Expense categories",
+        data_validation:
+            "Enable data validation",
 
-        preview: "Preview",
+        cash_alerts:
+            "Enable cash alerts",
 
-        generate: "Generate Excel workbook",
+        categories_title:
+            "Included categories",
 
-        analyticsTitle: "Anonymous statistics",
+        income_title:
+            "Income",
 
-        analyticsText:
-            "Optionally share basic information so we can measure the educational impact of this tool. No financial information is stored.",
+        expense_title:
+            "Expenses",
 
-        disclaimer:
-            "This tool is provided for educational purposes only and does not replace professional accounting or financial advice."
+        preview_button:
+            "Refresh preview",
+
+        preview_title:
+            "Preview",
+
+        preview_help:
+            "Review the configuration before generating the workbook.",
+
+        impact_title:
+            "Impact statistics",
+
+        impact_text:
+            "An anonymous event may be sent when the workbook is generated. Financial information is never transmitted.",
+
+        generate_button:
+            "Generate Excel workbook",
+
+        download_pending:
+            "Excel generation will be added in the next stage.",
+
+        education_title:
+            "Why is cash flow important?",
+
+        education_text_1:
+            "A company may have sales and still run out of cash if it collects late and pays early.",
+
+        education_text_2:
+            "The objective is to ensure enough cash to meet future obligations.",
+
+        education_phrase:
+            "Profit keeps a business alive in the long term; cash keeps it alive every day.",
+
+        disclaimer_title:
+            "Educational use",
+
+        disclaimer_text_1:
+            "This tool is intended for educational purposes only.",
+
+        disclaimer_text_2:
+            "It does not replace professional financial or accounting advice."
 
     }
 
 };
 
-function setLanguage(lang) {
+/* ========================================================= */
 
-    localStorage.setItem("language", lang);
+function applyLanguage(lang){
 
-    document.querySelectorAll("[data-i18n]").forEach(el => {
+    localStorage.setItem("language",lang);
+
+    document.documentElement.lang = lang;
+
+    document.querySelectorAll("[data-i18n]").forEach(el=>{
 
         const key = el.dataset.i18n;
 
-        if (LANG[lang][key]) {
+        if(translations[lang][key]){
 
-            el.textContent = LANG[lang][key];
-
-        }
-
-    });
-
-    document.querySelectorAll("[data-placeholder]").forEach(el => {
-
-        const key = el.dataset.placeholder;
-
-        if (LANG[lang][key]) {
-
-            el.placeholder = LANG[lang][key];
+            el.textContent = translations[lang][key];
 
         }
 
     });
 
-    document.title = LANG[lang].pageTitle;
-
-    document.getElementById("btnES").classList.toggle("active", lang === "es");
-    document.getElementById("btnEN").classList.toggle("active", lang === "en");
+    document.getElementById("langEs").classList.toggle("active",lang==="es");
+    document.getElementById("langEn").classList.toggle("active",lang==="en");
 
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded",()=>{
 
-    const lang = localStorage.getItem("language") || "es";
+    const saved = localStorage.getItem("language") || "es";
 
-    setLanguage(lang);
+    applyLanguage(saved);
 
-    document.getElementById("btnES").onclick = () => setLanguage("es");
-    document.getElementById("btnEN").onclick = () => setLanguage("en");
+    document.getElementById("langEs").addEventListener("click",()=>applyLanguage("es"));
+
+    document.getElementById("langEn").addEventListener("click",()=>applyLanguage("en"));
 
 });
