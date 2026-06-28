@@ -33,9 +33,13 @@
     }
 
     header {
-      padding: 28px 0;
+      padding: 24px 0;
       border-bottom: 1px solid var(--line);
-      background: var(--card);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     nav {
@@ -46,18 +50,54 @@
     }
 
     .brand {
-      font-weight: 700;
+      font-weight: 800;
       color: var(--primary);
+      letter-spacing: 0.2px;
+      font-size: 18px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
     }
 
     .nav-links a {
-      margin-left: 20px;
       text-decoration: none;
       color: var(--muted);
       font-size: 15px;
+      font-weight: 700;
     }
 
     .nav-links a:hover { color: var(--accent); }
+
+    .language-switch {
+      display: inline-flex;
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px;
+      box-shadow: 0 6px 18px rgba(15, 47, 79, 0.05);
+    }
+
+    .language-switch button {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 7px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 13px;
+      transition: all 0.2s ease;
+    }
+
+    .language-switch button.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
 
     main { padding: 70px 0; }
 
@@ -227,9 +267,8 @@
         align-items: flex-start;
       }
 
-      .nav-links a {
-        margin-left: 0;
-        margin-right: 16px;
+      .nav-links {
+        gap: 14px;
       }
 
       .layout, .result-grid {
@@ -259,10 +298,15 @@
       <nav>
         <div class="brand">Javier Cortés Mac Evoy</div>
         <div class="nav-links">
-          <a href="../../">Inicio</a>
-          <a href="../../proyectos/">Proyectos</a>
-          <a href="../../#sobre-mi">Sobre mí</a>
-          <a href="../../#contacto">Contacto</a>
+          <a href="../../#sobre-mi" data-i18n="navAbout">Sobre mí</a>
+          <a href="../../#herramientas" data-i18n="navTools">Herramientas</a>
+          <a href="../../#intereses" data-i18n="navInterests">Intereses</a>
+          <a href="../../proyectos/" data-i18n="navProjects">Proyectos</a>
+          <a href="../../#contacto" data-i18n="navContact">Contacto</a>
+          <div class="language-switch" aria-label="Selector de idioma">
+            <button id="langEs" type="button" class="active" onclick="setLanguage('es')">ES</button>
+            <button id="langEn" type="button" onclick="setLanguage('en')">EN</button>
+          </div>
         </div>
       </nav>
     </div>
@@ -270,96 +314,96 @@
 
   <main>
     <div class="container">
-      <h1>Simulador de Cuotas</h1>
+      <h1 data-i18n="pageTitle">Simulador de Cuotas</h1>
 
-      <p class="intro">
+      <p class="intro" data-i18n="intro">
         Herramienta para estimar el pago mensual, el costo total de una compra financiada
         y el impacto de intereses, seguros y otros costos asociados.
       </p>
 
       <div class="mode-switch">
         <button id="btnModoPrecio" class="active" onclick="cambiarModo('precio')">
-          Tengo el precio del producto
+          <span data-i18n="modePrice">Tengo el precio del producto</span>
         </button>
         <button id="btnModoCuota" onclick="cambiarModo('cuota')">
-          Tengo el valor de la cuota
+          <span data-i18n="modeInstallment">Tengo el valor de la cuota</span>
         </button>
       </div>
 
       <div class="layout">
         <div class="card">
-          <h2>Datos de entrada</h2>
+          <h2 data-i18n="inputData">Datos de entrada</h2>
 
           <div id="modoPrecio">
-            <label for="precio">Precio del producto</label>
+            <label for="precio" data-i18n="productPrice">Precio del producto</label>
             <input id="precio" type="number" placeholder="Ej: 10000000" step="1000">
 
-            <label for="pie">Pie o pago inicial</label>
+            <label for="pie" data-i18n="downPayment">Pie o pago inicial</label>
             <input id="pie" type="number" placeholder="Ej: 2000000" step="1000">
 
-            <label for="cuotas">Cantidad de cuotas</label>
+            <label for="cuotas" data-i18n="installmentCount">Cantidad de cuotas</label>
             <input id="cuotas" type="number" placeholder="Ej: 24" step="1">
 
-            <label for="tasa">Tasa de interés (% mensual)</label>
+            <label for="tasa" data-i18n="monthlyRate">Tasa de interés (% mensual)</label>
             <input id="tasa" type="number" placeholder="Ej: 1.5" step="0.01">
-            <div class="help">Ingrese 1.5 para una tasa mensual de 1,5%.</div>
+            <div class="help" data-i18n="rateHelp">Ingrese 1.5 para una tasa mensual de 1,5%.</div>
           </div>
 
           <div id="modoCuota" style="display:none;">
-            <label for="valorCuota">Valor de la cuota</label>
+            <label for="valorCuota" data-i18n="installmentValue">Valor de la cuota</label>
             <input id="valorCuota" type="number" placeholder="Ej: 424000" step="1000">
 
-            <label for="cuotasConocidas">Cantidad de cuotas</label>
+            <label for="cuotasConocidas" data-i18n="installmentCount">Cantidad de cuotas</label>
             <input id="cuotasConocidas" type="number" placeholder="Ej: 24" step="1">
 
-            <label for="pieConocido">Pie o pago inicial</label>
+            <label for="pieConocido" data-i18n="downPayment">Pie o pago inicial</label>
             <input id="pieConocido" type="number" placeholder="Ej: 2000000" step="1000">
 
-            <label for="precioReferencia">Precio del producto conocido u observado</label>
+            <label for="precioReferencia" data-i18n="referencePrice">Precio del producto conocido u observado</label>
             <input id="precioReferencia" type="number" placeholder="Opcional. Ej: 10000000" step="1000">
-            <div class="help">Si no conoce el precio original, deje este campo vacío. Para estimar intereses y generar un detalle de pagos, ingrese también este valor.</div>
+            <div class="help" data-i18n="referenceHelp">Si no conoce el precio original, deje este campo vacío. Para estimar intereses y generar un detalle de pagos, ingrese también este valor.</div>
           </div>
 
-          <label for="seguro">Seguro mensual</label>
+          <label for="seguro" data-i18n="monthlyInsurance">Seguro mensual</label>
           <input id="seguro" type="number" placeholder="Ej: 12000" step="1000">
 
-          <label for="otros">Otros costos mensuales</label>
+          <label for="otros" data-i18n="otherCosts">Otros costos mensuales</label>
           <input id="otros" type="number" placeholder="Ej: 5000" step="1000">
 
-          <button class="primary-button" onclick="calcular()">Calcular</button>
+          <button class="primary-button" onclick="calcular()" data-i18n="calculate">Calcular</button>
         </div>
 
         <div class="card results">
-          <h2>Resultados</h2>
+          <h2 data-i18n="results">Resultados</h2>
 
           <div class="result-grid">
             <div class="metric">
-              <span id="labelMonto">Monto financiado</span>
+              <span id="labelMonto" data-i18n="amountFinanced">Monto financiado</span>
               <strong id="montoFinanciado">-</strong>
             </div>
 
             <div class="metric">
-              <span>Pago mensual estimado</span>
+              <span data-i18n="monthlyPayment">Pago mensual estimado</span>
               <strong id="pagoMensual">-</strong>
             </div>
 
             <div class="metric">
-              <span>Total pagado</span>
+              <span data-i18n="totalPaid">Total pagado</span>
               <strong id="totalPagado">-</strong>
             </div>
 
             <div class="metric">
-              <span>Intereses pagados</span>
+              <span data-i18n="interestPaid">Intereses pagados</span>
               <strong id="interesesPagados">-</strong>
             </div>
 
             <div class="metric">
-              <span>Costos adicionales</span>
+              <span data-i18n="additionalCosts">Costos adicionales</span>
               <strong id="costosAdicionales">-</strong>
             </div>
 
             <div class="metric">
-              <span>Diferencia vs precio</span>
+              <span data-i18n="differenceVsPrice">Diferencia vs precio</span>
               <strong id="diferencia">-</strong>
             </div>
           </div>
@@ -367,21 +411,21 @@
       </div>
 
       <div class="summary">
-        <h2>Resumen</h2>
+        <h2 data-i18n="summaryTitle">Resumen</h2>
         <p id="resumenTexto">-</p>
       </div>
 
       <div class="table-wrap">
-        <h2>Detalle de pagos</h2>
+        <h2 data-i18n="paymentDetail">Detalle de pagos</h2>
         <table>
           <thead>
             <tr>
-              <th>Cuota</th>
-              <th>Saldo inicial</th>
-              <th>Interés</th>
-              <th>Abono a deuda</th>
-              <th>Pago mensual</th>
-              <th>Saldo final</th>
+              <th data-i18n="thInstallment">Cuota</th>
+              <th data-i18n="thInitialBalance">Saldo inicial</th>
+              <th data-i18n="thInterest">Interés</th>
+              <th data-i18n="thPrincipal">Abono a deuda</th>
+              <th data-i18n="thMonthlyPayment">Pago mensual</th>
+              <th data-i18n="thFinalBalance">Saldo final</th>
             </tr>
           </thead>
           <tbody id="tablaPagos"></tbody>
@@ -389,12 +433,12 @@
       </div>
 
       <div class="note">
-        <h2>Nota</h2>
-        <p>
+        <h2 data-i18n="noteTitle">Nota</h2>
+        <p data-i18n="note1">
           Esta información se proporciona únicamente con fines educativos, de experimentación
           y apoyo al aprendizaje.
         </p>
-        <p>
+        <p data-i18n="note2">
           Los resultados son referenciales y dependen de los datos ingresados, de la tasa utilizada
           y de las condiciones reales aplicadas por cada institución o comercio.
         </p>
@@ -404,11 +448,196 @@
 
   <footer>
     <div class="container">
-      © 2026 Javier Cortés Mac Evoy · Simulador de Cuotas
+      © 2026 Javier Cortés Mac Evoy · <span data-i18n="footerTool">Simulador de Cuotas</span>
     </div>
   </footer>
 
   <script>
+    let currentLanguage = localStorage.getItem("siteLanguage") || "es";
+
+    const translations = {
+      es: {
+        navAbout: "Sobre mí",
+        navTools: "Herramientas",
+        navInterests: "Intereses",
+        navProjects: "Proyectos",
+        navContact: "Contacto",
+        pageTitle: "Simulador de Cuotas",
+        intro: "Herramienta para estimar el pago mensual, el costo total de una compra financiada y el impacto de intereses, seguros y otros costos asociados.",
+        modePrice: "Tengo el precio del producto",
+        modeInstallment: "Tengo el valor de la cuota",
+        inputData: "Datos de entrada",
+        productPrice: "Precio del producto",
+        downPayment: "Pie o pago inicial",
+        installmentCount: "Cantidad de cuotas",
+        monthlyRate: "Tasa de interés (% mensual)",
+        rateHelp: "Ingrese 1.5 para una tasa mensual de 1,5%.",
+        installmentValue: "Valor de la cuota",
+        referencePrice: "Precio del producto conocido u observado",
+        referenceHelp: "Si no conoce el precio original, deje este campo vacío. Para estimar intereses y generar un detalle de pagos, ingrese también este valor.",
+        monthlyInsurance: "Seguro mensual",
+        otherCosts: "Otros costos mensuales",
+        calculate: "Calcular",
+        results: "Resultados",
+        amountFinanced: "Monto financiado",
+        totalInstallments: "Total de cuotas",
+        monthlyPayment: "Pago mensual estimado",
+        totalPaid: "Total pagado",
+        interestPaid: "Intereses pagados",
+        additionalCosts: "Costos adicionales",
+        differenceVsPrice: "Diferencia vs precio",
+        summaryTitle: "Resumen",
+        paymentDetail: "Detalle de pagos",
+        thInstallment: "Cuota",
+        thInitialBalance: "Saldo inicial",
+        thInterest: "Interés",
+        thPrincipal: "Abono a deuda",
+        thMonthlyPayment: "Pago mensual",
+        thFinalBalance: "Saldo final",
+        noteTitle: "Nota",
+        note1: "Esta información se proporciona únicamente con fines educativos, de experimentación y apoyo al aprendizaje.",
+        note2: "Los resultados son referenciales y dependen de los datos ingresados, de la tasa utilizada y de las condiciones reales aplicadas por cada institución o comercio.",
+        footerTool: "Simulador de Cuotas",
+        noBasePrice: "Sin precio base",
+        enterBasePrice: "Ingrese precio base",
+        notAvailable: "No disponible",
+        notCalculable: "No calculable",
+        alertPriceMode: "Revise los datos ingresados. Precio, cuotas y tasa deben ser válidos.",
+        alertInstallmentMode: "Revise los datos ingresados. Valor de cuota y cantidad de cuotas deben ser válidos.",
+        alertDownPayment: "El pie no puede ser mayor que el precio del producto.",
+        summaryFromPrice: function (precio, pie, montoFinanciado, pagoMensualTotal, totalDesembolsado, diferencia, incremento) {
+          return "El producto tiene un valor de " + moneda(precio) + ". " +
+            "Considerando un pie de " + moneda(pie) + ", el monto financiado sería de " + moneda(montoFinanciado) + ". " +
+            "El pago mensual estimado sería de " + moneda(pagoMensualTotal) + ", incluyendo la cuota y los costos adicionales ingresados. " +
+            "Al finalizar el período, el total desembolsado sería de " + moneda(totalDesembolsado) + ". " +
+            "Esto equivale a pagar " + moneda(diferencia) + " adicionales respecto al precio original del producto, equivalente a un incremento aproximado de " + incremento.toFixed(1) + "%.";
+        },
+        summaryKnownNoPrice: function (valorCuota, cuotas, costosMensuales, pagoMensualTotal, totalDesembolsado) {
+          return "Con una cuota de " + moneda(valorCuota) + " durante " + cuotas + " meses, más costos adicionales mensuales por " + moneda(costosMensuales) + ", " +
+            "el pago mensual estimado sería de " + moneda(pagoMensualTotal) + ". " +
+            "Al finalizar el período, el total desembolsado sería de " + moneda(totalDesembolsado) + ". " +
+            "Como no se ingresó un precio de referencia, no es posible separar capital e intereses.";
+        },
+        summaryInconsistent: function (valorCuota, cuotas, totalCuotas, montoFinanciado) {
+          return "Con una cuota de " + moneda(valorCuota) + " durante " + cuotas + " meses, el total de cuotas sería de " + moneda(totalCuotas) + ". " +
+            "Sin embargo, ese total es menor que el monto financiado estimado de " + moneda(montoFinanciado) + ". " +
+            "Revise los datos ingresados, porque no es posible construir una tabla de pagos consistente con interés no negativo.";
+        },
+        summaryKnownWithPrice: function (valorCuota, cuotas, costosMensuales, pagoMensualTotal, precioReferencia, pie, montoFinanciado, intereses, totalDesembolsado, diferencia, incremento, tasaImplicita) {
+          const textoTasa = tasaImplicita === null
+            ? "No fue posible estimar una tasa mensual implícita consistente."
+            : "La tasa mensual implícita estimada sería de " + (tasaImplicita * 100).toFixed(2) + "%.";
+          return "Con una cuota de " + moneda(valorCuota) + " durante " + cuotas + " meses, más costos adicionales mensuales por " + moneda(costosMensuales) + ", " +
+            "el pago mensual estimado sería de " + moneda(pagoMensualTotal) + ". " +
+            "Considerando un precio de referencia de " + moneda(precioReferencia) + " y un pie de " + moneda(pie) + ", el monto financiado sería de " + moneda(montoFinanciado) + ". " +
+            "Los intereses estimados serían de " + moneda(intereses) + ". " +
+            "Al finalizar el período, el total desembolsado sería de " + moneda(totalDesembolsado) + ", equivalente a una diferencia de " + moneda(diferencia) +
+            " respecto al precio original, con un incremento aproximado de " + incremento.toFixed(1) + "%. " + textoTasa;
+        }
+      },
+      en: {
+        navAbout: "About me",
+        navTools: "Tools",
+        navInterests: "Interests",
+        navProjects: "Projects",
+        navContact: "Contact",
+        pageTitle: "Installment Simulator",
+        intro: "Tool for estimating the monthly payment, the total cost of a financed purchase, and the impact of interest, insurance, and other associated costs.",
+        modePrice: "I know the product price",
+        modeInstallment: "I know the installment amount",
+        inputData: "Input data",
+        productPrice: "Product price",
+        downPayment: "Down payment",
+        installmentCount: "Number of installments",
+        monthlyRate: "Interest rate (% monthly)",
+        rateHelp: "Enter 1.5 for a monthly rate of 1.5%.",
+        installmentValue: "Installment amount",
+        referencePrice: "Known or observed product price",
+        referenceHelp: "If you do not know the original price, leave this field empty. To estimate interest and generate a payment detail, also enter this value.",
+        monthlyInsurance: "Monthly insurance",
+        otherCosts: "Other monthly costs",
+        calculate: "Calculate",
+        results: "Results",
+        amountFinanced: "Amount financed",
+        totalInstallments: "Total installments",
+        monthlyPayment: "Estimated monthly payment",
+        totalPaid: "Total paid",
+        interestPaid: "Interest paid",
+        additionalCosts: "Additional costs",
+        differenceVsPrice: "Difference vs price",
+        summaryTitle: "Summary",
+        paymentDetail: "Payment detail",
+        thInstallment: "Installment",
+        thInitialBalance: "Initial balance",
+        thInterest: "Interest",
+        thPrincipal: "Principal payment",
+        thMonthlyPayment: "Monthly payment",
+        thFinalBalance: "Final balance",
+        noteTitle: "Note",
+        note1: "This information is provided only for educational, experimental, and learning-support purposes.",
+        note2: "Results are referential and depend on the data entered, the rate used, and the real conditions applied by each institution or merchant.",
+        footerTool: "Installment Simulator",
+        noBasePrice: "No base price",
+        enterBasePrice: "Enter base price",
+        notAvailable: "Not available",
+        notCalculable: "Not calculable",
+        alertPriceMode: "Please review the entered data. Price, installments, and rate must be valid.",
+        alertInstallmentMode: "Please review the entered data. Installment amount and number of installments must be valid.",
+        alertDownPayment: "The down payment cannot be greater than the product price.",
+        summaryFromPrice: function (precio, pie, montoFinanciado, pagoMensualTotal, totalDesembolsado, diferencia, incremento) {
+          return "The product price is " + moneda(precio) + ". " +
+            "With a down payment of " + moneda(pie) + ", the financed amount would be " + moneda(montoFinanciado) + ". " +
+            "The estimated monthly payment would be " + moneda(pagoMensualTotal) + ", including the installment and the additional costs entered. " +
+            "At the end of the period, the total amount paid would be " + moneda(totalDesembolsado) + ". " +
+            "This means paying " + moneda(diferencia) + " above the original product price, equivalent to an approximate increase of " + incremento.toFixed(1) + "%.";
+        },
+        summaryKnownNoPrice: function (valorCuota, cuotas, costosMensuales, pagoMensualTotal, totalDesembolsado) {
+          return "With an installment of " + moneda(valorCuota) + " for " + cuotas + " months, plus monthly additional costs of " + moneda(costosMensuales) + ", " +
+            "the estimated monthly payment would be " + moneda(pagoMensualTotal) + ". " +
+            "At the end of the period, the total amount paid would be " + moneda(totalDesembolsado) + ". " +
+            "Because no reference price was entered, it is not possible to separate principal and interest.";
+        },
+        summaryInconsistent: function (valorCuota, cuotas, totalCuotas, montoFinanciado) {
+          return "With an installment of " + moneda(valorCuota) + " for " + cuotas + " months, the total installments would be " + moneda(totalCuotas) + ". " +
+            "However, that total is lower than the estimated financed amount of " + moneda(montoFinanciado) + ". " +
+            "Please review the entered data, because it is not possible to build a consistent payment table with non-negative interest.";
+        },
+        summaryKnownWithPrice: function (valorCuota, cuotas, costosMensuales, pagoMensualTotal, precioReferencia, pie, montoFinanciado, intereses, totalDesembolsado, diferencia, incremento, tasaImplicita) {
+          const rateText = tasaImplicita === null
+            ? "It was not possible to estimate a consistent implicit monthly rate."
+            : "The estimated implicit monthly rate would be " + (tasaImplicita * 100).toFixed(2) + "%.";
+          return "With an installment of " + moneda(valorCuota) + " for " + cuotas + " months, plus monthly additional costs of " + moneda(costosMensuales) + ", " +
+            "the estimated monthly payment would be " + moneda(pagoMensualTotal) + ". " +
+            "Considering a reference price of " + moneda(precioReferencia) + " and a down payment of " + moneda(pie) + ", the financed amount would be " + moneda(montoFinanciado) + ". " +
+            "Estimated interest would be " + moneda(intereses) + ". " +
+            "At the end of the period, the total amount paid would be " + moneda(totalDesembolsado) + ", equivalent to a difference of " + moneda(diferencia) +
+            " compared with the original price, with an approximate increase of " + incremento.toFixed(1) + "%. " + rateText;
+        }
+      }
+    };
+
+    function t(key) {
+      return (translations[currentLanguage] && translations[currentLanguage][key]) || translations.es[key] || key;
+    }
+
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      document.documentElement.lang = lang;
+      localStorage.setItem("siteLanguage", lang);
+      document.getElementById("langEs").classList.toggle("active", lang === "es");
+      document.getElementById("langEn").classList.toggle("active", lang === "en");
+
+      document.querySelectorAll("[data-i18n]").forEach(function (element) {
+        const key = element.getAttribute("data-i18n");
+        if (typeof t(key) === "string") {
+          element.textContent = t(key);
+        }
+      });
+
+      document.title = t("pageTitle") + " | Javier Cortés Mac Evoy";
+      ocultarResultados();
+    }
+
     let modoActual = "precio";
 
     function cambiarModo(modo) {
@@ -463,7 +692,7 @@
         isNaN(tasaMensual) || tasaMensual < 0 ||
         pie < 0 || pie > precio
       ) {
-        alert("Revise los datos ingresados. Precio, cuotas y tasa deben ser válidos.");
+        alert(t("alertPriceMode"));
         return;
       }
 
@@ -489,7 +718,7 @@
 
       mostrarBloques();
 
-      document.getElementById("labelMonto").textContent = "Monto financiado";
+      document.getElementById("labelMonto").textContent = t("amountFinanced");
       document.getElementById("montoFinanciado").textContent = moneda(montoFinanciado);
       document.getElementById("pagoMensual").textContent = moneda(pagoMensualTotal);
       document.getElementById("totalPagado").textContent = moneda(totalDesembolsado);
@@ -498,11 +727,7 @@
       document.getElementById("diferencia").textContent = moneda(diferencia);
 
       document.getElementById("resumenTexto").textContent =
-        "El producto tiene un valor de " + moneda(precio) + ". " +
-        "Considerando un pie de " + moneda(pie) + ", el monto financiado sería de " + moneda(montoFinanciado) + ". " +
-        "El pago mensual estimado sería de " + moneda(pagoMensualTotal) + ", incluyendo la cuota y los costos adicionales ingresados. " +
-        "Al finalizar el período, el total desembolsado sería de " + moneda(totalDesembolsado) + ". " +
-        "Esto equivale a pagar " + moneda(diferencia) + " adicionales respecto al precio original del producto, equivalente a un incremento aproximado de " + incremento.toFixed(1) + "%.";
+        t("summaryFromPrice")(precio, pie, montoFinanciado, pagoMensualTotal, totalDesembolsado, diferencia, incremento);
 
       generarTabla(montoFinanciado, tasa, cuotas, cuotaBase, costosMensuales);
     }
@@ -520,7 +745,7 @@
         isNaN(cuotas) || cuotas <= 0 ||
         pie < 0
       ) {
-        alert("Revise los datos ingresados. Valor de cuota y cantidad de cuotas deben ser válidos.");
+        alert(t("alertInstallmentMode"));
         return;
       }
 
@@ -539,7 +764,7 @@
 
       if (tienePrecioReferencia) {
         if (pie > precioReferencia) {
-          alert("El pie no puede ser mayor que el precio del producto.");
+          alert(t("alertDownPayment"));
           return;
         }
 
@@ -556,15 +781,15 @@
       mostrarBloques();
 
       if (tienePrecioReferencia) {
-        document.getElementById("labelMonto").textContent = "Monto financiado";
+        document.getElementById("labelMonto").textContent = t("amountFinanced");
         document.getElementById("montoFinanciado").textContent = moneda(montoFinanciado);
         document.getElementById("interesesPagados").textContent = moneda(Math.max(intereses, 0));
         document.getElementById("diferencia").textContent = moneda(diferencia);
       } else {
-        document.getElementById("labelMonto").textContent = "Total de cuotas";
+        document.getElementById("labelMonto").textContent = t("totalInstallments");
         document.getElementById("montoFinanciado").textContent = moneda(totalCuotas);
-        document.getElementById("interesesPagados").textContent = "Ingrese precio base";
-        document.getElementById("diferencia").textContent = "Sin precio base";
+        document.getElementById("interesesPagados").textContent = t("enterBasePrice");
+        document.getElementById("diferencia").textContent = t("noBasePrice");
       }
 
       document.getElementById("pagoMensual").textContent = moneda(pagoMensualTotal);
@@ -573,28 +798,13 @@
 
       if (!tienePrecioReferencia) {
         document.getElementById("resumenTexto").textContent =
-          "Con una cuota de " + moneda(valorCuota) + " durante " + cuotas + " meses, más costos adicionales mensuales por " + moneda(costosMensuales) + ", " +
-          "el pago mensual estimado sería de " + moneda(pagoMensualTotal) + ". " +
-          "Al finalizar el período, el total desembolsado sería de " + moneda(totalDesembolsado) + ". " +
-          "Como no se ingresó un precio de referencia, no es posible separar capital e intereses.";
+          t("summaryKnownNoPrice")(valorCuota, cuotas, costosMensuales, pagoMensualTotal, totalDesembolsado);
       } else if (intereses < 0) {
         document.getElementById("resumenTexto").textContent =
-          "Con una cuota de " + moneda(valorCuota) + " durante " + cuotas + " meses, el total de cuotas sería de " + moneda(totalCuotas) + ". " +
-          "Sin embargo, ese total es menor que el monto financiado estimado de " + moneda(montoFinanciado) + ". " +
-          "Revise los datos ingresados, porque no es posible construir una tabla de pagos consistente con interés no negativo.";
+          t("summaryInconsistent")(valorCuota, cuotas, totalCuotas, montoFinanciado);
       } else {
-        const textoTasa = tasaImplicita === null
-          ? "No fue posible estimar una tasa mensual implícita consistente."
-          : "La tasa mensual implícita estimada sería de " + (tasaImplicita * 100).toFixed(2) + "%.";
-
         document.getElementById("resumenTexto").textContent =
-          "Con una cuota de " + moneda(valorCuota) + " durante " + cuotas + " meses, más costos adicionales mensuales por " + moneda(costosMensuales) + ", " +
-          "el pago mensual estimado sería de " + moneda(pagoMensualTotal) + ". " +
-          "Considerando un precio de referencia de " + moneda(precioReferencia) + " y un pie de " + moneda(pie) + ", el monto financiado sería de " + moneda(montoFinanciado) + ". " +
-          "Los intereses estimados serían de " + moneda(intereses) + ". " +
-          "Al finalizar el período, el total desembolsado sería de " + moneda(totalDesembolsado) + ", equivalente a una diferencia de " + moneda(diferencia) +
-          " respecto al precio original, con un incremento aproximado de " + incremento.toFixed(1) + "%. " +
-          textoTasa;
+          t("summaryKnownWithPrice")(valorCuota, cuotas, costosMensuales, pagoMensualTotal, precioReferencia, pie, montoFinanciado, intereses, totalDesembolsado, diferencia, incremento, tasaImplicita);
       }
 
       generarTablaCuotaConocida(valorCuota, cuotas, costosMensuales, montoFinanciado, tasaImplicita);
@@ -681,11 +891,11 @@
 
           fila.innerHTML =
             "<td>" + i + "</td>" +
-            "<td>No disponible</td>" +
-            "<td>No calculable</td>" +
-            "<td>No calculable</td>" +
+            "<td>" + t("notAvailable") + "</td>" +
+            "<td>" + t("notCalculable") + "</td>" +
+            "<td>" + t("notCalculable") + "</td>" +
             "<td>" + moneda(valorCuota + costosMensuales) + "</td>" +
-            "<td>No disponible</td>";
+            "<td>" + t("notAvailable") + "</td>";
 
           tbody.appendChild(fila);
         }
@@ -716,6 +926,7 @@
       }
     }
 
+    setLanguage(currentLanguage);
     ocultarResultados();
   </script>
 </body>
