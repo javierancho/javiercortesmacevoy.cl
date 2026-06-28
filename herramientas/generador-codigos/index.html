@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de Códigos | Javier Cortés Mac Evoy</title>
+  <title data-i18n="page_title">Generador de Códigos | Javier Cortés Mac Evoy</title>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
@@ -53,14 +53,47 @@
       color: var(--primary);
     }
 
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
     .nav-links a {
-      margin-left: 20px;
       text-decoration: none;
       color: var(--muted);
       font-size: 15px;
+      font-weight: 700;
     }
 
     .nav-links a:hover { color: var(--accent); }
+
+    .lang-switch {
+      display: inline-flex;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px;
+      box-shadow: 0 6px 18px rgba(15, 47, 79, 0.05);
+    }
+
+    .lang-switch button {
+      border: none;
+      background: transparent;
+      color: var(--primary);
+      padding: 7px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+      margin: 0;
+    }
+
+    .lang-switch button.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
 
     main { padding: 70px 0; }
 
@@ -234,9 +267,8 @@
         align-items: flex-start;
       }
 
-      .nav-links a {
-        margin-left: 0;
-        margin-right: 16px;
+      .nav-links {
+        gap: 14px;
       }
 
       .layout {
@@ -263,10 +295,15 @@
       <nav>
         <div class="brand">Javier Cortés Mac Evoy</div>
         <div class="nav-links">
-          <a href="../../">Inicio</a>
-          <a href="../../proyectos/">Proyectos</a>
-          <a href="../../#sobre-mi">Sobre mí</a>
-          <a href="../../#contacto">Contacto</a>
+          <a href="../../#sobre-mi" data-i18n="nav_about">Sobre mí</a>
+          <a href="../../#herramientas" data-i18n="nav_tools">Herramientas</a>
+          <a href="../../#intereses" data-i18n="nav_interests">Intereses</a>
+          <a href="../../proyectos/" data-i18n="nav_projects">Proyectos</a>
+          <a href="../../#contacto" data-i18n="nav_contact">Contacto</a>
+          <div class="lang-switch" aria-label="Selector de idioma">
+            <button id="langES" type="button" class="active" onclick="setLanguage('es')">ES</button>
+            <button id="langEN" type="button" onclick="setLanguage('en')">EN</button>
+          </div>
         </div>
       </nav>
     </div>
@@ -274,9 +311,9 @@
 
   <main>
     <div class="container">
-      <h1>Generador de Códigos</h1>
+      <h1 data-i18n="title">Generador de Códigos</h1>
 
-      <p class="intro">
+      <p class="intro" data-i18n="intro">
         Herramienta para generar códigos QR y códigos de barras simples, validar dígitos verificadores
         y descargar una imagen del resultado generado.
       </p>
@@ -289,35 +326,35 @@
 
       <div class="layout">
         <div class="card">
-          <h2>Datos de entrada</h2>
+          <h2 data-i18n="input_data">Datos de entrada</h2>
 
           <div id="modoQR">
-            <label for="qrTexto">Texto, URL o dato a codificar</label>
-            <textarea id="qrTexto" placeholder="Ej: https://javiercortesmacevoy.cl"></textarea>
-            <div class="help">Puede ingresar una URL, texto, correo, teléfono o cualquier dato simple.</div>
+            <label for="qrTexto" data-i18n="qr_label">Texto, URL o dato a codificar</label>
+            <textarea id="qrTexto" data-i18n-placeholder="qr_placeholder" placeholder="Ej: https://javiercortesmacevoy.cl"></textarea>
+            <div class="help" data-i18n="qr_help">Puede ingresar una URL, texto, correo, teléfono o cualquier dato simple.</div>
           </div>
 
           <div id="modoEAN" style="display:none;">
-            <label for="eanInput">Código EAN</label>
-            <input id="eanInput" type="text" placeholder="Ingrese 12 o 13 dígitos">
-            <div class="help">
+            <label for="eanInput" data-i18n="ean_label">Código EAN</label>
+            <input id="eanInput" type="text" data-i18n-placeholder="ean_placeholder" placeholder="Ingrese 12 o 13 dígitos">
+            <div class="help" data-i18n="ean_help">
               Si ingresa 12 dígitos, se calculará el dígito verificador. Si ingresa 13, se validará el código.
             </div>
           </div>
 
           <div id="modoDUN" style="display:none;">
-            <label for="dunInput">Código base DUN-14 / ITF-14</label>
-            <input id="dunInput" type="text" placeholder="Ingrese 13 o 14 dígitos">
-            <div class="help">
+            <label for="dunInput" data-i18n="dun_label">Código base DUN-14 / ITF-14</label>
+            <input id="dunInput" type="text" data-i18n-placeholder="dun_placeholder" placeholder="Ingrese 13 o 14 dígitos">
+            <div class="help" data-i18n="dun_help">
               Si ingresa 13 dígitos, se calculará el dígito verificador. Si ingresa 14, se validará el código.
             </div>
           </div>
 
-          <button class="primary-button" onclick="generarCodigo()">Generar código</button>
+          <button class="primary-button" onclick="generarCodigo()" data-i18n="generate_button">Generar código</button>
         </div>
 
         <div class="card result-box">
-          <h2>Resultado</h2>
+          <h2 data-i18n="result">Resultado</h2>
 
           <div class="status" id="estadoCodigo">
             -
@@ -328,24 +365,24 @@
             <canvas id="barcodeCanvas"></canvas>
           </div>
 
-          <button class="secondary-button" onclick="descargarPNG()">
+          <button class="secondary-button" onclick="descargarPNG()" data-i18n="download_png">
             Descargar PNG
           </button>
         </div>
       </div>
 
       <div class="details">
-        <h2>Detalle del cálculo</h2>
+        <h2 data-i18n="calculation_detail">Detalle del cálculo</h2>
         <div class="technical" id="detalleCalculo">-</div>
       </div>
 
       <div class="note">
-        <h2>Nota</h2>
-        <p>
+        <h2 data-i18n="note_title">Nota</h2>
+        <p data-i18n="note_1">
           Esta herramienta se proporciona únicamente con fines educativos, de experimentación
           y apoyo al aprendizaje.
         </p>
-        <p>
+        <p data-i18n="note_2">
           Siempre valide los códigos generados antes de utilizarlos en procesos productivos,
           comerciales, regulatorios o de trazabilidad.
         </p>
@@ -355,11 +392,142 @@
 
   <footer>
     <div class="container">
-      © 2026 Javier Cortés Mac Evoy · Generador de Códigos
+      <span data-i18n="footer">© 2026 Javier Cortés Mac Evoy · Generador de Códigos</span>
     </div>
   </footer>
 
   <script>
+    const i18n = {
+      es: {
+        page_title: "Generador de Códigos | Javier Cortés Mac Evoy",
+        nav_about: "Sobre mí",
+        nav_tools: "Herramientas",
+        nav_interests: "Intereses",
+        nav_projects: "Proyectos",
+        nav_contact: "Contacto",
+        title: "Generador de Códigos",
+        intro: "Herramienta para generar códigos QR y códigos de barras simples, validar dígitos verificadores y descargar una imagen del resultado generado.",
+        input_data: "Datos de entrada",
+        qr_label: "Texto, URL o dato a codificar",
+        qr_help: "Puede ingresar una URL, texto, correo, teléfono o cualquier dato simple.",
+        ean_label: "Código EAN",
+        ean_help: "Si ingresa 12 dígitos, se calculará el dígito verificador. Si ingresa 13, se validará el código.",
+        dun_label: "Código base DUN-14 / ITF-14",
+        dun_help: "Si ingresa 13 dígitos, se calculará el dígito verificador. Si ingresa 14, se validará el código.",
+        generate_button: "Generar código",
+        result: "Resultado",
+        download_png: "Descargar PNG",
+        calculation_detail: "Detalle del cálculo",
+        note_title: "Nota",
+        note_1: "Esta herramienta se proporciona únicamente con fines educativos, de experimentación y apoyo al aprendizaje.",
+        note_2: "Siempre valide los códigos generados antes de utilizarlos en procesos productivos, comerciales, regulatorios o de trazabilidad.",
+        footer: "© 2026 Javier Cortés Mac Evoy · Generador de Códigos",
+        qr_placeholder: "Ej: https://javiercortesmacevoy.cl",
+        ean_placeholder: "Ingrese 12 o 13 dígitos",
+        dun_placeholder: "Ingrese 13 o 14 dígitos",
+        alert_qr: "Ingrese un texto o URL para generar el QR.",
+        qr_ok: "QR generado correctamente.",
+        type_qr: "Tipo: QR",
+        encoded_content: "Contenido codificado:",
+        alert_ean: "Ingrese un código EAN de 12 o 13 dígitos.",
+        ean_generated: "EAN-13 generado correctamente: ",
+        ean_valid: "EAN-13 válido: ",
+        ean_invalid: "EAN-13 inválido. Dígito esperado: ",
+        alert_dun: "Ingrese un código DUN-14 / ITF-14 de 13 o 14 dígitos.",
+        dun_generated: "DUN-14 / ITF-14 generado correctamente: ",
+        dun_valid: "DUN-14 / ITF-14 válido: ",
+        dun_invalid: "DUN-14 / ITF-14 inválido. Dígito esperado: ",
+        base_code: "Código base: ",
+        calculated_check: "Dígito verificador calculado: ",
+        final_code: "Código final: ",
+        entered_code: "Código ingresado: ",
+        base: "Base: ",
+        entered_check: "Dígito ingresado: ",
+        calculated_digit: "Dígito calculado: ",
+        alert_barcode: "No fue posible generar el código de barras. Revise el valor ingresado.",
+        alert_first: "Primero genere un código."
+      },
+      en: {
+        page_title: "Code Generator | Javier Cortés Mac Evoy",
+        nav_about: "About me",
+        nav_tools: "Tools",
+        nav_interests: "Interests",
+        nav_projects: "Projects",
+        nav_contact: "Contact",
+        title: "Code Generator",
+        intro: "Tool for generating QR codes and simple barcodes, validating check digits, and downloading an image of the generated result.",
+        input_data: "Input data",
+        qr_label: "Text, URL, or data to encode",
+        qr_help: "You can enter a URL, text, email, phone number, or any simple data.",
+        ean_label: "EAN code",
+        ean_help: "If you enter 12 digits, the check digit will be calculated. If you enter 13, the code will be validated.",
+        dun_label: "DUN-14 / ITF-14 base code",
+        dun_help: "If you enter 13 digits, the check digit will be calculated. If you enter 14, the code will be validated.",
+        generate_button: "Generate code",
+        result: "Result",
+        download_png: "Download PNG",
+        calculation_detail: "Calculation detail",
+        note_title: "Note",
+        note_1: "This tool is provided only for educational, experimental, and learning-support purposes.",
+        note_2: "Always validate generated codes before using them in production, commercial, regulatory, or traceability processes.",
+        footer: "© 2026 Javier Cortés Mac Evoy · Code Generator",
+        qr_placeholder: "Example: https://javiercortesmacevoy.cl",
+        ean_placeholder: "Enter 12 or 13 digits",
+        dun_placeholder: "Enter 13 or 14 digits",
+        alert_qr: "Enter text or a URL to generate the QR code.",
+        qr_ok: "QR generated successfully.",
+        type_qr: "Type: QR",
+        encoded_content: "Encoded content:",
+        alert_ean: "Enter an EAN code with 12 or 13 digits.",
+        ean_generated: "EAN-13 generated successfully: ",
+        ean_valid: "Valid EAN-13: ",
+        ean_invalid: "Invalid EAN-13. Expected digit: ",
+        alert_dun: "Enter a DUN-14 / ITF-14 code with 13 or 14 digits.",
+        dun_generated: "DUN-14 / ITF-14 generated successfully: ",
+        dun_valid: "Valid DUN-14 / ITF-14: ",
+        dun_invalid: "Invalid DUN-14 / ITF-14. Expected digit: ",
+        base_code: "Base code: ",
+        calculated_check: "Calculated check digit: ",
+        final_code: "Final code: ",
+        entered_code: "Entered code: ",
+        base: "Base: ",
+        entered_check: "Entered digit: ",
+        calculated_digit: "Calculated digit: ",
+        alert_barcode: "The barcode could not be generated. Review the entered value.",
+        alert_first: "Generate a code first."
+      }
+    };
+
+    let currentLang = localStorage.getItem("jcm_lang") || "es";
+
+    function tr(key) {
+      return (i18n[currentLang] && i18n[currentLang][key]) || i18n.es[key] || key;
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem("jcm_lang", lang);
+
+      document.documentElement.lang = lang;
+
+      document.querySelectorAll("[data-i18n]").forEach(function (el) {
+        const key = el.getAttribute("data-i18n");
+        if (key === "page_title") {
+          document.title = tr(key);
+        } else {
+          el.textContent = tr(key);
+        }
+      });
+
+      document.querySelectorAll("[data-i18n-placeholder]").forEach(function (el) {
+        const key = el.getAttribute("data-i18n-placeholder");
+        el.setAttribute("placeholder", tr(key));
+      });
+
+      document.getElementById("langES").classList.toggle("active", lang === "es");
+      document.getElementById("langEN").classList.toggle("active", lang === "en");
+    }
+
     let modoActual = "qr";
 
     function cambiarModo(modo) {
@@ -421,7 +589,7 @@
       const texto = document.getElementById("qrTexto").value.trim();
 
       if (!texto) {
-        alert("Ingrese un texto o URL para generar el QR.");
+        alert(tr("alert_qr"));
         return;
       }
 
@@ -437,10 +605,10 @@
         correctLevel: QRCode.CorrectLevel.M
       });
 
-      document.getElementById("estadoCodigo").textContent = "QR generado correctamente.";
+      document.getElementById("estadoCodigo").textContent = tr("qr_ok");
       document.getElementById("detalleCalculo").innerHTML =
-        "Tipo: QR<br>" +
-        "Contenido codificado:<br>" +
+        tr("type_qr") + "<br>" +
+        tr("encoded_content") + "<br>" +
         texto;
     }
 
@@ -448,7 +616,7 @@
       const entrada = soloDigitos(document.getElementById("eanInput").value);
 
       if (entrada.length !== 12 && entrada.length !== 13) {
-        alert("Ingrese un código EAN de 12 o 13 dígitos.");
+        alert(tr("alert_ean"));
         return;
       }
 
@@ -459,11 +627,11 @@
       if (entrada.length === 12) {
         const dv = calcularDigitoVerificador(entrada);
         codigoFinal = entrada + dv;
-        estado = "EAN-13 generado correctamente: " + codigoFinal;
+        estado = tr("ean_generated") + codigoFinal;
         detalle =
-          "Código base: " + entrada + "<br>" +
-          "Dígito verificador calculado: " + dv + "<br>" +
-          "Código final: " + codigoFinal;
+          tr("base_code") + entrada + "<br>" +
+          tr("calculated_check") + dv + "<br>" +
+          tr("final_code") + codigoFinal;
       } else {
         const base = entrada.slice(0, 12);
         const dvIngresado = parseInt(entrada[12]);
@@ -471,16 +639,16 @@
         codigoFinal = entrada;
 
         if (dvIngresado === dvCalculado) {
-          estado = "EAN-13 válido: " + codigoFinal;
+          estado = tr("ean_valid") + codigoFinal;
         } else {
-          estado = "EAN-13 inválido. Dígito esperado: " + dvCalculado;
+          estado = tr("ean_invalid") + dvCalculado;
         }
 
         detalle =
-          "Código ingresado: " + entrada + "<br>" +
-          "Base: " + base + "<br>" +
-          "Dígito ingresado: " + dvIngresado + "<br>" +
-          "Dígito calculado: " + dvCalculado;
+          tr("entered_code") + entrada + "<br>" +
+          tr("base") + base + "<br>" +
+          tr("entered_check") + dvIngresado + "<br>" +
+          tr("calculated_digit") + dvCalculado;
       }
 
       mostrarResultado();
@@ -494,7 +662,7 @@
       const entrada = soloDigitos(document.getElementById("dunInput").value);
 
       if (entrada.length !== 13 && entrada.length !== 14) {
-        alert("Ingrese un código DUN-14 / ITF-14 de 13 o 14 dígitos.");
+        alert(tr("alert_dun"));
         return;
       }
 
@@ -505,11 +673,11 @@
       if (entrada.length === 13) {
         const dv = calcularDigitoVerificador(entrada);
         codigoFinal = entrada + dv;
-        estado = "DUN-14 / ITF-14 generado correctamente: " + codigoFinal;
+        estado = tr("dun_generated") + codigoFinal;
         detalle =
-          "Código base: " + entrada + "<br>" +
-          "Dígito verificador calculado: " + dv + "<br>" +
-          "Código final: " + codigoFinal;
+          tr("base_code") + entrada + "<br>" +
+          tr("calculated_check") + dv + "<br>" +
+          tr("final_code") + codigoFinal;
       } else {
         const base = entrada.slice(0, 13);
         const dvIngresado = parseInt(entrada[13]);
@@ -517,16 +685,16 @@
         codigoFinal = entrada;
 
         if (dvIngresado === dvCalculado) {
-          estado = "DUN-14 / ITF-14 válido: " + codigoFinal;
+          estado = tr("dun_valid") + codigoFinal;
         } else {
-          estado = "DUN-14 / ITF-14 inválido. Dígito esperado: " + dvCalculado;
+          estado = tr("dun_invalid") + dvCalculado;
         }
 
         detalle =
-          "Código ingresado: " + entrada + "<br>" +
-          "Base: " + base + "<br>" +
-          "Dígito ingresado: " + dvIngresado + "<br>" +
-          "Dígito calculado: " + dvCalculado;
+          tr("entered_code") + entrada + "<br>" +
+          tr("base") + base + "<br>" +
+          tr("entered_check") + dvIngresado + "<br>" +
+          tr("calculated_digit") + dvCalculado;
       }
 
       mostrarResultado();
@@ -552,7 +720,7 @@
           lineColor: "#0f2f4f"
         });
       } catch (error) {
-        alert("No fue posible generar el código de barras. Revise el valor ingresado.");
+        alert(tr("alert_barcode"));
       }
     }
 
@@ -575,7 +743,7 @@
       }
 
       if (!canvas) {
-        alert("Primero genere un código.");
+        alert(tr("alert_first"));
         return;
       }
 
@@ -586,6 +754,7 @@
     }
 
     limpiarResultado();
+    setLanguage(currentLang);
   </script>
 </body>
 </html>
