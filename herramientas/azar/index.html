@@ -62,6 +62,44 @@
 
     .nav-links a:hover { color: var(--accent); }
 
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      margin-left: 0;
+    }
+
+    .lang-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px;
+      box-shadow: 0 6px 16px rgba(15, 47, 79, 0.05);
+    }
+
+    .lang-switch button {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .lang-switch button.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
     main { padding: 60px 0; }
 
     h1, h2, h3 { color: var(--primary); }
@@ -687,10 +725,16 @@
       <nav>
         <div class="brand">Javier Cortés Mac Evoy</div>
         <div class="nav-links">
-          <a href="../../">Inicio</a>
-          <a href="../../proyectos/">Proyectos</a>
-          <a href="../../#sobre-mi">Sobre mí</a>
-          <a href="../../#contacto">Contacto</a>
+          <a href="../../#sobre-mi" data-i18n="navAbout">Sobre mí</a>
+          <a href="../../#herramientas" data-i18n="navTools">Herramientas</a>
+          <a href="../../#intereses" data-i18n="navInterests">Intereses</a>
+          <a href="../../proyectos/" data-i18n="navProjects">Proyectos</a>
+          <a href="../../#contacto" data-i18n="navContact">Contacto</a>
+
+          <div class="lang-switch" aria-label="Selector de idioma">
+            <button id="langES" type="button" class="active">ES</button>
+            <button id="langEN" type="button">EN</button>
+          </div>
         </div>
       </nav>
     </div>
@@ -698,55 +742,55 @@
 
   <main>
     <div class="container">
-      <h1>Azar</h1>
-      <p class="intro">
+      <h1 data-i18n="pageTitle">Azar</h1>
+      <p class="intro" data-i18n="pageIntro">
         Herramienta para lanzar dados, elegir opciones al azar y jugar cachipún. Los resultados se generan localmente en el navegador usando un generador aleatorio seguro.
       </p>
 
       <div class="tabs">
-        <button class="tab" id="tabDice" type="button">Dados</button>
-        <button class="tab active" id="tabSelector" type="button">Selector</button>
-        <button class="tab" id="tabRps" type="button">Cachipún</button>
+        <button class="tab" id="tabDice" type="button" data-i18n="tabDice">Dados</button>
+        <button class="tab active" id="tabSelector" type="button" data-i18n="tabSelector">Selector</button>
+        <button class="tab" id="tabRps" type="button" data-i18n="tabRps">Cachipún</button>
       </div>
 
       <section class="panel" id="selectorPanel">
         <div class="tool-layout">
           <aside>
-            <p class="sidebar-title">Elegir lista</p>
+            <p class="sidebar-title" data-i18n="chooseList">Elegir lista</p>
             <div class="list-menu" id="listMenu"></div>
 
             <div class="side-card">
               <div class="list-actions">
-                <button class="secondary-button" id="newListButton" type="button">Nueva lista</button>
-                <button class="secondary-button" id="editListButton" type="button">Editar lista</button>
-                <button class="secondary-button" id="duplicateListButton" type="button">Duplicar</button>
-                <button class="secondary-button" id="deleteListButton" type="button">Eliminar</button>
-                <button class="secondary-button" id="resetDefaultsButton" type="button">Restablecer predeterminados</button>
+                <button class="secondary-button" id="newListButton" type="button" data-i18n="newList">Nueva lista</button>
+                <button class="secondary-button" id="editListButton" type="button" data-i18n="editList">Editar lista</button>
+                <button class="secondary-button" id="duplicateListButton" type="button" data-i18n="duplicateList">Duplicar</button>
+                <button class="secondary-button" id="deleteListButton" type="button" data-i18n="deleteList">Eliminar</button>
+                <button class="secondary-button" id="resetDefaultsButton" type="button" data-i18n="resetDefaults">Restablecer predeterminados</button>
               </div>
 
               <div class="custom-box" id="customBox">
-                <h3 id="customBoxTitle">Nueva lista</h3>
+                <h3 id="customBoxTitle" data-i18n="newList">Nueva lista</h3>
 
-                <label for="customListName">Nombre de la lista</label>
+                <label for="customListName" data-i18n="listName">Nombre de la lista</label>
                 <input id="customListName" type="text" placeholder="Ej: Restaurantes">
 
-                <label for="customOptions">Opciones</label>
+                <label for="customOptions" data-i18n="options">Opciones</label>
                 <textarea id="customOptions" placeholder="Escriba una opción por línea"></textarea>
 
-                <button class="primary-button" id="saveCustomButton" type="button">Guardar lista local</button>
-                <button class="secondary-button" id="cancelCustomButton" type="button">Cancelar</button>
+                <button class="primary-button" id="saveCustomButton" type="button" data-i18n="saveLocalList">Guardar lista local</button>
+                <button class="secondary-button" id="cancelCustomButton" type="button" data-i18n="cancel">Cancelar</button>
 
-                <p class="help">Las listas se guardan solo en este navegador.</p>
+                <p class="help" data-i18n="listsBrowserOnly">Las listas se guardan solo en este navegador.</p>
               </div>
 
-              <div class="local-note">
+              <div class="local-note" data-i18n="localNote">
                 Las listas personalizadas y ediciones se almacenan únicamente en este navegador. No se suben a GitHub ni a ningún servidor.
               </div>
             </div>
 
             <div class="side-card">
               <div class="switch-row">
-                <span>Eliminar resultados ya seleccionados</span>
+                <span data-i18n="removeSelected">Eliminar resultados ya seleccionados</span>
                 <button class="switch active" id="removeSelectedSwitch" type="button" aria-label="Eliminar resultados ya seleccionados"></button>
               </div>
             </div>
@@ -755,7 +799,7 @@
           <div class="machine-card">
             <div class="machine-head">
               <h2 id="currentListTitle">Trabajo</h2>
-              <p>Selecciona una opción al azar</p>
+              <p data-i18n="selectorSubtitle">Selecciona una opción al azar</p>
             </div>
 
             <div class="selector-area">
@@ -766,7 +810,7 @@
                     <div class="slot-items" id="slotItems"></div>
                   </div>
                 </div>
-                <p class="note">Tira de la palanca hacia abajo o presiona el botón de selección.</p>
+                <p class="note" data-i18n="leverHelp">Tira de la palanca hacia abajo o presiona el botón de selección.</p>
               </div>
 
               <div class="lever-wrap">
@@ -776,32 +820,32 @@
                     <span class="lever-knob"></span>
                   </span>
                 </button>
-                <div class="lever-text">Baja la palanca para girar</div>
+                <div class="lever-text" data-i18n="leverText">Baja la palanca para girar</div>
               </div>
             </div>
 
             <div class="result-card">
-              <div class="result-label">Resultado</div>
+              <div class="result-label" data-i18n="resultLabel">Resultado</div>
               <div class="result-value" id="selectorResult">Pendiente</div>
-              <button class="copy-button" id="copyResultButton" type="button">Copiar resultado</button>
-              <button class="primary-button" id="spinButton" type="button">Elegir al azar</button>
-              <button class="secondary-button" id="resetUsedButton" type="button">Reiniciar lista</button>
+              <button class="copy-button" id="copyResultButton" type="button" data-i18n="copyResult">Copiar resultado</button>
+              <button class="primary-button" id="spinButton" type="button" data-i18n="chooseRandom">Elegir al azar</button>
+              <button class="secondary-button" id="resetUsedButton" type="button" data-i18n="resetList">Reiniciar lista</button>
             </div>
           </div>
         </div>
       </section>
 
       <section class="panel hidden" id="dicePanel">
-        <h2>Dados</h2>
-        <p class="intro">Seleccione la cantidad de dados, el número de caras y realice un lanzamiento.</p>
+        <h2 data-i18n="diceTitle">Dados</h2>
+        <p class="intro" data-i18n="diceIntro">Seleccione la cantidad de dados, el número de caras y realice un lanzamiento.</p>
 
         <div class="simple-grid">
           <div>
-            <label for="diceCount">Cantidad de dados</label>
+            <label for="diceCount" data-i18n="diceCount">Cantidad de dados</label>
             <input id="diceCount" type="number" min="1" max="10" value="2">
           </div>
           <div>
-            <label for="diceFaces">Caras por dado</label>
+            <label for="diceFaces" data-i18n="diceFaces">Caras por dado</label>
             <select id="diceFaces">
               <option value="4">4</option>
               <option value="6" selected>6</option>
@@ -812,28 +856,28 @@
             </select>
           </div>
           <div>
-            <button class="primary-button" id="rollDiceButton" type="button">Lanzar dados</button>
-            <button class="secondary-button" id="clearDiceButton" type="button">Borrar resultado</button>
+            <button class="primary-button" id="rollDiceButton" type="button" data-i18n="rollDice">Lanzar dados</button>
+            <button class="secondary-button" id="clearDiceButton" type="button" data-i18n="clearResult">Borrar resultado</button>
           </div>
         </div>
 
         <div class="dice-row" id="diceRow"></div>
 
         <div class="simple-grid">
-          <div class="metric"><span>Total</span><strong id="diceTotal">-</strong></div>
-          <div class="metric"><span>Promedio por lanzamiento</span><strong id="diceAverage">-</strong></div>
-          <div class="metric"><span>Lanzamientos</span><strong id="diceRolls">0</strong></div>
+          <div class="metric"><span data-i18n="total">Total</span><strong id="diceTotal">-</strong></div>
+          <div class="metric"><span data-i18n="averageRoll">Promedio por lanzamiento</span><strong id="diceAverage">-</strong></div>
+          <div class="metric"><span data-i18n="rolls">Lanzamientos</span><strong id="diceRolls">0</strong></div>
         </div>
       </section>
 
       <section class="panel hidden" id="rpsPanel">
-        <h2>Cachipún</h2>
-        <p class="intro">Elige piedra, papel o tijera. El computador elegirá una opción al azar.</p>
+        <h2 data-i18n="rpsTitle">Cachipún</h2>
+        <p class="intro" data-i18n="rpsIntro">Elige piedra, papel o tijera. El computador elegirá una opción al azar.</p>
 
         <div class="choice-row">
-          <button class="choice-button" data-choice="Piedra" type="button">Piedra</button>
-          <button class="choice-button" data-choice="Papel" type="button">Papel</button>
-          <button class="choice-button" data-choice="Tijera" type="button">Tijera</button>
+          <button class="choice-button" data-choice="Piedra" type="button" data-choice-label="rock">Piedra</button>
+          <button class="choice-button" data-choice="Papel" type="button" data-choice-label="paper">Papel</button>
+          <button class="choice-button" data-choice="Tijera" type="button" data-choice-label="scissors">Tijera</button>
         </div>
 
         <div class="rps-stage">
@@ -841,15 +885,15 @@
         </div>
 
         <div class="result-card">
-          <div class="result-label">Resultado</div>
+          <div class="result-label" data-i18n="resultLabel">Resultado</div>
           <div class="result-value" id="rpsResult">Pendiente</div>
           <p id="rpsDetail"></p>
         </div>
 
         <div class="simple-grid">
-          <div class="metric"><span>Victorias</span><strong id="rpsWins">0</strong></div>
-          <div class="metric"><span>Empates</span><strong id="rpsDraws">0</strong></div>
-          <div class="metric"><span>Derrotas</span><strong id="rpsLosses">0</strong></div>
+          <div class="metric"><span data-i18n="wins">Victorias</span><strong id="rpsWins">0</strong></div>
+          <div class="metric"><span data-i18n="draws">Empates</span><strong id="rpsDraws">0</strong></div>
+          <div class="metric"><span data-i18n="losses">Derrotas</span><strong id="rpsLosses">0</strong></div>
         </div>
       </section>
     </div>
@@ -857,14 +901,78 @@
 
   <footer>
     <div class="container">
-      © 2026 Javier Cortés Mac Evoy · Azar
+      <span data-i18n="footerText">© 2026 Javier Cortés Mac Evoy · Azar</span>
     </div>
   </footer>
 
   <script>
     "use strict";
 
-    const defaultLists = {
+    let currentLang = localStorage.getItem("jcm_language") || "es";
+
+    const i18n = {
+      es: {
+        navAbout: "Sobre mí", navTools: "Herramientas", navInterests: "Intereses", navProjects: "Proyectos", navContact: "Contacto",
+        pageTitle: "Azar",
+        pageIntro: "Herramienta para lanzar dados, elegir opciones al azar y jugar cachipún. Los resultados se generan localmente en el navegador usando un generador aleatorio seguro.",
+        tabDice: "Dados", tabSelector: "Selector", tabRps: "Cachipún",
+        chooseList: "Elegir lista", newList: "Nueva lista", editList: "Editar lista", duplicateList: "Duplicar", deleteList: "Eliminar", resetDefaults: "Restablecer predeterminados",
+        listName: "Nombre de la lista", options: "Opciones", saveLocalList: "Guardar lista local", saveChanges: "Guardar cambios", cancel: "Cancelar",
+        listsBrowserOnly: "Las listas se guardan solo en este navegador.",
+        localNote: "Las listas personalizadas y ediciones se almacenan únicamente en este navegador. No se suben a GitHub ni a ningún servidor.",
+        removeSelected: "Eliminar resultados ya seleccionados", selectorSubtitle: "Selecciona una opción al azar",
+        leverHelp: "Tira de la palanca hacia abajo o presiona el botón de selección.", leverText: "Baja la palanca para girar",
+        resultLabel: "Resultado", copyResult: "Copiar resultado", chooseRandom: "Elegir al azar", resetList: "Reiniciar lista",
+        diceTitle: "Dados", diceIntro: "Seleccione la cantidad de dados, el número de caras y realice un lanzamiento.",
+        diceCount: "Cantidad de dados", diceFaces: "Caras por dado", rollDice: "Lanzar dados", clearResult: "Borrar resultado",
+        total: "Total", averageRoll: "Promedio por lanzamiento", rolls: "Lanzamientos",
+        rpsTitle: "Cachipún", rpsIntro: "Elige piedra, papel o tijera. El computador elegirá una opción al azar.",
+        rock: "Piedra", paper: "Papel", scissors: "Tijera", wins: "Victorias", draws: "Empates", losses: "Derrotas",
+        pending: "Pendiente", noOptions: "Sin opciones", win: "Ganaste", draw: "Empate", lose: "Perdiste",
+        rpsStart: "Ca · Chi · Pun",
+        footerText: "© 2026 Javier Cortés Mac Evoy · Azar",
+        alertList: "Ingrese un nombre y al menos dos opciones.",
+        alertDuplicate: "La lista actual no tiene suficientes opciones para duplicarla.",
+        alertDeleteDefault: "Las listas predeterminadas no se eliminan. Puede editarlas o restablecer los predeterminados.",
+        confirmReset: "Esto eliminará listas personalizadas y restaurará las listas predeterminadas. ¿Desea continuar?",
+        rpsDetail: "Tú elegiste {user}. El computador eligió {computer}.",
+        listDisplay: {
+          "Fiesta": "Fiesta", "Romántico": "Romántico", "Panoramas": "Panoramas", "Comidas": "Comidas", "Trabajo": "Trabajo", "Viajes": "Viajes", "Niños": "Niños", "Decisiones": "Decisiones"
+        }
+      },
+      en: {
+        navAbout: "About me", navTools: "Tools", navInterests: "Interests", navProjects: "Projects", navContact: "Contact",
+        pageTitle: "Random Tools",
+        pageIntro: "A tool for rolling dice, randomly selecting options, and playing rock-paper-scissors. Results are generated locally in the browser using a secure random generator.",
+        tabDice: "Dice", tabSelector: "Selector", tabRps: "Rock Paper Scissors",
+        chooseList: "Choose list", newList: "New list", editList: "Edit list", duplicateList: "Duplicate", deleteList: "Delete", resetDefaults: "Reset defaults",
+        listName: "List name", options: "Options", saveLocalList: "Save local list", saveChanges: "Save changes", cancel: "Cancel",
+        listsBrowserOnly: "Lists are saved only in this browser.",
+        localNote: "Custom lists and edits are stored only in this browser. They are not uploaded to GitHub or any server.",
+        removeSelected: "Remove already selected results", selectorSubtitle: "Select one option at random",
+        leverHelp: "Pull the lever down or press the selection button.", leverText: "Pull the lever down to spin",
+        resultLabel: "Result", copyResult: "Copy result", chooseRandom: "Choose randomly", resetList: "Reset list",
+        diceTitle: "Dice", diceIntro: "Select the number of dice, the number of faces, and roll.",
+        diceCount: "Number of dice", diceFaces: "Faces per die", rollDice: "Roll dice", clearResult: "Clear result",
+        total: "Total", averageRoll: "Average per roll", rolls: "Rolls",
+        rpsTitle: "Rock Paper Scissors", rpsIntro: "Choose rock, paper, or scissors. The computer will choose randomly.",
+        rock: "Rock", paper: "Paper", scissors: "Scissors", wins: "Wins", draws: "Draws", losses: "Losses",
+        pending: "Pending", noOptions: "No options", win: "You won", draw: "Draw", lose: "You lost",
+        rpsStart: "Rock · Paper · Scissors",
+        footerText: "© 2026 Javier Cortés Mac Evoy · Random Tools",
+        alertList: "Enter a name and at least two options.",
+        alertDuplicate: "The current list does not have enough options to duplicate it.",
+        alertDeleteDefault: "Default lists cannot be deleted. You can edit them or reset defaults.",
+        confirmReset: "This will delete custom lists and restore the default lists. Do you want to continue?",
+        rpsDetail: "You chose {user}. The computer chose {computer}.",
+        listDisplay: {
+          "Fiesta": "Party", "Romántico": "Romantic", "Panoramas": "Plans", "Comidas": "Food", "Trabajo": "Work", "Viajes": "Travel", "Niños": "Kids", "Decisiones": "Decisions"
+        }
+      }
+    };
+
+    const defaultListsByLang = {
+      es: {
       "Fiesta": [
         "Bebe 1 sorbo", "Bebe 2 sorbos", "Bebe 3 sorbos", "Bebe 5 sorbos", "Termina tu vaso",
         "Todos beben 1 sorbo", "Todos beben 2 sorbos", "Elige quién bebe", "El de la izquierda bebe", "El de la derecha bebe",
@@ -916,7 +1024,74 @@
         "Inténtalo mañana", "Ve por ello", "Busca otra opción", "Confía en tu intuición", "Analízalo mejor", "Empieza ahora", "Termina primero lo pendiente", "Pide ayuda", "Arriesga un poco", "No cambies nada",
         "Haz una prueba", "Reduce el riesgo", "Investiga más", "Elige la opción A", "Elige la opción B", "Lanza otra decisión", "Date un descanso", "Sigue tu plan", "Improvisa", "Vuelve a decidir"
       ]
+    },
+      en: {
+      "Fiesta": [
+        "Drink 1 sip", "Drink 2 sips", "Drink 3 sips", "Drink 5 sips", "Finish your glass",
+        "Everyone drinks 1 sip", "Everyone drinks 2 sips", "Choose who drinks", "The person on the left drinks", "The person on the right drinks",
+        "Skip the next turn", "Play again", "Everyone raises their glass", "Toast with someone", "Tell a funny story",
+        "Tell an embarrassing story", "Imitate someone famous", "Imitate another player", "Dance for 20 seconds", "Sing a song chorus",
+        "Speak with an accent for one round", "Tell a joke", "Ask an uncomfortable question", "Answer a question", "Make a creative toast",
+        "Everyone changes seats", "Exchange your glass", "Avoid saying yes for one turn", "Avoid saying no for one turn", "Choose a category for everyone",
+        "Make a wish", "Strike a ridiculous pose", "Group selfie", "Everyone applauds", "Everyone laughs for 10 seconds",
+        "Choose a partner", "Give out 3 sips", "Receive 3 sips", "Wildcard", "Spin again"
+      ],
+      "Romántico": [
+        "Give a 20-second hug", "Kiss on the cheek", "Give a kiss", "Hold hands for one minute", "Look into each other's eyes for 30 seconds",
+        "Say three things you admire", "Remember the first date", "Share your best memory together", "Choose the next movie", "Choose the next restaurant",
+        "Choose the next trip", "Choose the next walk", "Prepare coffee", "Prepare dessert", "Prepare the next meal",
+        "Give a shoulder massage", "Give a hand massage", "Choose the music", "Dance to one song", "Take a photo together",
+        "Give a compliment", "Say something you appreciate", "Ask a deep question", "Answer with total honesty", "Share a dream",
+        "Share a goal", "Talk about a place you want to visit", "Plan a date", "Plan a trip", "Look at the stars together",
+        "Watch a sunset", "Turn phones off for 30 minutes", "Choose a weekend activity", "Write a note", "Read a note out loud",
+        "Hug in silence for one minute", "Remember a funny moment", "Share something you had never said", "Share a special song", "Choose who decides today",
+        "Prepare a surprise", "Make a simple promise", "Take a selfie", "Kiss on the forehead", "Choose a series to watch",
+        "Choose a dessert", "Say what you first liked", "Say I love you in another language", "Invent a sweet nickname", "Romantic wildcard"
+      ],
+      "Panoramas": [
+        "Go to the movies", "Go for a walk", "Go to a café", "Go out for breakfast", "Go out for lunch", "Go out for dinner", "Go for ice cream", "Watch a movie",
+        "Watch a series", "Go to the park", "Have a picnic", "Ride a bike", "Go to the beach", "Go to the mountains", "Go trekking", "Visit a museum",
+        "Go to a viewpoint", "Take city photos", "Go shopping", "Drive without a fixed destination", "Visit a nearby town", "Go to a concert", "Go to a bar", "Go to a fair",
+        "Play video games", "Play board games", "Prepare a special meal", "Have a barbecue", "Visit a botanical garden", "Watch the sunrise", "Watch the sunset",
+        "Go camping", "Make a campfire", "Go fishing", "Read a book", "Do sports", "Go to an exhibition", "Take a short getaway", "Choose again"
+      ],
+      "Comidas": [
+        "Pizza", "Burger", "Sushi", "Chinese food", "Japanese food", "Mexican food", "Peruvian food", "Italian food", "Arabic food", "Indian food",
+        "Barbecue", "Pasta", "Empanadas", "Sandwich", "Hot dog", "Chicken", "Salads", "Seafood", "Fish", "Completo", "Ramen", "Tacos", "Burritos", "Lasagna",
+        "Risotto", "Ceviche", "Ice cream", "Bakery", "Coffee", "Breakfast", "Brunch", "Fast food", "Homemade food", "Desserts", "Asado", "Vegetarian food",
+        "Vegan food", "Buffet", "Whatever you want", "Choose again"
+      ],
+      "Trabajo": [
+        "You start", "A teammate starts", "The meeting is suspended", "We order pizza", "It is postponed", "We continue tomorrow", "Ask for another opinion", "We stay until it is finished", "Coffee break and then continue"
+      ],
+      "Viajes": [
+        "Beach getaway", "Mountain getaway", "Nearby city", "Camping", "Hotel", "Cabin", "Food route", "Museum", "Hot springs", "Road trip",
+        "Domestic trip", "International trip", "Car trip", "Bus trip", "Short trip", "Long trip", "Visit a lake", "Visit a river", "Visit a vineyard", "Visit a national park"
+      ],
+      "Niños": [
+        "Draw", "Color", "Read a story", "Build a puzzle", "Dance", "Sing", "Play hide and seek", "Invent a story", "Build something", "Watch a movie",
+        "Tidy up toys", "Make a craft", "Play with blocks", "Prepare a snack", "Choose a game", "Have a race", "Play memory", "Make a card", "Tell jokes", "Create a character"
+      ],
+      "Decisiones": [
+        "Yes", "No", "Wait", "Do it", "Do not do it", "Think a little more", "Ask someone", "Take a pause", "It is a good idea", "It is not the moment",
+        "Try tomorrow", "Go for it", "Find another option", "Trust your intuition", "Analyze it better", "Start now", "Finish what is pending first", "Ask for help", "Take a small risk", "Do not change anything",
+        "Run a test", "Reduce the risk", "Research more", "Choose option A", "Choose option B", "Make another decision", "Take a break", "Follow your plan", "Improvise", "Decide again"
+      ]
+    }
     };
+
+    function t(key) {
+      return (i18n[currentLang] && i18n[currentLang][key]) || i18n.es[key] || key;
+    }
+
+    function getDefaultLists() {
+      return defaultListsByLang[currentLang] || defaultListsByLang.es;
+    }
+
+    function displayListName(name) {
+      const labels = t("listDisplay");
+      return labels && labels[name] ? labels[name] : name;
+    }
 
     const state = {
       activeTab: "selector",
@@ -975,7 +1150,9 @@
       rpsDetail: document.getElementById("rpsDetail"),
       rpsWins: document.getElementById("rpsWins"),
       rpsDraws: document.getElementById("rpsDraws"),
-      rpsLosses: document.getElementById("rpsLosses")
+      rpsLosses: document.getElementById("rpsLosses"),
+      langES: document.getElementById("langES"),
+      langEN: document.getElementById("langEN")
     };
 
     function secureRandomInt(max) {
@@ -992,28 +1169,71 @@
       return value % max;
     }
 
+    function choiceLabel(choice) {
+      if (choice === "Piedra") return t("rock");
+      if (choice === "Papel") return t("paper");
+      if (choice === "Tijera") return t("scissors");
+      return choice;
+    }
+
+    function applyLanguage(lang) {
+      currentLang = lang === "en" ? "en" : "es";
+      localStorage.setItem("jcm_language", currentLang);
+      document.documentElement.lang = currentLang;
+
+      document.querySelectorAll("[data-i18n]").forEach(function (node) {
+        const key = node.getAttribute("data-i18n");
+        node.textContent = t(key);
+      });
+
+      document.querySelectorAll("[data-choice-label]").forEach(function (button) {
+        button.textContent = t(button.getAttribute("data-choice-label"));
+      });
+
+      dom.langES.classList.toggle("active", currentLang === "es");
+      dom.langEN.classList.toggle("active", currentLang === "en");
+
+      dom.customListName.placeholder = currentLang === "es" ? "Ej: Restaurantes" : "Example: Restaurants";
+      dom.customOptions.placeholder = currentLang === "es" ? "Escriba una opción por línea" : "Write one option per line";
+
+      if (dom.selectorResult.textContent === "Pendiente" || dom.selectorResult.textContent === "Pending") {
+        dom.selectorResult.textContent = t("pending");
+      }
+
+      if (dom.rpsResult.textContent === "Pendiente" || dom.rpsResult.textContent === "Pending") {
+        dom.rpsResult.textContent = t("pending");
+      }
+
+      if (!dom.rpsDetail.textContent) {
+        dom.rpsStageText.textContent = t("rpsStart");
+      }
+
+      renderListMenu();
+      renderSlotPreview(state.activeList);
+    }
+
     function getCustomLists() {
       try {
-        return JSON.parse(localStorage.getItem("jcm_azar_custom_lists") || "{}");
+        return JSON.parse(localStorage.getItem("jcm_azar_custom_lists_" + currentLang) || "{}");
       } catch (error) {
         return {};
       }
     }
 
     function saveCustomLists(lists) {
-      localStorage.setItem("jcm_azar_custom_lists", JSON.stringify(lists));
+      localStorage.setItem("jcm_azar_custom_lists_" + currentLang, JSON.stringify(lists));
     }
 
     function getAllLists() {
-      return Object.assign({}, defaultLists, getCustomLists());
+      return Object.assign({}, getDefaultLists(), getCustomLists());
     }
 
     function isDefaultList(name) {
-      return Object.prototype.hasOwnProperty.call(defaultLists, name);
+      return Object.prototype.hasOwnProperty.call(getDefaultLists(), name);
     }
 
     function uniqueListName(baseName, allLists) {
-      const cleanBase = (baseName || "Nueva lista").trim() || "Nueva lista";
+      const cleanBase = (baseName || t("newList")).trim() || t("newList");
 
       if (!Object.prototype.hasOwnProperty.call(allLists, cleanBase)) {
         return cleanBase;
@@ -1044,15 +1264,15 @@
       state.editingList = mode === "edit" ? state.activeList : null;
 
       if (mode === "edit") {
-        dom.customBoxTitle.textContent = "Editar lista";
+        dom.customBoxTitle.textContent = t("editList");
         dom.customListName.value = state.activeList;
         dom.customOptions.value = (lists[state.activeList] || []).join("\n");
-        dom.saveCustomButton.textContent = "Guardar cambios";
+        dom.saveCustomButton.textContent = t("saveChanges");
       } else {
-        dom.customBoxTitle.textContent = "Nueva lista";
+        dom.customBoxTitle.textContent = t("newList");
         dom.customListName.value = "";
         dom.customOptions.value = "";
-        dom.saveCustomButton.textContent = "Guardar lista local";
+        dom.saveCustomButton.textContent = t("saveLocalList");
       }
 
       dom.customBox.style.display = "block";
@@ -1075,10 +1295,10 @@
         const button = document.createElement("button");
         button.type = "button";
         button.className = "list-button" + (name === state.activeList ? " active" : "");
-        button.textContent = name;
+        button.textContent = displayListName(name);
         button.addEventListener("click", function () {
           state.activeList = name;
-          dom.selectorResult.textContent = "Pendiente";
+          dom.selectorResult.textContent = t("pending");
           closeListEditor();
           renderListMenu();
           renderSlotPreview(name);
@@ -1104,10 +1324,10 @@
     function renderSlotPreview(listName, center) {
       const lists = getAllLists();
       const options = lists[listName] || [];
-      const selected = center || options[secureRandomInt(options.length)] || "Sin opciones";
+      const selected = center || options[secureRandomInt(options.length)] || t("noOptions");
       const around = makeVisibleItems(options, selected);
 
-      dom.currentListTitle.textContent = listName;
+      dom.currentListTitle.textContent = displayListName(listName);
       dom.slotItems.textContent = "";
 
       around.forEach(function (item, index) {
@@ -1119,7 +1339,7 @@
     }
 
     function makeVisibleItems(options, center) {
-      if (!options.length) return ["-", "-", "Sin opciones", "-", "-"];
+      if (!options.length) return ["-", "-", t("noOptions"), "-", "-"];
 
       const centerIndex = options.indexOf(center) >= 0 ? options.indexOf(center) : 0;
       const result = [];
@@ -1138,7 +1358,7 @@
       const options = getAvailableOptions(state.activeList);
 
       if (!options.length) {
-        dom.selectorResult.textContent = "Sin opciones";
+        dom.selectorResult.textContent = t("noOptions");
         return;
       }
 
@@ -1248,7 +1468,7 @@
 
       state.rpsPlaying = true;
       setRpsButtonsDisabled(true);
-      dom.rpsResult.textContent = "Pendiente";
+      dom.rpsResult.textContent = t("pending");
       dom.rpsDetail.textContent = "";
 
       document.querySelectorAll(".choice-button").forEach(function (button) {
@@ -1269,23 +1489,23 @@
         let result;
 
         if (userChoice === computer) {
-          result = "Empate";
+          result = t("draw");
           state.rps.draws++;
         } else if (
           (userChoice === "Piedra" && computer === "Tijera") ||
           (userChoice === "Papel" && computer === "Piedra") ||
           (userChoice === "Tijera" && computer === "Papel")
         ) {
-          result = "Ganaste";
+          result = t("win");
           state.rps.wins++;
         } else {
-          result = "Perdiste";
+          result = t("lose");
           state.rps.losses++;
         }
 
         setRpsStage(result);
         dom.rpsResult.textContent = result;
-        dom.rpsDetail.textContent = "Tú elegiste " + userChoice + ". El computador eligió " + computer + ".";
+        dom.rpsDetail.textContent = t("rpsDetail").replace("{{user}}", choiceLabel(userChoice)).replace("{{computer}}", choiceLabel(computer));
         dom.rpsWins.textContent = state.rps.wins;
         dom.rpsDraws.textContent = state.rps.draws;
         dom.rpsLosses.textContent = state.rps.losses;
@@ -1294,6 +1514,9 @@
         setRpsButtonsDisabled(false);
       }, sequence.length * 450 + 250);
     }
+
+    dom.langES.addEventListener("click", function () { applyLanguage("es"); });
+    dom.langEN.addEventListener("click", function () { applyLanguage("en"); });
 
     dom.tabDice.addEventListener("click", function () { setTab("dice"); });
     dom.tabSelector.addEventListener("click", function () { setTab("selector"); });
@@ -1371,7 +1594,7 @@
       const options = parseOptions(dom.customOptions.value);
 
       if (!rawName || options.length < 2) {
-        alert("Ingrese un nombre y al menos dos opciones.");
+        alert(t("alertList"));
         return;
       }
 
@@ -1398,7 +1621,7 @@
 
       state.activeList = finalName;
       state.used[finalName] = [];
-      dom.selectorResult.textContent = "Pendiente";
+      dom.selectorResult.textContent = t("pending");
 
       closeListEditor();
       renderListMenu();
@@ -1411,7 +1634,7 @@
       const options = (lists[state.activeList] || []).slice();
 
       if (options.length < 2) {
-        alert("La lista actual no tiene suficientes opciones para duplicarla.");
+        alert(t("alertDuplicate"));
         return;
       }
 
@@ -1421,7 +1644,7 @@
 
       state.activeList = newName;
       state.used[newName] = [];
-      dom.selectorResult.textContent = "Pendiente";
+      dom.selectorResult.textContent = t("pending");
 
       closeListEditor();
       renderListMenu();
@@ -1432,7 +1655,7 @@
       const customLists = getCustomLists();
 
       if (!Object.prototype.hasOwnProperty.call(customLists, state.activeList)) {
-        alert("Las listas predeterminadas no se eliminan. Puede editarlas o restablecer los predeterminados.");
+        alert(t("alertDeleteDefault"));
         return;
       }
 
@@ -1447,23 +1670,23 @@
         state.activeList = "Trabajo";
       }
 
-      dom.selectorResult.textContent = "Pendiente";
+      dom.selectorResult.textContent = t("pending");
       closeListEditor();
       renderListMenu();
       renderSlotPreview(state.activeList);
     });
 
     dom.resetDefaultsButton.addEventListener("click", function () {
-      const confirmReset = window.confirm("Esto eliminará listas personalizadas y restaurará las listas predeterminadas. ¿Desea continuar?");
+      const confirmReset = window.confirm(t("confirmReset"));
 
       if (!confirmReset) {
         return;
       }
 
-      localStorage.removeItem("jcm_azar_custom_lists");
+      localStorage.removeItem("jcm_azar_custom_lists_" + currentLang);
       state.used = {};
       state.activeList = "Trabajo";
-      dom.selectorResult.textContent = "Pendiente";
+      dom.selectorResult.textContent = t("pending");
 
       closeListEditor();
       renderListMenu();
@@ -1479,6 +1702,7 @@
       });
     });
 
+    applyLanguage(currentLang);
     renderListMenu();
     renderSlotPreview(state.activeList);
     clearDiceResults();
