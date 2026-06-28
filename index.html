@@ -20,9 +20,7 @@
       --orange: #f97316;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -75,17 +73,38 @@
       font-weight: 700;
     }
 
-    .nav-links a:hover {
-      color: var(--accent);
+    .nav-links a:hover { color: var(--accent); }
+
+    .language-switch {
+      display: inline-flex;
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px;
+      box-shadow: 0 6px 18px rgba(15, 47, 79, 0.05);
     }
 
-    main {
-      padding-bottom: 20px;
+    .language-switch button {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 7px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 13px;
+      transition: all 0.2s ease;
     }
 
-    .hero {
-      padding: 58px 0 18px;
+    .language-switch button.active {
+      background: var(--primary);
+      color: #ffffff;
     }
+
+    main { padding-bottom: 20px; }
+
+    .hero { padding: 58px 0 18px; }
 
     .hero-card {
       background: linear-gradient(135deg, #ffffff 0%, #edf4ff 100%);
@@ -102,9 +121,7 @@
       gap: 42px;
     }
 
-    .hero-text {
-      flex: 1;
-    }
+    .hero-text { flex: 1; }
 
     .hero-image {
       width: 320px;
@@ -147,13 +164,9 @@
       margin-bottom: 0;
     }
 
-    section {
-      padding: 34px 0;
-    }
+    section { padding: 34px 0; }
 
-    .tools-section {
-      padding: 10px 0 26px;
-    }
+    .tools-section { padding: 10px 0 26px; }
 
     .panel {
       background: #ffffff;
@@ -190,9 +203,7 @@
       white-space: nowrap;
     }
 
-    .interest-heading {
-      justify-content: flex-start;
-    }
+    .interest-heading { justify-content: flex-start; }
 
     .tools-grid {
       display: grid;
@@ -286,9 +297,7 @@
       text-align: justify;
     }
 
-    .interests-section {
-      padding-top: 24px;
-    }
+    .interests-section { padding-top: 24px; }
 
     .interests-grid {
       display: grid;
@@ -310,9 +319,7 @@
       position: relative;
     }
 
-    .interest-card:first-child {
-      border-left: none;
-    }
+    .interest-card:first-child { border-left: none; }
 
     .interest-card h3 {
       font-size: 15px;
@@ -422,9 +429,7 @@
         5px 3px 0 -2px #5daa6a;
     }
 
-    .interest-card.available .mini-door {
-      border-color: #b8cdf8;
-    }
+    .interest-card.available .mini-door { border-color: #b8cdf8; }
 
     .interest-card.available:hover .mini-door {
       transform: translateY(-4px);
@@ -452,9 +457,7 @@
       box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
     }
 
-    .project-button:hover {
-      background: var(--primary);
-    }
+    .project-button:hover { background: var(--primary); }
 
     footer {
       margin-top: 40px;
@@ -470,15 +473,11 @@
         row-gap: 24px;
       }
 
-      .interest-card:nth-child(4) {
-        border-left: none;
-      }
+      .interest-card:nth-child(4) { border-left: none; }
     }
 
     @media (max-width: 950px) {
-      .tools-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .tools-grid { grid-template-columns: repeat(2, 1fr); }
 
       .tool-group:nth-child(3) {
         border-left: none;
@@ -492,17 +491,11 @@
         flex-direction: column;
       }
 
-      .nav-links {
-        gap: 14px;
-      }
+      .nav-links { gap: 14px; }
 
-      .hero {
-        padding-top: 42px;
-      }
+      .hero { padding-top: 42px; }
 
-      .hero-card {
-        padding: 34px;
-      }
+      .hero-card { padding: 34px; }
 
       .hero-content {
         flex-direction: column-reverse;
@@ -516,13 +509,9 @@
     }
 
     @media (max-width: 620px) {
-      .panel {
-        padding: 24px;
-      }
+      .panel { padding: 24px; }
 
-      .tools-grid {
-        grid-template-columns: 1fr;
-      }
+      .tools-grid { grid-template-columns: 1fr; }
 
       .tool-group {
         border-left: none;
@@ -536,14 +525,10 @@
         padding-top: 0;
       }
 
-      .interests-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .interests-grid { grid-template-columns: repeat(2, 1fr); }
 
       .interest-card,
-      .interest-card:nth-child(4) {
-        border-left: none;
-      }
+      .interest-card:nth-child(4) { border-left: none; }
     }
   </style>
 </head>
@@ -555,11 +540,16 @@
         <div class="brand">Javier Cortés Mac Evoy</div>
 
         <div class="nav-links">
-          <a href="#sobre-mi">Sobre mí</a>
-          <a href="#herramientas">Herramientas</a>
-          <a href="#intereses">Intereses</a>
-          <a href="proyectos/">Proyectos</a>
-          <a href="#contacto">Contacto</a>
+          <a href="#sobre-mi" data-i18n="nav_about">Sobre mí</a>
+          <a href="#herramientas" data-i18n="nav_tools">Herramientas</a>
+          <a href="#intereses" data-i18n="nav_interests">Intereses</a>
+          <a href="proyectos/" data-i18n="nav_projects">Proyectos</a>
+          <a href="#contacto" data-i18n="nav_contact">Contacto</a>
+
+          <div class="language-switch" aria-label="Selector de idioma">
+            <button id="langEs" type="button" class="active" onclick="setLanguage('es')">ES</button>
+            <button id="langEn" type="button" onclick="setLanguage('en')">EN</button>
+          </div>
         </div>
       </nav>
     </div>
@@ -571,15 +561,15 @@
         <div class="hero-card">
           <div class="hero-content">
             <div class="hero-text">
-              <div class="eyebrow">Página personal</div>
+              <div class="eyebrow" data-i18n="hero_eyebrow">Página personal</div>
 
-              <h1>Hola, soy Javier.</h1>
+              <h1 data-i18n="hero_title">Hola, soy Javier.</h1>
 
-              <p class="subtitle">
+              <p class="subtitle" data-i18n="hero_subtitle">
                 Un espacio para compartir proyectos, aprendizajes, intereses y algo de mi historia.
               </p>
 
-              <p class="summary">
+              <p class="summary" data-i18n="hero_summary">
                 Soy padre, químico farmacéutico, estudiante y una persona curiosa por naturaleza.
                 Me interesan la tecnología, el aprendizaje continuo y los proyectos que permiten
                 transformar ideas en algo tangible.
@@ -598,19 +588,19 @@
       <div class="container">
         <div class="panel">
           <div class="tools-heading">
-            <span>Herramientas</span>
+            <span data-i18n="tools_heading">Herramientas</span>
           </div>
 
           <div class="tools-grid">
             <div class="tool-group">
               <div class="tool-title">
                 <span class="tool-icon radio">⌁</span>
-                <h3>Radioafición</h3>
+                <h3 data-i18n="cat_radio">Radioafición</h3>
               </div>
 
               <div class="tool-list">
                 <a class="tool-link" href="herramientas/radioaficion/antenas/">
-                  <span>Calculadora de Antenas</span>
+                  <span data-i18n="tool_antennas">Calculadora de Antenas</span>
                   <span>›</span>
                 </a>
               </div>
@@ -624,7 +614,7 @@
 
               <div class="tool-list">
                 <a class="tool-link" href="herramientas/supplychain/rop/">
-                  <span>Punto de Reorden (ROP)</span>
+                  <span data-i18n="tool_rop">Punto de Reorden (ROP)</span>
                   <span>›</span>
                 </a>
               </div>
@@ -633,17 +623,17 @@
             <div class="tool-group">
               <div class="tool-title">
                 <span class="tool-icon fin">%</span>
-                <h3>Finanzas</h3>
+                <h3 data-i18n="cat_finance">Finanzas</h3>
               </div>
 
               <div class="tool-list">
                 <a class="tool-link" href="herramientas/simulador-cuotas/">
-                  <span>Simulador de Cuotas</span>
+                  <span data-i18n="tool_installments">Simulador de Cuotas</span>
                   <span>›</span>
                 </a>
 
                 <a class="tool-link" href="herramientas/calculo-precio-venta/">
-                  <span>Cálculo Precio Venta</span>
+                  <span data-i18n="tool_sale_price">Cálculo Precio Venta</span>
                   <span>›</span>
                 </a>
               </div>
@@ -652,25 +642,25 @@
             <div class="tool-group">
               <div class="tool-title">
                 <span class="tool-icon other">▦</span>
-                <h3>Otros</h3>
+                <h3 data-i18n="cat_other">Otros</h3>
               </div>
 
-            <div class="tool-list">
-              <a class="tool-link" href="herramientas/generador-codigos/">
-                <span>Generador de Códigos</span>
-                <span>›</span>
-              </a>
-            
-              <a class="tool-link" href="herramientas/esteganografia/">
-                <span>Esteganografía</span>
-                <span>›</span>
-              </a>
-            
-              <a class="tool-link" href="herramientas/azar/">
-                <span>Azar</span>
-                <span>›</span>
-              </a>
-            </div>
+              <div class="tool-list">
+                <a class="tool-link" href="herramientas/generador-codigos/">
+                  <span data-i18n="tool_codes">Generador de Códigos</span>
+                  <span>›</span>
+                </a>
+
+                <a class="tool-link" href="herramientas/esteganografia/">
+                  <span data-i18n="tool_steganography">Esteganografía</span>
+                  <span>›</span>
+                </a>
+
+                <a class="tool-link" href="herramientas/azar/">
+                  <span data-i18n="tool_random">Azar</span>
+                  <span>›</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -679,16 +669,16 @@
 
     <section id="sobre-mi">
       <div class="container">
-        <h2 class="section-title">Sobre mí</h2>
+        <h2 class="section-title" data-i18n="about_title">Sobre mí</h2>
 
         <div class="text-block">
-          <p>
+          <p data-i18n="about_p1">
             Esta página busca reunir distintas partes de mi vida sin convertirlas en una copia
             de LinkedIn. Aquí quiero compartir proyectos, intereses, aprendizajes y algunas ideas
             que normalmente no aparecen en una presentación profesional.
           </p>
 
-          <p>
+          <p data-i18n="about_p2">
             Me gusta aprender, probar herramientas nuevas y entender cómo funcionan las cosas.
             Con el tiempo he descubierto que muchas de mis motivaciones se conectan entre sí:
             la curiosidad, la resolución de problemas, la tecnología, la naturaleza, la familia
@@ -702,67 +692,49 @@
       <div class="container">
         <div class="panel">
           <div class="interest-heading">
-            <span>Áreas de interés</span>
+            <span data-i18n="interests_title">Áreas de interés</span>
           </div>
 
           <div class="interests-grid">
-            <a class="interest-card locked" href="#intereses" aria-label="Familia y paternidad próximamente">
-              <h3>Familia y paternidad</h3>
-              <div class="mini-door">
-                <span class="door-handle"></span>
-                <span class="plant"></span>
-              </div>
+            <a class="interest-card locked" href="#intereses">
+              <h3 data-i18n="interest_family">Familia y paternidad</h3>
+              <div class="mini-door"><span class="door-handle"></span><span class="plant"></span></div>
               <span class="lock-badge">⌂</span>
             </a>
 
-            <a class="interest-card locked" href="#intereses" aria-label="Radioafición próximamente">
-              <h3>Radioafición</h3>
-              <div class="mini-door">
-                <span class="door-handle"></span>
-                <span class="plant"></span>
-              </div>
+            <a class="interest-card locked" href="#intereses">
+              <h3 data-i18n="interest_radio">Radioafición</h3>
+              <div class="mini-door"><span class="door-handle"></span><span class="plant"></span></div>
               <span class="lock-badge">⌂</span>
             </a>
 
-            <a class="interest-card locked" href="#intereses" aria-label="Naturaleza próximamente">
-              <h3>Naturaleza</h3>
-              <div class="mini-door">
-                <span class="door-handle"></span>
-                <span class="plant"></span>
-              </div>
+            <a class="interest-card locked" href="#intereses">
+              <h3 data-i18n="interest_nature">Naturaleza</h3>
+              <div class="mini-door"><span class="door-handle"></span><span class="plant"></span></div>
               <span class="lock-badge">⌂</span>
             </a>
 
-            <a class="interest-card locked" href="#intereses" aria-label="Trekking próximamente">
-              <h3>Trekking</h3>
-              <div class="mini-door">
-                <span class="door-handle"></span>
-                <span class="plant"></span>
-              </div>
+            <a class="interest-card locked" href="#intereses">
+              <h3 data-i18n="interest_trekking">Trekking</h3>
+              <div class="mini-door"><span class="door-handle"></span><span class="plant"></span></div>
               <span class="lock-badge">⌂</span>
             </a>
 
-            <a class="interest-card locked" href="#intereses" aria-label="Jeepeo próximamente">
-              <h3>Jeepeo</h3>
-              <div class="mini-door">
-                <span class="door-handle"></span>
-                <span class="plant"></span>
-              </div>
+            <a class="interest-card locked" href="#intereses">
+              <h3 data-i18n="interest_offroad">Jeepeo</h3>
+              <div class="mini-door"><span class="door-handle"></span><span class="plant"></span></div>
               <span class="lock-badge">⌂</span>
             </a>
 
-            <a class="interest-card locked" href="#intereses" aria-label="Tecnología y proyectos próximamente">
-              <h3>Tecnología y proyectos</h3>
-              <div class="mini-door">
-                <span class="door-handle"></span>
-                <span class="plant"></span>
-              </div>
+            <a class="interest-card locked" href="#intereses">
+              <h3 data-i18n="interest_tech">Tecnología y proyectos</h3>
+              <div class="mini-door"><span class="door-handle"></span><span class="plant"></span></div>
               <span class="lock-badge">⌂</span>
             </a>
           </div>
 
           <div class="project-button-wrap">
-            <a class="project-button" href="proyectos/">Ver todos los proyectos</a>
+            <a class="project-button" href="proyectos/" data-i18n="projects_button">Ver todos los proyectos</a>
           </div>
         </div>
       </div>
@@ -770,9 +742,9 @@
 
     <section id="contacto">
       <div class="container">
-        <h2 class="section-title">Contacto</h2>
+        <h2 class="section-title" data-i18n="contact_title">Contacto</h2>
         <p>
-          También puedes encontrar mi perfil profesional en
+          <span data-i18n="contact_text">También puedes encontrar mi perfil profesional en</span>
           <a href="https://www.linkedin.com/in/javiercortesmacevoy/" target="_blank">LinkedIn</a>.
         </p>
       </div>
@@ -780,9 +752,106 @@
   </main>
 
   <footer>
-    <div class="container">
+    <div class="container" data-i18n="footer_text">
       © 2026 Javier Cortés Mac Evoy · Página personal y proyectos
     </div>
   </footer>
+
+  <script>
+    const translations = {
+      es: {
+        nav_about: "Sobre mí",
+        nav_tools: "Herramientas",
+        nav_interests: "Intereses",
+        nav_projects: "Proyectos",
+        nav_contact: "Contacto",
+        hero_eyebrow: "Página personal",
+        hero_title: "Hola, soy Javier.",
+        hero_subtitle: "Un espacio para compartir proyectos, aprendizajes, intereses y algo de mi historia.",
+        hero_summary: "Soy padre, químico farmacéutico, estudiante y una persona curiosa por naturaleza. Me interesan la tecnología, el aprendizaje continuo y los proyectos que permiten transformar ideas en algo tangible.",
+        tools_heading: "Herramientas",
+        cat_radio: "Radioafición",
+        cat_finance: "Finanzas",
+        cat_other: "Otros",
+        tool_antennas: "Calculadora de Antenas",
+        tool_rop: "Punto de Reorden (ROP)",
+        tool_installments: "Simulador de Cuotas",
+        tool_sale_price: "Cálculo Precio Venta",
+        tool_codes: "Generador de Códigos",
+        tool_steganography: "Esteganografía",
+        tool_random: "Azar",
+        about_title: "Sobre mí",
+        about_p1: "Esta página busca reunir distintas partes de mi vida sin convertirlas en una copia de LinkedIn. Aquí quiero compartir proyectos, intereses, aprendizajes y algunas ideas que normalmente no aparecen en una presentación profesional.",
+        about_p2: "Me gusta aprender, probar herramientas nuevas y entender cómo funcionan las cosas. Con el tiempo he descubierto que muchas de mis motivaciones se conectan entre sí: la curiosidad, la resolución de problemas, la tecnología, la naturaleza, la familia y las ganas de seguir construyendo algo propio.",
+        interests_title: "Áreas de interés",
+        interest_family: "Familia y paternidad",
+        interest_radio: "Radioafición",
+        interest_nature: "Naturaleza",
+        interest_trekking: "Trekking",
+        interest_offroad: "Jeepeo",
+        interest_tech: "Tecnología y proyectos",
+        projects_button: "Ver todos los proyectos",
+        contact_title: "Contacto",
+        contact_text: "También puedes encontrar mi perfil profesional en",
+        footer_text: "© 2026 Javier Cortés Mac Evoy · Página personal y proyectos"
+      },
+      en: {
+        nav_about: "About me",
+        nav_tools: "Tools",
+        nav_interests: "Interests",
+        nav_projects: "Projects",
+        nav_contact: "Contact",
+        hero_eyebrow: "Personal page",
+        hero_title: "Hi, I’m Javier.",
+        hero_subtitle: "A space to share projects, learning, interests, and part of my story.",
+        hero_summary: "I am a father, pharmacist, student, and naturally curious person. I am interested in technology, continuous learning, and projects that turn ideas into something tangible.",
+        tools_heading: "Tools",
+        cat_radio: "Amateur Radio",
+        cat_finance: "Finance",
+        cat_other: "Other",
+        tool_antennas: "Antenna Calculator",
+        tool_rop: "Reorder Point (ROP)",
+        tool_installments: "Installment Simulator",
+        tool_sale_price: "Sale Price Calculator",
+        tool_codes: "Code Generator",
+        tool_steganography: "Steganography",
+        tool_random: "Random",
+        about_title: "About me",
+        about_p1: "This page brings together different parts of my life without turning it into a copy of LinkedIn. Here I share projects, interests, learning, and ideas that usually do not appear in a professional profile.",
+        about_p2: "I enjoy learning, testing new tools, and understanding how things work. Over time, I have found that many of my motivations are connected: curiosity, problem solving, technology, nature, family, and the desire to keep building something of my own.",
+        interests_title: "Areas of interest",
+        interest_family: "Family and fatherhood",
+        interest_radio: "Amateur Radio",
+        interest_nature: "Nature",
+        interest_trekking: "Trekking",
+        interest_offroad: "Off-road driving",
+        interest_tech: "Technology and projects",
+        projects_button: "View all projects",
+        contact_title: "Contact",
+        contact_text: "You can also find my professional profile on",
+        footer_text: "© 2026 Javier Cortés Mac Evoy · Personal page and projects"
+      }
+    };
+
+    function setLanguage(lang) {
+      const dictionary = translations[lang] || translations.es;
+
+      document.documentElement.lang = lang;
+      localStorage.setItem("siteLanguage", lang);
+
+      document.querySelectorAll("[data-i18n]").forEach(function (element) {
+        const key = element.getAttribute("data-i18n");
+        if (dictionary[key]) {
+          element.textContent = dictionary[key];
+        }
+      });
+
+      document.getElementById("langEs").classList.toggle("active", lang === "es");
+      document.getElementById("langEn").classList.toggle("active", lang === "en");
+    }
+
+    const savedLanguage = localStorage.getItem("siteLanguage") || "es";
+    setLanguage(savedLanguage);
+  </script>
 </body>
 </html>
