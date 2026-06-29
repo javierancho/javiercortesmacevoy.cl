@@ -40,5 +40,17 @@ window.JCMAnalytics = (function () {
     }
   }
 
-  return { track };
+  function trackTool(toolName, eventName = "uso_herramienta", extra = {}) {
+    track({
+      herramienta: toolName,
+      evento: eventName,
+      version: extra.version || "1.0",
+      ...extra
+    });
+  }
+
+  return {
+    track,
+    trackTool
+  };
 })();
