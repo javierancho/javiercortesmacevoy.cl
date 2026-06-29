@@ -66,20 +66,43 @@ async function loadData() {
 ========================== */
 
 function normalizeChileData(data) {
-    const list = Array.isArray(data) ? data : data.data || data.earthquakes || [];
+
+    let list = [];
+
+    if (Array.isArray(data)) {
+
+        list = data;
+
+    } else if (Array.isArray(data.data)) {
+
+        list = data.data;
+
+    } else if (Array.isArray(data.earthquakes)) {
+
+        list = data.earthquakes;
+
+    } else if (data && typeof data.data === "object") {
+
+        list = [data.data];
+
+    }
 
     return list.map(item => ({
-        date: item.fecha || item.date || item.datetime || "",
+        date: item.fecha || item.date || "",
+        time: item.hora || item.hour || "",
         magnitude: parseFloat(item.magnitud || item.magnitude || item.mag || 0),
         depth: item.profundidad || item.depth || "",
         location: item.lugar || item.place || item.location || "",
         latitude: parseFloat(item.latitud || item.latitude || item.lat || 0),
         longitude: parseFloat(item.longitud || item.longitude || item.lon || 0),
         source: "Boostr / CSN",
-        url: item.url || item.informe || item.report || ""
+        url: item.url || item.informe || item.report || item.info || ""
+    })).map(item => ({
+        ...item,
+        date: item.time ? `${item.date} ${item.time}` : item.date
     })).filter(item => item.latitude && item.longitude);
-}
 
+}
 function normalizeUSGSData(data) {
     if (!data || !Array.isArray(data.features)) return [];
 
