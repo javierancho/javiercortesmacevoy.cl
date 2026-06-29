@@ -25,8 +25,15 @@ function bindEvents() {
     document.getElementById("centerChileBtn").addEventListener("click", centerChile);
     document.getElementById("viewWorldBtn").addEventListener("click", viewWorld);
 
-    document.getElementById("sourceSelect").addEventListener("change", renderTable);
-    document.getElementById("minMagnitude").addEventListener("change", renderTable);
+document.getElementById("sourceSelect").addEventListener("change", () => {
+    renderTable();
+    renderMap();
+});
+
+document.getElementById("minMagnitude").addEventListener("change", () => {
+    renderTable();
+    renderMap();
+});
 }
 
 /* ==========================
