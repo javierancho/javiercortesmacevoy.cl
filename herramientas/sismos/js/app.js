@@ -210,7 +210,7 @@ function renderMap() {
     const minMagnitude = parseFloat(document.getElementById("minMagnitude").value);
     const filtered = data.filter(item => item.magnitude >= minMagnitude);
 
-    data.slice(0, 100).forEach(item => {
+    filtered.slice(0, 100).forEach(item => {
         addMarker(
             item.latitude,
             item.longitude,
