@@ -1,1 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <title>Monitor de Sismos | Javier Cortés Mac Evoy</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <a href="../../index.html">Javier Cortés Mac Evoy</a>
+    </div>
+
+    <nav class="main-nav">
+      <a href="../../index.html#sobre-mi" data-i18n="navAbout">Sobre mí</a>
+      <a href="../../index.html#herramientas" data-i18n="navTools">Herramientas</a>
+      <a href="../../index.html#intereses" data-i18n="navInterests">Intereses</a>
+      <a href="../../proyectos/" data-i18n="navProjects">Proyectos</a>
+      <a href="../../index.html#contacto" data-i18n="navContact">Contacto</a>
+    </nav>
+
+    <div class="language-switch" aria-label="Selector de idioma">
+      <button type="button" id="lang-es" class="lang-btn active">ES</button>
+      <button type="button" id="lang-en" class="lang-btn">EN</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <p class="eyebrow" data-i18n="eyebrow">Herramientas / Utilidades</p>
+        <h1 data-i18n="title">Monitor de Sismos</h1>
+        <p class="hero-text" data-i18n="subtitle">
+          Visualización referencial de sismos recientes en Chile y el mundo,
+          usando fuentes públicas. No reemplaza información oficial de
+          SENAPRED, SHOA ni del Centro Sismológico Nacional.
+        </p>
+      </div>
+
+      <div class="hero-actions">
+        <button
+          type="button"
+          id="refreshBtn"
+          class="btn btn-primary"
+          data-analytics-tool="Monitor de Sismos"
+          data-analytics-event="consulta_realizada"
+          data-i18n="refresh"
+        >
+          Actualizar datos
+        </button>
+      </div>
+    </section>
+
+    <section class="notice-card" role="note">
+      <strong data-i18n="noticeTitle">Uso informativo.</strong>
+      <span data-i18n="noticeText">
+        Esta página muestra datos públicos para consulta general. Para
+        emergencias, alertas oficiales o instrucciones de seguridad, consulta
+        siempre los canales oficiales correspondientes.
+      </span>
+    </section>
+
+    <section class="dashboard-card">
+      <div class="card-header">
+        <div>
+          <p class="section-label" data-i18n="lastChileLabel">Chile</p>
+          <h2 data-i18n="lastChileTitle">Último sismo registrado</h2>
+        </div>
+        <span id="lastUpdate" class="update-status" data-i18n="notLoaded">
+          Sin actualizar
+        </span>
+      </div>
+
+      <div id="lastChileCard" class="summary-grid">
+        <article class="metric-card">
+          <span class="metric-label" data-i18n="magnitude">Magnitud</span>
+          <strong id="lastMagnitude">--</strong>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-label" data-i18n="depth">Profundidad</span>
+          <strong id="lastDepth">--</strong>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-label" data-i18n="dateTime">Fecha y hora</span>
+          <strong id="lastDateTime">--</strong>
+        </article>
+
+        <article class="metric-card metric-location">
+          <span class="metric-label" data-i18n="location">Ubicación</span>
+          <strong id="lastLocation">--</strong>
+        </article>
+      </div>
+
+      <div class="source-row">
+        <span>
+          <span data-i18n="source">Fuente</span>:
+          <strong id="lastSource">Boostr / CSN</strong>
+        </span>
+        <a id="lastReportLink" href="#" target="_blank" rel="noopener" class="text-link hidden" data-i18n="officialReport">
+          Ver informe
+        </a>
+      </div>
+    </section>
+
+    <section class="map-card">
+      <div class="card-header">
+        <div>
+          <p class="section-label" data-i18n="mapLabel">Mapa</p>
+          <h2 data-i18n="mapTitle">Sismos recientes</h2>
+        </div>
+
+        <div class="map-actions">
+          <button type="button" id="centerChileBtn" class="btn btn-secondary" data-i18n="centerChile">
+            Centrar Chile
+          </button>
+          <button type="button" id="viewWorldBtn" class="btn btn-secondary" data-i18n="viewWorld">
+            Ver mundo
+          </button>
+        </div>
+      </div>
+
+      <div id="map" class="map"></div>
+    </section>
+
+    <section class="data-card">
+      <div class="card-header table-card-header">
+        <div>
+          <p class="section-label" data-i18n="recordsLabel">Registros</p>
+          <h2 data-i18n="recordsTitle">Listado de sismos</h2>
+        </div>
+
+        <div class="filters">
+          <label for="sourceSelect" data-i18n="sourceFilter">Fuente</label>
+          <select id="sourceSelect">
+            <option value="chile" data-i18n="sourceChile">Chile</option>
+            <option value="world" data-i18n="sourceWorld">Mundo</option>
+          </select>
+
+          <label for="minMagnitude" data-i18n="minMagnitude">Magnitud mínima</label>
+          <select id="minMagnitude">
+            <option value="0">Todas</option>
+            <option value="2">≥ 2.0</option>
+            <option value="3">≥ 3.0</option>
+            <option value="4">≥ 4.0</option>
+            <option value="5">≥ 5.0</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="tableDate">Fecha</th>
+              <th data-i18n="tableMagnitude">Magnitud</th>
+              <th data-i18n="tableDepth">Prof.</th>
+              <th data-i18n="tableLocation">Ubicación</th>
+              <th data-i18n="tableSource">Fuente</th>
+            </tr>
+          </thead>
+          <tbody id="earthquakeTableBody">
+            <tr>
+              <td colspan="5" class="empty-state" data-i18n="loading">
+                Cargando datos...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    © 2026 Javier Cortés Mac Evoy
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/app.js"></script>
+
+  <script src="../../assets/js/analytics.js"></script>
+</body>
+</html>
