@@ -7,7 +7,7 @@ window.JCMAnalytics = (function () {
     try {
       const payload = {
         herramienta: data.herramienta || "",
-        evento: data.evento || "",
+        evento: data.evento || "uso_herramienta",
         empresa: data.empresa || "",
         rubro: data.rubro || "",
         pais: data.pais || "",
@@ -40,14 +40,26 @@ window.JCMAnalytics = (function () {
     }
   }
 
-  function trackTool(toolName, eventName = "uso_herramienta", extra = {}) {
+  function trackTool(toolName, eventName) {
     track({
       herramienta: toolName,
-      evento: eventName,
-      version: extra.version || "1.0",
-      ...extra
+      evento: eventName || "uso_herramienta",
+      version: "1.0"
     });
   }
+
+  function initAutoTracking() {
+    document.querySelectorAll("[data-analytics-tool]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        trackTool(
+          el.getAttribute("data-analytics-tool"),
+          el.getAttribute("data-analytics-event") || "uso_herramienta"
+        );
+      });
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", initAutoTracking);
 
   return {
     track,
