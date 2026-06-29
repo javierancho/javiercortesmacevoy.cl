@@ -207,6 +207,8 @@ function renderMap() {
 
     const selectedSource = document.getElementById("sourceSelect").value;
     const data = selectedSource === "chile" ? chileEarthquakes : worldEarthquakes;
+    const minMagnitude = parseFloat(document.getElementById("minMagnitude").value);
+    const filtered = data.filter(item => item.magnitude >= minMagnitude);
 
     data.slice(0, 100).forEach(item => {
         addMarker(
