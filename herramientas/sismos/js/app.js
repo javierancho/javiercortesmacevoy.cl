@@ -6,39 +6,27 @@
 let chileEarthquakes = [];
 let worldEarthquakes = [];
 
-/* ==========================
-   Inicio
-========================== */
-
 document.addEventListener("DOMContentLoaded", () => {
     initMap();
     bindEvents();
     loadData();
 });
 
-/* ==========================
-   Eventos
-========================== */
-
 function bindEvents() {
     document.getElementById("refreshBtn").addEventListener("click", loadData);
     document.getElementById("centerChileBtn").addEventListener("click", centerChile);
     document.getElementById("viewWorldBtn").addEventListener("click", viewWorld);
 
-document.getElementById("sourceSelect").addEventListener("change", () => {
-    renderTable();
-    renderMap();
-});
+    document.getElementById("sourceSelect").addEventListener("change", () => {
+        renderTable();
+        renderMap();
+    });
 
-document.getElementById("minMagnitude").addEventListener("change", () => {
-    renderTable();
-    renderMap();
-});
+    document.getElementById("minMagnitude").addEventListener("change", () => {
+        renderTable();
+        renderMap();
+    });
 }
-
-/* ==========================
-   Carga de datos
-========================== */
 
 async function loadData() {
     setLoadingState();
@@ -47,7 +35,7 @@ async function loadData() {
         const [lastChile, chileList, worldData] = await Promise.all([
             getLastChileEarthquake(),
             getChileEarthquakes(),
-            getWorldEarthquakes()
+            getWorldEarthquakes("week")
         ]);
 
         chileEarthquakes = normalizeChileData(chileList);
@@ -68,48 +56,39 @@ async function loadData() {
     }
 }
 
-/* ==========================
-   Normalización de datos
-========================== */
-
 function normalizeChileData(data) {
-
     let list = [];
 
     if (Array.isArray(data)) {
-
         list = data;
-
     } else if (Array.isArray(data.data)) {
-
         list = data.data;
-
     } else if (Array.isArray(data.earthquakes)) {
-
         list = data.earthquakes;
-
     } else if (data && typeof data.data === "object") {
-
         list = [data.data];
-
     }
 
-    return list.map(item => ({
-        date: item.fecha || item.date || "",
-        time: item.hora || item.hour || "",
-        magnitude: parseFloat(item.magnitud || item.magnitude || item.mag || 0),
-        depth: item.profundidad || item.depth || "",
-        location: item.lugar || item.place || item.location || "",
-        latitude: parseFloat(item.latitud || item.latitude || item.lat || 0),
-        longitude: parseFloat(item.longitud || item.longitude || item.lon || 0),
-        source: "Boostr / CSN",
-        url: item.url || item.informe || item.report || item.info || ""
-    })).map(item => ({
-        ...item,
-        date: item.time ? `${item.date} ${item.time}` : item.date
-    })).filter(item => item.latitude && item.longitude);
+    return list.map(item => {
+        const date = item.fecha || item.date || "";
+        const time = item.hora || item.hour || "";
 
+        return {
+            date: time ? `${date} ${time}` : date,
+            rawTime: Date.parse(`${date} ${time}`) || 0,
+            magnitude: parseFloat(item.magnitud || item.magnitude || item.mag || 0),
+            depth: item.profundidad || item.depth || "",
+            location: item.lugar || item.place || item.location || "",
+            latitude: parseFloat(item.latitud || item.latitude || item.lat || 0),
+            longitude: parseFloat(item.longitud || item.longitude || item.lon || 0),
+            source: "Boostr / CSN",
+            url: item.url || item.informe || item.report || item.info || ""
+        };
+    })
+    .filter(item => item.latitude && item.longitude)
+    .sort((a, b) => b.rawTime - a.rawTime);
 }
+
 function normalizeUSGSData(data) {
     if (!data || !Array.isArray(data.features)) return [];
 
@@ -119,39 +98,36 @@ function normalizeUSGSData(data) {
 
         return {
             date: props.time ? new Date(props.time).toLocaleString("es-CL") : "",
-            magnitude: props.mag || 0,
-            depth: coords[2] !== undefined ? `${coords[2]} km` : "",
-            location: props.place || "",
+            rawTime: props.time || 0,
+            magnitude: Number(props.mag || 0),
+            depth: coords[2] !== undefined ? `${Number(coords[2]).toFixed(1)} km` : "",
+            location: props.place || "Sin ubicación",
             latitude: coords[1],
             longitude: coords[0],
             source: "USGS",
             url: props.url || ""
         };
-    }).filter(item => item.latitude && item.longitude);
+    })
+    .filter(item => item.latitude && item.longitude)
+    .sort((a, b) => b.rawTime - a.rawTime);
 }
 
-/* ==========================
-   Último sismo Chile
-========================== */
-
 function renderLastChile(data) {
-    const magnitude = data.magnitud || data.magnitude || data.mag || "--";
-    const depth = data.profundidad || data.depth || "--";
-    const location = data.lugar || data.place || data.location || "--";
-    const date =
-        data.fecha ||
-        data.date ||
-        data.datetime ||
-        data.hora ||
-        "--";
+    const item = data.data || data;
 
-    document.getElementById("lastMagnitude").textContent = magnitude;
-    document.getElementById("lastDepth").textContent = depth;
-    document.getElementById("lastDateTime").textContent = date;
-    document.getElementById("lastLocation").textContent = location;
+    document.getElementById("lastMagnitude").textContent =
+        item.magnitud || item.magnitude || item.mag || "--";
 
-    const link = data.url || data.informe || data.report || "";
+    document.getElementById("lastDepth").textContent =
+        item.profundidad || item.depth || "--";
 
+    document.getElementById("lastDateTime").textContent =
+        `${item.fecha || item.date || ""} ${item.hora || item.hour || ""}`.trim() || "--";
+
+    document.getElementById("lastLocation").textContent =
+        item.lugar || item.place || item.location || "--";
+
+    const link = item.url || item.informe || item.report || item.info || "";
     const reportLink = document.getElementById("lastReportLink");
 
     if (link) {
@@ -162,18 +138,19 @@ function renderLastChile(data) {
     }
 }
 
-/* ==========================
-   Tabla
-========================== */
-
-function renderTable() {
+function getFilteredData() {
     const source = document.getElementById("sourceSelect").value;
     const minMagnitude = parseFloat(document.getElementById("minMagnitude").value);
 
     const data = source === "chile" ? chileEarthquakes : worldEarthquakes;
 
-    const filtered = data.filter(item => item.magnitude >= minMagnitude);
+    return data
+        .filter(item => item.magnitude >= minMagnitude)
+        .sort((a, b) => b.rawTime - a.rawTime);
+}
 
+function renderTable() {
+    const filtered = getFilteredData();
     const tbody = document.getElementById("earthquakeTableBody");
 
     if (!filtered.length) {
@@ -187,10 +164,10 @@ function renderTable() {
         return;
     }
 
-    tbody.innerHTML = filtered.map(item => `
+    tbody.innerHTML = filtered.slice(0, 250).map(item => `
         <tr>
             <td>${item.date}</td>
-            <td>${item.magnitude}</td>
+            <td><span class="mag-badge mag-${getMagnitudeClass(item.magnitude)}">${formatMagnitude(item.magnitude)}</span></td>
             <td>${item.depth}</td>
             <td>${item.url ? `<a href="${item.url}" target="_blank" rel="noopener">${item.location}</a>` : item.location}</td>
             <td>${item.source}</td>
@@ -198,38 +175,44 @@ function renderTable() {
     `).join("");
 }
 
-/* ==========================
-   Mapa
-========================== */
-
 function renderMap() {
     clearMarkers();
 
-    const selectedSource = document.getElementById("sourceSelect").value;
-    const data = selectedSource === "chile" ? chileEarthquakes : worldEarthquakes;
-    const minMagnitude = parseFloat(document.getElementById("minMagnitude").value);
-    const filtered = data.filter(item => item.magnitude >= minMagnitude);
+    const filtered = getFilteredData();
 
-    filtered.slice(0, 100).forEach(item => {
+    filtered.slice(0, 500).forEach(item => {
         addMarker(
             item.latitude,
             item.longitude,
             `
-                <strong>Magnitud ${item.magnitude}</strong><br>
+                <strong>Magnitud ${formatMagnitude(item.magnitude)}</strong><br>
                 ${item.location}<br>
                 Profundidad: ${item.depth}<br>
-                Fecha: ${item.date}
-            `
+                Fecha: ${item.date}<br>
+                Fuente: ${item.source}
+            `,
+            item.magnitude
         );
     });
 }
 
-/* ==========================
-   Estados
-========================== */
+function getMagnitudeClass(magnitude) {
+    if (magnitude >= 6) return "high";
+    if (magnitude >= 5) return "strong";
+    if (magnitude >= 4) return "medium";
+    if (magnitude >= 3) return "light";
+    return "low";
+}
+
+function formatMagnitude(value) {
+    const number = Number(value);
+    if (Number.isNaN(number)) return "--";
+    return number.toFixed(1);
+}
 
 function setLoadingState() {
     document.getElementById("lastUpdate").textContent = "Actualizando...";
+
     document.getElementById("earthquakeTableBody").innerHTML = `
         <tr>
             <td colspan="5" class="empty-state">
