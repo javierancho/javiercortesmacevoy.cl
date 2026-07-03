@@ -625,4 +625,48 @@ tbody tr:hover{
 
     }
 
+    /* ==========================
+   MAGNITUDE BADGES
+========================== */
+
+.mag-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    font-weight: 800;
+    font-size: 0.9rem;
+
+    color: #111827;
+
+    box-shadow: 0 4px 12px rgba(15, 47, 79, 0.14);
+}
+
+.mag-low {
+    background: #d9d9d9;
+}
+
+.mag-light {
+    background: #facc15;
+}
+
+.mag-medium {
+    background: #f59e0b;
+}
+
+.mag-strong {
+    background: #f97316;
+    color: #ffffff;
+}
+
+.mag-high {
+    background: #dc0000;
+    color: #ffffff;
+}
+
 }
