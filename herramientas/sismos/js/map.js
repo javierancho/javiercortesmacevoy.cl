@@ -29,12 +29,12 @@ function clearMarkers() {
 }
 
 function getMagnitudeColor(magnitude) {
-    if (magnitude >= 6) return "#b91c1c";
-    if (magnitude >= 5) return "#dc2626";
+    if (magnitude >= 6) return "#dc0000";
+    if (magnitude >= 5) return "#ef4444";
     if (magnitude >= 4) return "#f97316";
-    if (magnitude >= 3) return "#facc15";
-    if (magnitude >= 2) return "#60a5fa";
-    return "#94a3b8";
+    if (magnitude >= 3) return "#f59e0b";
+    if (magnitude >= 2) return "#facc15";
+    return "#d9d9d9";
 }
 
 function getMagnitudeRadius(magnitude) {
@@ -42,8 +42,8 @@ function getMagnitudeRadius(magnitude) {
     if (magnitude >= 5) return 20;
     if (magnitude >= 4) return 16;
     if (magnitude >= 3) return 12;
-    if (magnitude >= 2) return 9;
-    return 6;
+    if (magnitude >= 2) return 8;
+    return 5;
 }
 
 function addMarker(lat, lon, popup, magnitude = 2) {
@@ -53,10 +53,10 @@ function addMarker(lat, lon, popup, magnitude = 2) {
     const marker = L.circleMarker([lat, lon], {
         radius: radius,
         color: color,
-        weight: 1,
+        weight: 1.4,
         fillColor: color,
-        fillOpacity: 0.38,
-        opacity: 0.75
+        fillOpacity: 0.42,
+        opacity: 0.85
     });
 
     marker.bindPopup(popup);
