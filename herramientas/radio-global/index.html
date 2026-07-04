@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Radio Global | Javier Cortés Mac Evoy</title>
+  <meta name="description" content="Radio Global: reproductor liviano de emisoras de radio por Internet, con búsqueda por país, género, favoritos, historial y modo ultra bajo consumo." />
+
+  <link rel="stylesheet" href="css/radio-global.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">Javier Cortés Mac Evoy</a>
+
+      <nav class="nav">
+        <a href="../index.html">Inicio</a>
+        <a href="../proyectos.html">Proyectos</a>
+        <a href="../index.html#herramientas">Herramientas</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="radio-page">
+    <section class="hero">
+      <p class="eyebrow">Herramienta web</p>
+      <h1>Radio Global</h1>
+      <p>
+        Directorio liviano de emisoras de radio por Internet. Permite buscar,
+        escuchar y guardar radios favoritas sin cuentas, sin backend y sin
+        publicidad propia.
+      </p>
+    </section>
+
+    <section class="controls-panel" aria-label="Búsqueda de emisoras">
+      <div class="field">
+        <label for="searchInput">Buscar emisora</label>
+        <input id="searchInput" type="search" placeholder="Ej: Cooperativa, BBC, jazz, noticias" />
+      </div>
+
+      <div class="field">
+        <label for="countrySelect">País</label>
+        <select id="countrySelect">
+          <option value="">Todos los países</option>
+          <option value="CL" selected>Chile</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="tagSelect">Género / categoría</label>
+        <select id="tagSelect">
+          <option value="">Todos</option>
+          <option value="news">Noticias</option>
+          <option value="classical">Música clásica</option>
+          <option value="rock">Rock</option>
+          <option value="pop">Pop</option>
+          <option value="jazz">Jazz</option>
+          <option value="sports">Deportes</option>
+          <option value="talk">Conversación</option>
+          <option value="public">Radio pública</option>
+          <option value="ambient">Ambient</option>
+          <option value="latin">Música latina</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="qualitySelect">Consumo de datos</label>
+        <select id="qualitySelect">
+          <option value="">Cualquier calidad</option>
+          <option value="ultra">Ultra bajo, hasta 32 kbps</option>
+          <option value="low">Bajo, hasta 64 kbps</option>
+          <option value="medium">Medio, hasta 128 kbps</option>
+          <option value="high">Alto, sobre 128 kbps</option>
+        </select>
+      </div>
+
+      <div class="button-row">
+        <button id="searchBtn" type="button">Buscar radios</button>
+        <button id="chileBtn" type="button" class="secondary">Radios de Chile</button>
+        <button id="emergencyBtn" type="button" class="secondary">Modo emergencia</button>
+        <button id="lowPowerBtn" type="button" class="ghost">Ultra bajo consumo</button>
+      </div>
+    </section>
+
+    <section class="player-panel" aria-label="Reproductor">
+      <div>
+        <p class="label">Reproduciendo</p>
+        <h2 id="nowPlaying">Ninguna emisora seleccionada</h2>
+        <p id="stationMeta">Selecciona una radio para iniciar la reproducción.</p>
+      </div>
+
+      <div class="player-actions">
+        <button id="playBtn" type="button">Play</button>
+        <button id="pauseBtn" type="button">Pausa</button>
+        <button id="stopBtn" type="button">Stop</button>
+      </div>
+
+      <div class="volume-control">
+        <label for="volumeRange">Volumen</label>
+        <input id="volumeRange" type="range" min="0" max="1" step="0.05" value="0.8" />
+      </div>
+
+      <p id="dataEstimate" class="data-estimate">Consumo estimado: no disponible.</p>
+
+      <audio id="radioAudio" preload="none"></audio>
+    </section>
+
+    <section class="content-grid">
+      <section class="results-panel">
+        <div class="section-heading">
+          <h2>Resultados</h2>
+          <p id="resultsStatus">Busca una emisora o carga radios de Chile.</p>
+        </div>
+
+        <div id="resultsList" class="station-list"></div>
+      </section>
+
+      <aside class="side-panel">
+        <section>
+          <h2>Favoritos</h2>
+          <div id="favoritesList" class="compact-list"></div>
+        </section>
+
+        <section>
+          <h2>Historial</h2>
+          <div id="historyList" class="compact-list"></div>
+        </section>
+      </aside>
+    </section>
+
+    <section class="legal-note">
+      <h2>Uso de fuentes</h2>
+      <p>
+        Radio Global no aloja ni retransmite audio. El reproductor utiliza
+        streams públicos servidos directamente por cada emisora. Los derechos
+        sobre la programación pertenecen a sus respectivos titulares.
+      </p>
+    </section>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
