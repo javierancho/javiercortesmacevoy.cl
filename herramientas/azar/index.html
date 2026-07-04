@@ -1528,7 +1528,9 @@
 
         setRpsStage(result);
         dom.rpsResult.textContent = result;
-        dom.rpsDetail.textContent = t("rpsDetail").replace("{{user}}", choiceLabel(userChoice)).replace("{{computer}}", choiceLabel(computer));
+        dom.rpsDetail.textContent = t("rpsDetail")
+  .replace("{user}", choiceLabel(userChoice))
+  .replace("{computer}", choiceLabel(computer));
         dom.rpsWins.textContent = state.rps.wins;
         dom.rpsDraws.textContent = state.rps.draws;
         dom.rpsLosses.textContent = state.rps.losses;
