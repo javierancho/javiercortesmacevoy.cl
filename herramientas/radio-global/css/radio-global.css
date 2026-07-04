@@ -1,0 +1,291 @@
+:root {
+  --bg: #f5f7fa;
+  --card: #ffffff;
+  --text: #1f2933;
+  --muted: #5f6c7b;
+  --primary: #0f2f4f;
+  --accent: #2563eb;
+  --line: #d9e2ec;
+  --soft: #edf4ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.site-header,
+.site-footer {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.header-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+}
+
+.brand,
+.nav a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.brand {
+  font-weight: 700;
+}
+
+.nav {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.radio-page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+.hero,
+.controls-panel,
+.results-panel,
+.side-panel section,
+.player-panel,
+.legal-note {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+
+.eyebrow,
+.label {
+  color: var(--accent);
+  font-weight: 700;
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin-top: 0;
+  color: var(--primary);
+}
+
+.controls-panel {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+label {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input,
+select {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 11px 12px;
+  background: #ffffff;
+  color: var(--text);
+}
+
+.button-row {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 16px;
+  background: var(--accent);
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+button.secondary {
+  background: var(--primary);
+}
+
+button.ghost {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--line);
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  gap: 20px;
+}
+
+.section-heading p,
+.station-meta,
+.data-estimate,
+.legal-note p {
+  color: var(--muted);
+}
+
+.station-list,
+.compact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.station-card,
+.compact-item {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  background: #ffffff;
+}
+
+.station-card h3,
+.compact-item h3 {
+  margin: 0 0 6px;
+  color: var(--primary);
+}
+
+.station-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.player-panel {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+}
+
+.player-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+
+.volume-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.site-footer {
+  text-align: center;
+  padding: 18px;
+  margin-top: 24px;
+}
+
+/* Modo Ultra Bajo Consumo */
+body.low-power {
+  background: #000000;
+  color: #f1f5f9;
+}
+
+body.low-power .site-header,
+body.low-power .site-footer,
+body.low-power .hero,
+body.low-power .controls-panel,
+body.low-power .results-panel,
+body.low-power .side-panel section,
+body.low-power .player-panel,
+body.low-power .legal-note,
+body.low-power .station-card,
+body.low-power .compact-item {
+  background: #000000;
+  color: #f1f5f9;
+  border-color: #333333;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+body.low-power h1,
+body.low-power h2,
+body.low-power h3,
+body.low-power .brand,
+body.low-power .nav a {
+  color: #ffffff;
+}
+
+body.low-power .eyebrow,
+body.low-power .label,
+body.low-power .section-heading p,
+body.low-power .station-meta,
+body.low-power .data-estimate,
+body.low-power .legal-note p {
+  color: #cbd5e1;
+}
+
+body.low-power input,
+body.low-power select {
+  background: #000000;
+  color: #ffffff;
+  border-color: #555555;
+}
+
+body.low-power button {
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #ffffff;
+}
+
+body.low-power button.ghost,
+body.low-power button.secondary {
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+@media (max-width: 850px) {
+  .header-inner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .controls-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .player-panel {
+    position: static;
+  }
+}
