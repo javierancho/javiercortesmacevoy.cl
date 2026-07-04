@@ -22,6 +22,8 @@ function bindEvents() {
         renderMap();
     });
 
+    document.getElementById("periodSelect").addEventListener("change", loadData);
+
     document.getElementById("minMagnitude").addEventListener("change", () => {
         renderTable();
         renderMap();
@@ -32,10 +34,12 @@ async function loadData() {
     setLoadingState();
 
     try {
+        const period = document.getElementById("periodSelect").value;
+
         const [lastChile, chileList, worldData] = await Promise.all([
             getLastChileEarthquake(),
             getChileEarthquakes(),
-            getWorldEarthquakes("week")
+            getWorldEarthquakes(period, 0)
         ]);
 
         chileEarthquakes = normalizeChileData(chileList);
@@ -76,16 +80,16 @@ function normalizeChileData(data) {
         return {
             date: time ? `${date} ${time}` : date,
             rawTime: Date.parse(`${date} ${time}`) || 0,
-            magnitude: parseFloat(item.magnitud || item.magnitude || item.mag || 0),
+            magnitude: Number(item.magnitud || item.magnitude || item.mag || 0),
             depth: item.profundidad || item.depth || "",
             location: item.lugar || item.place || item.location || "",
-            latitude: parseFloat(item.latitud || item.latitude || item.lat || 0),
-            longitude: parseFloat(item.longitud || item.longitude || item.lon || 0),
+            latitude: Number(item.latitud || item.latitude || item.lat || 0),
+            longitude: Number(item.longitud || item.longitude || item.lon || 0),
             source: "Boostr / CSN",
             url: item.url || item.informe || item.report || item.info || ""
         };
     })
-    .filter(item => item.latitude && item.longitude)
+    .filter(item => Number.isFinite(item.latitude) && Number.isFinite(item.longitude))
     .sort((a, b) => b.rawTime - a.rawTime);
 }
 
@@ -94,7 +98,9 @@ function normalizeUSGSData(data) {
 
     return data.features.map(feature => {
         const props = feature.properties || {};
-        const coords = feature.geometry?.coordinates || [];
+        const coords = feature.geometry && feature.geometry.coordinates
+            ? feature.geometry.coordinates
+            : [];
 
         return {
             date: props.time ? new Date(props.time).toLocaleString("es-CL") : "",
@@ -102,13 +108,16 @@ function normalizeUSGSData(data) {
             magnitude: Number(props.mag || 0),
             depth: coords[2] !== undefined ? `${Number(coords[2]).toFixed(1)} km` : "",
             location: props.place || "Sin ubicación",
-            latitude: coords[1],
-            longitude: coords[0],
-            source: "USGS",
+            latitude: Number(coords[1]),
+            longitude: Number(coords[0]),
+            source: "USGS FDSN",
             url: props.url || ""
         };
     })
-    .filter(item => item.latitude && item.longitude)
+    .filter(item =>
+        Number.isFinite(item.latitude) &&
+        Number.isFinite(item.longitude)
+    )
     .sort((a, b) => b.rawTime - a.rawTime);
 }
 
@@ -140,13 +149,13 @@ function renderLastChile(data) {
 
 function getFilteredData() {
     const source = document.getElementById("sourceSelect").value;
-    const minMagnitude = parseFloat(document.getElementById("minMagnitude").value);
+    const minMagnitude = Number(document.getElementById("minMagnitude").value);
 
-    const data = source === "chile" ? chileEarthquakes : worldEarthquakes;
+    const data = source === "chile"
+        ? chileEarthquakes
+        : worldEarthquakes;
 
-    return data
-        .filter(item => item.magnitude >= minMagnitude)
-        .sort((a, b) => b.rawTime - a.rawTime);
+    return data.filter(item => item.magnitude >= minMagnitude);
 }
 
 function renderTable() {
@@ -164,12 +173,22 @@ function renderTable() {
         return;
     }
 
-    tbody.innerHTML = filtered.slice(0, 250).map(item => `
+    tbody.innerHTML = filtered.map(item => `
         <tr>
             <td>${item.date}</td>
-            <td><span class="mag-badge mag-${getMagnitudeClass(item.magnitude)}">${formatMagnitude(item.magnitude)}</span></td>
+            <td>
+                <span class="mag-badge mag-${getMagnitudeClass(item.magnitude)}">
+                    ${formatMagnitude(item.magnitude)}
+                </span>
+            </td>
             <td>${item.depth}</td>
-            <td>${item.url ? `<a href="${item.url}" target="_blank" rel="noopener">${item.location}</a>` : item.location}</td>
+            <td>
+                ${
+                    item.url
+                        ? `<a href="${item.url}" target="_blank" rel="noopener">${item.location}</a>`
+                        : item.location
+                }
+            </td>
             <td>${item.source}</td>
         </tr>
     `).join("");
@@ -180,7 +199,7 @@ function renderMap() {
 
     const filtered = getFilteredData();
 
-    filtered.slice(0, 500).forEach(item => {
+    filtered.forEach(item => {
         addMarker(
             item.latitude,
             item.longitude,
@@ -206,7 +225,11 @@ function getMagnitudeClass(magnitude) {
 
 function formatMagnitude(value) {
     const number = Number(value);
-    if (Number.isNaN(number)) return "--";
+
+    if (Number.isNaN(number)) {
+        return "--";
+    }
+
     return number.toFixed(1);
 }
 
