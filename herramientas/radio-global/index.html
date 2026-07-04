@@ -7,18 +7,27 @@
   <title>Radio Global | Javier Cortés Mac Evoy</title>
   <meta name="description" content="Radio Global: reproductor liviano de emisoras de radio por Internet, con búsqueda por país, género, favoritos, historial y modo ultra bajo consumo." />
 
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1M1TVZT13N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-1M1TVZT13N");
+  </script>
+
   <link rel="stylesheet" href="css/radio-global.css" />
 </head>
 
 <body>
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="../index.html">Javier Cortés Mac Evoy</a>
+      <a class="brand" href="../../index.html">Javier Cortés Mac Evoy</a>
 
       <nav class="nav">
-        <a href="../index.html">Inicio</a>
-        <a href="../proyectos.html">Proyectos</a>
-        <a href="../index.html#herramientas">Herramientas</a>
+        <a href="../../index.html">Inicio</a>
+        <a href="../../proyectos.html">Proyectos</a>
+        <a href="../../index.html#herramientas">Herramientas</a>
       </nav>
     </div>
   </header>
@@ -34,7 +43,7 @@
       </p>
     </section>
 
-    <section class="controls-panel" aria-label="Búsqueda de emisoras">
+    <section class="controls-panel">
       <div class="field">
         <label for="searchInput">Buscar emisora</label>
         <input id="searchInput" type="search" placeholder="Ej: Cooperativa, BBC, jazz, noticias" />
@@ -79,12 +88,12 @@
       <div class="button-row">
         <button id="searchBtn" type="button">Buscar radios</button>
         <button id="chileBtn" type="button" class="secondary">Radios de Chile</button>
-        <button id="emergencyBtn" type="button" class="secondary">Modo emergencia</button>
+        <button id="emergencyBtn" type="button" class="secondary">Emergencia</button>
         <button id="lowPowerBtn" type="button" class="ghost">Ultra bajo consumo</button>
       </div>
     </section>
 
-    <section class="player-panel" aria-label="Reproductor">
+    <section class="player-panel">
       <div>
         <p class="label">Reproduciendo</p>
         <h2 id="nowPlaying">Ninguna emisora seleccionada</h2>
@@ -139,6 +148,10 @@
       </p>
     </section>
   </main>
+
+  <footer class="site-footer">
+    <p>© Javier Cortés Mac Evoy</p>
+  </footer>
 
   <script src="js/config.js"></script>
   <script src="js/storage.js"></script>
