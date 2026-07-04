@@ -30,63 +30,53 @@
     </div>
   </header>
 
-  <main class="monitor-page">
-    <section class="monitor-hero">
+  <main class="page">
+    <section class="hero">
       <div>
         <p class="eyebrow" data-i18n="eyebrow">Herramientas / Comunicaciones</p>
         <h1 data-i18n="title">Monitor de Sismos</h1>
         <p class="hero-text" data-i18n="subtitle">
-          Visualización referencial de sismos recientes en Chile y el mundo, usando fuentes públicas.
+          Visualización referencial de sismos recientes en Chile y el mundo,
+          usando fuentes públicas. No reemplaza información oficial de
+          SENAPRED, SHOA ni del Centro Sismológico Nacional.
         </p>
       </div>
 
-      <button
-        type="button"
-        id="refreshBtn"
-        class="btn btn-primary"
-        data-analytics-tool="Monitor de Sismos"
-        data-analytics-event="consulta_realizada"
-        data-i18n="refresh"
-      >
-        Actualizar datos
-      </button>
+      <div class="hero-actions">
+        <button
+          type="button"
+          id="refreshBtn"
+          class="btn btn-primary"
+          data-analytics-tool="Monitor de Sismos"
+          data-analytics-event="consulta_realizada"
+          data-i18n="refresh"
+        >
+          Actualizar datos
+        </button>
+      </div>
     </section>
 
-    <section class="stats-grid">
-      <article class="stat-card">
-        <span data-i18n="lastUpdateLabel">Última actualización</span>
-        <strong id="lastUpdate">Sin actualizar</strong>
-      </article>
-
-      <article class="stat-card">
-        <span data-i18n="chileEventsLabel">Chile</span>
-        <strong id="statChileEvents">--</strong>
-      </article>
-
-      <article class="stat-card">
-        <span data-i18n="worldEventsLabel">Mundo</span>
-        <strong id="statWorldEvents">--</strong>
-      </article>
-
-      <article class="stat-card">
-        <span data-i18n="maxMagnitudeLabel">Mayor magnitud</span>
-        <strong id="statMaxMagnitude">--</strong>
-      </article>
+    <section class="notice-card" role="note">
+      <strong data-i18n="noticeTitle">Información no oficial.</strong>
+      <span data-i18n="noticeText">
+        Esta página muestra datos públicos con fines referenciales. Para
+        emergencias, alertas oficiales o instrucciones de seguridad, consulta
+        siempre los canales oficiales correspondientes.
+      </span>
     </section>
 
-    <section class="latest-card">
+    <section class="dashboard-card">
       <div class="card-header">
         <div>
           <p class="section-label" data-i18n="lastChileLabel">Chile</p>
           <h2 data-i18n="lastChileTitle">Último sismo registrado</h2>
         </div>
-
-        <a id="lastReportLink" href="#" target="_blank" rel="noopener" class="text-link hidden" data-i18n="officialReport">
-          Ver informe oficial
-        </a>
+        <span id="lastUpdate" class="update-status" data-i18n="notLoaded">
+          Sin actualizar
+        </span>
       </div>
 
-      <div class="summary-grid">
+      <div id="lastChileCard" class="summary-grid">
         <article class="metric-card">
           <span class="metric-label" data-i18n="magnitude">Magnitud</span>
           <strong id="lastMagnitude">--</strong>
@@ -107,28 +97,31 @@
           <strong id="lastLocation">--</strong>
         </article>
       </div>
+
+      <div class="source-row">
+        <span>
+          <span data-i18n="source">Fuente</span>:
+          <strong id="lastSource">Boostr / CSN</strong>
+        </span>
+
+        <a
+          id="lastReportLink"
+          href="#"
+          target="_blank"
+          rel="noopener"
+          class="text-link hidden"
+          data-i18n="officialReport"
+        >
+          Ver informe oficial
+        </a>
+      </div>
     </section>
 
-    <section class="monitor-card">
-      <div class="filters-bar">
-        <div class="filter-group">
-          <label for="sourceSelect" data-i18n="sourceFilter">Fuente</label>
-          <select id="sourceSelect">
-            <option value="chile" data-i18n="sourceChile">Chile</option>
-            <option value="world" data-i18n="sourceWorld">Mundo</option>
-          </select>
-        </div>
-
-        <div class="filter-group">
-          <label for="minMagnitude" data-i18n="minMagnitude">Magnitud mínima</label>
-          <select id="minMagnitude">
-            <option value="0">Todas</option>
-            <option value="2">≥ 2.0</option>
-            <option value="3">≥ 3.0</option>
-            <option value="4">≥ 4.0</option>
-            <option value="5">≥ 5.0</option>
-            <option value="6">≥ 6.0</option>
-          </select>
+    <section class="map-card">
+      <div class="card-header">
+        <div>
+          <p class="section-label" data-i18n="mapLabel">Mapa</p>
+          <h2 data-i18n="mapTitle">Sismos recientes</h2>
         </div>
 
         <div class="map-actions">
@@ -141,41 +134,73 @@
         </div>
       </div>
 
-      <div class="monitor-layout">
-        <div class="map-panel">
-          <div id="map" class="map"></div>
+      <div id="map" class="map"></div>
 
-          <div class="map-legend">
-            <strong data-i18n="legendTitle">Magnitud</strong>
-            <span><i class="legend-dot mag-low-dot"></i>&lt; 3</span>
-            <span><i class="legend-dot mag-light-dot"></i>3 - 4</span>
-            <span><i class="legend-dot mag-medium-dot"></i>4 - 5</span>
-            <span><i class="legend-dot mag-strong-dot"></i>5 - 6</span>
-            <span><i class="legend-dot mag-high-dot"></i>≥ 6</span>
-          </div>
-        </div>
-
-        <aside class="list-panel">
-          <div class="list-header">
-            <div>
-              <p class="section-label" data-i18n="recordsLabel">Registros</p>
-              <h2 data-i18n="recordsTitle">Sismos recientes</h2>
-            </div>
-            <span id="visibleCount" class="visible-count">--</span>
-          </div>
-
-          <div class="event-list" id="earthquakeList">
-            <div class="empty-state" data-i18n="loading">Cargando datos...</div>
-          </div>
-        </aside>
+      <div class="map-legend">
+        <strong data-i18n="legendTitle">Magnitud</strong>
+        <span><i class="legend-dot mag-low-dot"></i>&lt; 3</span>
+        <span><i class="legend-dot mag-light-dot"></i>3 - 4</span>
+        <span><i class="legend-dot mag-medium-dot"></i>4 - 5</span>
+        <span><i class="legend-dot mag-strong-dot"></i>5 - 6</span>
+        <span><i class="legend-dot mag-high-dot"></i>≥ 6</span>
       </div>
     </section>
 
-    <section class="disclaimer-card">
-      <strong data-i18n="noticeTitle">Información no oficial.</strong>
-      <p data-i18n="noticeText">
-        Esta herramienta muestra información pública con fines referenciales. No reemplaza las alertas, reportes ni recomendaciones oficiales de SENAPRED, SHOA, CSN u otros organismos competentes.
-      </p>
+    <section class="data-card">
+      <div class="card-header table-card-header">
+        <div>
+          <p class="section-label" data-i18n="recordsLabel">Registros</p>
+          <h2 data-i18n="recordsTitle">Listado de sismos</h2>
+        </div>
+
+        <div class="filters">
+          <label for="sourceSelect" data-i18n="sourceFilter">Fuente</label>
+          <select id="sourceSelect">
+            <option value="world" data-i18n="sourceWorld">Mundo</option>
+            <option value="chile" data-i18n="sourceChile">Chile</option>
+          </select>
+
+          <label for="periodSelect" data-i18n="periodFilter">Período</label>
+          <select id="periodSelect">
+            <option value="day" data-i18n="periodDay">24 horas</option>
+            <option value="week" selected data-i18n="periodWeek">7 días</option>
+            <option value="month" data-i18n="periodMonth">30 días</option>
+          </select>
+
+          <label for="minMagnitude" data-i18n="minMagnitude">Magnitud mínima</label>
+          <select id="minMagnitude">
+            <option value="0">Todas</option>
+            <option value="1">≥ 1.0</option>
+            <option value="2">≥ 2.0</option>
+            <option value="3">≥ 3.0</option>
+            <option value="4">≥ 4.0</option>
+            <option value="5">≥ 5.0</option>
+            <option value="6">≥ 6.0</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="tableDate">Fecha</th>
+              <th data-i18n="tableMagnitude">Magnitud</th>
+              <th data-i18n="tableDepth">Prof.</th>
+              <th data-i18n="tableLocation">Ubicación</th>
+              <th data-i18n="tableSource">Fuente</th>
+            </tr>
+          </thead>
+
+          <tbody id="earthquakeTableBody">
+            <tr>
+              <td colspan="5" class="empty-state" data-i18n="loading">
+                Cargando datos...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
 
