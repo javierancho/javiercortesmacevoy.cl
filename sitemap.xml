@@ -6,10 +6,6 @@
   </url>
 
   <url>
-    <loc>https://javiercortesmacevoy.cl/herramientas/</loc>
-  </url>
-
-  <url>
     <loc>https://javiercortesmacevoy.cl/herramientas/azar/</loc>
   </url>
 
@@ -22,7 +18,15 @@
   </url>
 
   <url>
+    <loc>https://javiercortesmacevoy.cl/herramientas/flujo-caja-pyme/</loc>
+  </url>
+
+  <url>
     <loc>https://javiercortesmacevoy.cl/herramientas/generador-codigos/</loc>
+  </url>
+
+  <url>
+    <loc>https://javiercortesmacevoy.cl/herramientas/radio-global/</loc>
   </url>
 
   <url>
@@ -31,6 +35,10 @@
 
   <url>
     <loc>https://javiercortesmacevoy.cl/herramientas/simulador-cuotas/</loc>
+  </url>
+
+  <url>
+    <loc>https://javiercortesmacevoy.cl/herramientas/sismos/</loc>
   </url>
 
   <url>
